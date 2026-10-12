@@ -8,6 +8,10 @@
  * Usage:
  *   node worker.js          # Run once and exit
  *   node worker.js --watch  # Run continuously (runs every 6 hours)
+ * 
+ * Environment Variables:
+ *   MONGO_URI  - MongoDB connection string (required)
+ *   MONGO_URL  - Alternative MongoDB connection string (fallback if MONGO_URI not set)
  */
 
 const { fetchAllJobs, expireOldJobs, expireOldSavedJobs } = require('./controllers/fetchJobs');
@@ -26,42 +30,56 @@ const JOB_MAX_AGE_HOURS = 48; // Jobs older than 48 hours are removed
 const INTERVAL_HOURS = 6;     // Run every 6 hours in watch mode
 
 /**
+ * Resolve MongoDB connection string from environment variables.
+ * Prefers MONGO_URI (matches existing server.js convention).
+ * Falls back to MONGO_URL for backward compatibility.
+ * Returns null if neither is set.
+ */
+function resolveMongoURI() {
+  return process.env.MONGO_URI || process.env.MONGO_URL || null;
+}
+
+/**
  * Run the complete job fetching cycle
+ * Returns true only if MongoDB was connected and operations succeeded.
+ * Returns false if MongoDB was not connected or operations failed.
  */
 async function runJobFetchCycle() {
   console.log(`[${new Date().toISOString()}] Starting job fetch cycle...`);
+  
+  // Verify MongoDB is connected before proceeding
+  if (mongoose.connection.readyState !== 1) {
+    console.error('❌ FATAL: MongoDB is not connected. Cannot fetch jobs.');
+    console.error('   Set MONGO_URI (or MONGO_URL) environment variable with your MongoDB connection string.');
+    return false;
+  }
   
   try {
     // Refresh live job cache from all sources
     const liveCache = await refreshLiveJobCache();
     console.log(`✅ Live cache updated: ${liveCache.jobs.length} jobs`);
     
-    // If MongoDB is connected, perform additional operations
-    if (mongoose.connection.readyState === 1) {
-      console.log('📊 MongoDB connected - performing database operations...');
-      
-      // Fetch and store new jobs from sources
-      await fetchAllJobs();
-      console.log('✅ New jobs fetched and stored');
-      
-      // Expire old jobs (older than 48 hours)
-      const expiredCount = await expireOldJobs();
-      if (expiredCount > 0) {
-        console.log(`🗑️  Removed ${expiredCount} expired jobs`);
-      }
-      
-      // Expire old saved jobs (older than 48 hours)
-      const expiredSavedCount = await expireOldSavedJobs();
-      if (expiredSavedCount > 0) {
-        console.log(`🗑️  Removed ${expiredSavedCount} expired saved jobs`);
-      }
-      
-      // Process email alerts
-      await processEmailAlerts();
-      console.log('✅ Email alerts processed');
-    } else {
-      console.log('⚠️  MongoDB not connected - running in cache-only mode');
+    console.log('📊 MongoDB connected - performing database operations...');
+    
+    // Fetch and store new jobs from sources
+    await fetchAllJobs();
+    console.log('✅ New jobs fetched and stored');
+    
+    // Expire old jobs (older than 48 hours)
+    const expiredCount = await expireOldJobs();
+    if (expiredCount > 0) {
+      console.log(`🗑️  Removed ${expiredCount} expired jobs`);
     }
+    
+    // Expire old saved jobs (older than 48 hours)
+    const expiredSavedCount = await expireOldSavedJobs();
+    if (expiredSavedCount > 0) {
+      console.log(`🗑️  Removed ${expiredSavedCount} expired saved jobs`);
+    }
+    
+    // Process email alerts
+    await processEmailAlerts();
+    console.log('✅ Email alerts processed');
     
     console.log(`[${new Date().toISOString()}] Job fetch cycle completed successfully`);
     return true;
@@ -81,20 +99,33 @@ async function main() {
   console.log('🔧 Global Freelancing Network - Job Fetching Worker');
   console.log('====================================================');
   
-  // Connect to MongoDB (non-fatal - worker can run in cache-only mode)
-  if (process.env.MONGO_URL || process.env.MONGO_URI) {
-    try {
-      const uri = process.env.MONGO_URL || process.env.MONGO_URI;
-      await mongoose.connect(uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      });
-      console.log('✅ MongoDB connected');
-    } catch (err) {
-      console.log('⚠️  MongoDB connection failed (continuing in cache-only mode):', err.message);
-    }
-  } else {
-    console.log('⚠️  No MONGO_URI configured - running in cache-only mode');
+  // Resolve MongoDB connection string
+  const mongoURI = resolveMongoURI();
+  
+  if (!mongoURI) {
+    console.error('❌ FATAL: No MongoDB connection string configured.');
+    console.error('   Set the MONGO_URI (or MONGO_URL) environment variable.');
+    console.error('   Example: MONGO_URI=mongodb+srv://user:pass@cluster.mongodb.net/db');
+    process.exit(1);
+  }
+  
+  // Connect to MongoDB (required - worker cannot run without it)
+  try {
+    await mongoose.connect(mongoURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('✅ MongoDB connected successfully');
+  } catch (err) {
+    console.error('❌ FATAL: MongoDB connection failed:', err.message);
+    console.error('   Verify your MONGO_URI is correct and the cluster is accessible.');
+    process.exit(1);
+  }
+  
+  // Verify connection is actually established
+  if (mongoose.connection.readyState !== 1) {
+    console.error('❌ FATAL: MongoDB connection not established after connect attempt.');
+    process.exit(1);
   }
   
   if (watchMode) {
@@ -102,11 +133,19 @@ async function main() {
     console.log(`⏰ Starting worker in watch mode (runs every ${INTERVAL_HOURS} hours)`);
     
     // Run immediately on start
-    await runJobFetchCycle();
+    const initialSuccess = await runJobFetchCycle();
+    if (!initialSuccess) {
+      console.error('❌ Initial job fetch cycle failed. Exiting.');
+      process.exit(1);
+    }
     
     // Schedule recurring runs
     cron.schedule(`0 */${INTERVAL_HOURS} * * *`, async () => {
-      await runJobFetchCycle();
+      const success = await runJobFetchCycle();
+      if (!success) {
+        console.error('❌ Scheduled job fetch cycle failed.');
+        // Don't exit - let the worker retry on next schedule
+      }
     });
     
     console.log('✅ Worker started - will run every 6 hours');
