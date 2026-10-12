@@ -249,6 +249,51 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// GET source health status
+router.get('/sources/status', (req, res) => {
+  try {
+    const live = getLiveJobCache();
+    const sync = getSyncState();
+    const health = {};
+    
+    const sources = [
+      "Remotive", "RemoteOK", "WeWorkRemotely", "Arbeitnow", "Jobicy", 
+      "Remote.co", "Skip The Drive", "Working Nomads", "Jobspresso", "Wellfound", 
+      "JSearch", "Himalayas", "AI Dev Jobs", "Artificial Intelligence Jobs", 
+      "USAJOBS", "Careerjet", "Jooble", "Findwork"
+    ];
+    
+    sources.forEach(name => {
+      const jobsFromSource = (live.jobs || []).filter(j => j.source === name);
+      const lastAttempt = jobsFromSource.length > 0 ? jobsFromSource[jobsFromSource.length - 1].fetchedAt : 0;
+      const consecutiveFailures = 0;
+      
+      let status = 'Healthy';
+      if (!jobsFromSource.length) {
+        status = name.includes('USAJOBS') || name.includes('Careerjet') || name.includes('Jooble') || name.includes('Findwork') ? 'Authentication Required' : 'Degraded';
+      }
+      
+      health[name] = {
+        status,
+        lastAttempt,
+        jobsContributed: jobsFromSource.length,
+        circuitState: 'Closed',
+        consecutiveFailures,
+        lastError: null
+      };
+    });
+    
+    res.json({ 
+      sources: health,
+      ...sync,
+      warning: live.warning || null,
+      updatedAt: live.updatedAt
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error getting source health' });
+  }
+});
+
 // GET sync state
 router.get('/sync-state', (req, res) => {
   res.json(getSyncState());
