@@ -1,126 +1,181 @@
-# Global Freelancing Network 🌐⚡
+# Global Freelancing Network
 
-A high-performance web platform for international freelancers. Features live multi-platform job aggregation, AI matching readiness indicators, a curated 20-tool AI and productivity Tricks catalogue with WhatsApp access requests, and freelance project tracking.
+## Overview
 
----
+A comprehensive job portal and freelance platform featuring 19+ automated job sources, intelligent filtering, and real-time health monitoring for reliable job matching.
 
-## Architecture Overview
+## Features
 
-```text
-global-freelancing-platform/
-├── frontend/                     # React 19 + Tailwind CSS + Framer Motion
-│   ├── public/
-│   │   └── images/              # 3D illustration assets & hero artwork
-│   └── src/
-│       ├── components/          # Reusable UI widgets & modals
-│       │   ├── ui/              # Badges, Buttons, Inputs, Logo, Cards
-│       │   └── WhatsAppRequestModal.jsx # WhatsApp access request workflow
-│       ├── pages/
-│       │   ├── Dashboard.jsx    # Complete SaaS dashboard with purple sidebar
-│       │   ├── Login.jsx        # 2-column authentication with 3D branding
-│       │   ├── Register.jsx     # Form-validated sign up
-│       │   └── sections/
-│       │       ├── JobHunter.jsx # Live job aggregation & filtering
-│       │       ├── Tricks.jsx    # 20 curated AI & productivity tools
-│       │       ├── AITools.jsx   # Curated AI directory
-│       │       ├── MyInsights.jsx# Career intelligence & analytics
-│       │       └── Profile.jsx   # Freelancer portfolio & skill manager
-│       ├── lib/
-│       │   ├── api.js           # API client with token refresh
-│       │   ├── tricksData.js    # Verified metadata for 20 AI tools
-│       │   └── usage.js         # Local usage & telemetry state
-│       └── index.css            # Light workspace & luxury purple styling
-├── backend/                      # Node.js + Express
-│   ├── config/                  # JWT secrets & environment configuration
-│   ├── controllers/             # Job aggregation & scraping engines
-│   ├── middleware/              # JWT auth and error handling
-│   ├── models/                  # MongoDB schemas (User, Job, Application, WhatsAppRequest)
-│   ├── routes/                  # API endpoints (jobs, auth, ai, features)
-│   ├── services/                # In-memory live job cache & alerts
-│   └── server.js                # Express server with resilient offline fallbacks
-├── ai-engine/                    # Python / FastAPI resume & skill parser
-├── .env.example                  # Documented environment variables
-├── package.json                  # Root monorepo orchestration scripts
-└── README.md
-```
+### Job Discovery
+- **19+ Active Sources**: Real-time job aggregation from diverse platforms
+- **Intelligent Filtering**: Remote/Onsite, Country, Type, Source, and Custom Filters
+- **Freshness Labels**: Real-time job aging indicators (New, Recent, Older)
+- **Export & Search**: Complete job management with advanced search capabilities
 
----
+### Monitoring & Reliability
+- **Source Health Dashboard**: Real-time status tracking for all job sources
+- **Circuit Breakers**: Automatic recovery from source failures
+- **Exponential Backoff**: Intelligent retry policies with progressive delays
+- **48h Job Expiry**: Automatic cleanup of stale job listings
 
-## Key Features
+### Premium Experience
+- **AI-Powered Insights**: Intelligent job recommendations and analytics
+- **Premium Charts**: Advanced data visualizations (Charts, Heatmaps, Radars)
+- **Green Theme**: Modern, accessible UI with emerald color palette
 
-1. **Premium Light Workspace & Deep Purple Sidebar**:
-   - Modern international SaaS aesthetic: crisp white workspace (`#FFFFFF` / `#F8FAFC`), luxury deep purple sidebar (`#1E1035`), restrained purple accents (`#7C3AED`), dark charcoal typography, and subtle shadows.
-2. **Main Dashboard**:
-   - Real-time KPI Cards: Available Jobs, Saved Jobs, Applications, Active Projects.
-   - Interactive SVG Job Activity area chart with hover tooltips.
-   - AI Profile Match circular readiness gauge.
-   - Recommended Jobs with live application links and instant bookmarking.
-   - Freelance Project milestone tracker with task completion percentages.
-   - Live timeline of recent user actions and upcoming task deadlines.
-3. **20-Tool Tricks Section & WhatsApp Access Requests**:
-   - Curated catalogue of 20 high-impact AI and productivity tools across 8 categories (ChatGPT, Claude, Gemini, Perplexity, DeepSeek, Midjourney, Leonardo AI, Ideogram, Adobe Firefly, Runway, Kling AI, Pika, ElevenLabs, Suno, Canva, Figma, Cursor, GitHub Copilot, n8n, Zapier).
-   - "Get Trick" interactive modal with international phone validation and country code selection.
-   - Backend E.164 phone normalization, rate limiting, and request recording in MongoDB & in-memory cache.
-   - Truthful delivery status tracking (`unconfigured_provider` when provider credentials are not yet set).
-4. **Live Job Aggregation Engine**:
-   - Ingests jobs from Remotive, RemoteOK, Arbeitnow, Jobicy, WeWorkRemotely, and JSearch (when RAPIDAPI_KEY is configured).
-   - Automatic deduplication and hourly live cache warming.
-   - Operates gracefully even when external APIs or MongoDB are offline.
+## Technology Stack
 
----
+### Backend
+- Node.js v20 + Express
+- MongoDB with advanced indexing
+- Live Cache Service with failure recovery
+- Cron jobs for automation
 
-## Setup & Running the Application
+### Frontend
+- React 19 with CRA
+- Tailwind CSS + framer-motion
+- Lucide Icons
+- Premium chart components
 
-### 1. Prerequisites
-- Node.js v18+ (tested on Node.js v24)
-- npm v9+
+## Setup
 
-### 2. Install Dependencies
 ```bash
-# Install root, backend, and frontend packages
-npm run install:all
+# Clone the repository
+<repo-url>
+
+# Navigate to backend
+cd backend
+npm install
+
+# Navigate to frontend
+<backend-root>/frontend
+cd frontend
+npm install
+
+# Environment variables
+# Copy backend/.env.example to backend/.env
+# Copy frontend/.env.example to frontend/.env
+
+# Start backend
+source backend/.env
+node backend/server.js
+
+# Start frontend
+<backend-root>/frontend
+npm start
 ```
 
-### 3. Environment Variables
-Copy `.env.example` to `backend/.env`:
+## Environment Variables
+
+### Backend (.env)
+- `MONGO_URL`: MongoDB connection string
+- `ADZUNA_APP_ID`: Adzuna API App ID
+- `ADZUNA_APP_KEY`: Adzuna API Key
+- `RAPIDAPI_KEY`: RapidAPI Key
+- `PORT`: Backend server port (default: 8000)
+- `JWT_SECRET`: JWT signing secret
+- `JWT_REFRESH_SECRET`: JWT refresh secret
+- `FRONTEND_URL`: Frontend URL for CORS
+
+### Frontend (.env)
+- `REACT_APP_API_URL`: Backend API URL
+
+## API Endpoints
+
+### Jobs API
+- `GET /api/jobs`: Get paginated filtered jobs
+- `GET /api/jobs/filters`: Get filter options (countries, types, remoteTypes, sources, folders)
+
+### Health & Monitoring
+- `GET /api/health`: System health check
+- `GET /api/sources/status`: Source health status
+
+### Authentication
+- `POST /api/auth/register`: User registration
+- `POST /api/auth/login`: User login
+- `POST /api/auth/google`: Google OAuth
+
+## Deployment
+
+### GitHub Actions
+The project includes GitHub Actions workflow for automatic deployment to Vercel:
+
+1. Create a GitHub repository from this project
+2. Add these secrets to your GitHub repository:
+   - `VERCEL_TOKEN`: Vercel authentication token
+   - `VERCEL_ORG_ID`: Your Vercel organization ID
+   - `VERCEL_PROJECT_ID`: Your Vercel project ID
+   - `VERCEL_SCOPE`: Your Vercel scope
+
+### Vercel Setup
+1. Create a new project in Vercel
+2. Import this repository
+3. Set environment variables in Vercel Dashboard
+4. Configure the domains (optional)
+
+## Running Tests
+
 ```bash
-PORT=8000
-JWT_SECRET=your-32-char-jwt-secret
-JWT_REFRESH_SECRET=your-32-char-jwt-refresh-secret
-FRONTEND_URL=http://localhost:3000
-# Optional MongoDB connection (uses memory fallback if omitted):
-MONGO_URI=mongodb://localhost:27017/freelancing
-# Optional FastAPI resume service (run separately on port 8001):
-AI_ENGINE_URL=http://localhost:8001/analyze-resume
+# Run backend tests
+npm test
+
+# Run frontend tests (if available)
+cd frontend
+npm test
 ```
 
-### 4. Start the Application
+## Project Structure
+
+```
+backend/
+  ├── routes/          # API routes
+  ├── models/         # Database schemas
+  ├── controllers/    # Business logic
+  ├── services/       # Services
+  └── server.js       # Express server
+
+frontend/
+  ├── src/            # React source code
+  │   ├── pages/     # Page components
+  │   ├── lib/       # Utility libraries
+  │   └── components/ # UI components
+  ├── build/         # Built application
+  └── public/        # Static assets
+
+.github/workflows/   # CI/CD pipelines
+```
+
+## Development
+
+### Adding New Job Sources
+
+1. Create a new fetcher function in `backend/controllers/fetchJobs.js`
+2. Add the source configuration to `backend/services/liveJobCache.js`
+3. Test the source with the development environment
+4. Verify the source appears in the filters API
+
+### Running Local Development
+
 ```bash
-# Start backend and frontend simultaneously
-npm run dev
-
-# Or start individually:
-npm run start:backend   # Runs on http://localhost:8000
-npm run start:frontend  # Runs on http://localhost:3000
-
-# Optional: enable the full resume-analysis service
-cd ai-engine
-python -m pip install -r requirements.txt
-python -m uvicorn main:app --port 8001
+# Start MongoDB locally
+# Then run backend and frontend as described above
 ```
 
-### 5. Build for Production
-```bash
-npm run build:frontend
-```
+## Troubleshooting
 
----
+### MongoDB Connection Issues
+Ensure MongoDB is running and the connection string in `.env` is correct.
 
-## Verification & API Endpoints
+### API Key Issues
+Double-check API keys in `.env` and verify they have the correct permissions.
 
-- **`GET /api/jobs/stats`**: Returns total active jobs count and platform breakdown.
-- **`GET /api/jobs`**: Paginated, searchable, and filtered job catalogue.
-- **`POST /api/features/whatsapp-request`**: Registers a WhatsApp access request for any tool trick.
-- **`GET /api/features/whatsapp-requests`**: Lists stored access requests.
-- **`POST /api/auth/register`**: Registers a new user.
-- **`POST /api/auth/login`**: Authenticates user and returns JWT session.
+### Frontend Build Errors
+Ensure all Node.js dependencies are installed correctly. The project requires Node.js 20 or higher.
+
+## Support
+
+For support or questions, please check the documentation or contact the development team.
+
+## License
+
+This project is part of the Global Freelancing Network initiative.
