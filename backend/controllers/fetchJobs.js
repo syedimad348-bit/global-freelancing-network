@@ -288,14 +288,20 @@ async function fetchJobicy() {
   const jobs = data.jobs || [];
   let saved = 0;
   for (const job of jobs) {
+    const jobType = Array.isArray(job.jobType) ? job.jobType[0] : job.jobType;
+    const postedAt = job.pubDate || job.jobPublished;
     const ok = await saveJob({
-      title: job.jobTitle, company: job.companyName || "Company",
-      location: job.jobGeo || "Remote", url: job.url, source: "Jobicy",
-      type: job.jobType || "Full-time",
+      title: job.jobTitle,
+      company: job.companyName || "Company",
+      location: job.jobGeo || "Remote",
+      url: job.url,
+      source: "Jobicy",
+      type: jobType || "Full-time",
       category: job.jobIndustry?.[0] || "Tech",
-      postedAt: job.jobPublished ? new Date(job.jobPublished) : null,
+      postedAt: postedAt ? new Date(postedAt) : null,
       salary: job.salaryMin && job.salaryMax
-        ? `${job.salaryCurrency || "USD"} ${job.salaryMin}-${job.salaryMax}/${job.salaryPeriod || "year"}` : "",
+        ? `${job.salaryCurrency || "USD"} ${job.salaryMin}-${job.salaryMax}/${job.salaryPeriod || "year"}`
+        : "",
     });
     if (ok) saved++;
   }
