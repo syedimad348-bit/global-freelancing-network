@@ -14,11 +14,10 @@ import {
   Server,
   WifiOff,
   TrendingUp,
-  TrendingDown,
   Minus,
   ExternalLink,
 } from 'lucide-react';
-import { apiFetch, API_BASE_URL } from '../../lib/api';
+import { apiFetch } from '../../lib/api';
 import Badge from '../../components/ui/Badge';
 
 const STATUS_CONFIG = {

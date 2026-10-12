@@ -30,15 +30,8 @@ import {
   LineChart,
   Activity,
   Target,
-  Award,
   Flame,
-  Database,
   Globe,
-  Cpu,
-  Zap as ZapIcon,
-  TrendingDown,
-  Users,
-  Briefcase as BriefcaseIcon,
 } from 'lucide-react';
 import { apiFetch, API_BASE_URL } from '../lib/api';
 import Logo from '../components/ui/Logo';
@@ -512,9 +505,6 @@ function DashboardOverview({ user, setActive, onOpenTrickModal }) {
 
   // 4. Folder heatmap (top 8 folders by demand)
   const folderHeatmap = useMemo(() => {
-    const allJobs = recommendedJobs.length ? recommendedJobs : [];
-    const folderCounts = {};
-    // Use a default set of folders with weighted values
     const defaultFolders = [
       'Software Engineering', 'AI & Automation', 'Web Development', 'Data Analytics',
       'Digital Marketing', 'UI/UX Design', 'DevOps & Cloud', 'Content & Copywriting',
@@ -525,7 +515,7 @@ function DashboardOverview({ user, setActive, onOpenTrickModal }) {
       value: weights[idx] + Math.round((stats.total / 100) * (idx + 1)),
       intensity: Math.min(100, (weights[idx] / 30) * 100),
     }));
-  }, [recommendedJobs, stats.total]);
+  }, [stats.total]);
 
   // 5. Pipeline (horizontal bar chart)
   const barData = useMemo(() => {

@@ -17,7 +17,7 @@ const PAKISTAN_CITIES = ["lahore", "karachi", "islamabad", "peshawar", "faisalab
 const REMOTE_KEYWORDS = ["remote", "worldwide", "global", "distributed", "work from home", "virtual", "home office"];
 const HYBRID_KEYWORDS = ["hybrid", "hybrid remote", "remote-first", "mix of office"];
 
-// Sources that are exclusively remote/flexible — their jobs default to remote
+// Sources that are exclusively remote/flexible â€” their jobs default to remote
 const REMOTE_SOURCES = new Set([
   "Remotive", "RemoteOK", "WeWorkRemotely", "Remote.co", "Skip The Drive",
   "Working Nomads", "Jobspresso", "Wellfound", "Himalayas", "AI Dev Jobs",
@@ -630,7 +630,7 @@ async function fetchAllJobs() {
 module.exports = { fetchAllJobs, getJSearchCount: () => jsearchMonthlyCount, expireOldJobs, expireOldSavedJobs };
 
 
-// -- DRIBBBLE JOBS (RSS — design/UI positions) ------------------------------------
+// -- DRIBBBLE JOBS (RSS â€” design/UI positions) ------------------------------------
 async function fetchDribbble() {
   const xml = await httpGet("https://dribbble.com/jobs/feed");
   if (!xml) {
@@ -649,7 +649,7 @@ async function fetchDribbble() {
   return saved;
 }
 
-// -- PROBLOGGER (RSS — writing/content positions) -----------------------------------
+// -- PROBLOGGER (RSS â€” writing/content positions) -----------------------------------
 async function fetchProBlogger() {
   const xml = await httpGet("https://problogger.com/jobs/feed");
   if (!xml) {
@@ -668,7 +668,7 @@ async function fetchProBlogger() {
   return saved;
 }
 
-// -- MARKETING JOARD BOARD (RSS — marketing positions) -----------------------------
+// -- MARKETING JOARD BOARD (RSS â€” marketing positions) -----------------------------
 async function fetchMarketingJobsBoard() {
   const xml = await httpGet("https://marketingjobsboard.com/feed");
   if (!xml) {
@@ -687,7 +687,7 @@ async function fetchMarketingJobsBoard() {
   return saved;
 }
 
-// -- MARKERSHIRE (RSS — marketing/creative positions) -------------------------------
+// -- MARKERSHIRE (RSS â€” marketing/creative positions) -------------------------------
 async function fetchMarketersHire() {
   const xml = await httpGet("https://marketershire.com/feed");
   if (!xml) {
