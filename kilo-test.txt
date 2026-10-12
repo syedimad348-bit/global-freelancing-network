@@ -1,0 +1,5 @@
+Dashboard URLs:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
+
+Both servers running successfully after fixing the pipeline duplicate declaration error.

@@ -1,0 +1,50 @@
+{
+  "_meta": {
+    "purpose": "Seed dataset for the owner Admin panel — users, payments, and section-usage events.",
+    "owner": "syedimad348@gmail.com",
+    "version": 1
+  },
+  "users": [
+    { "id": "u_1",  "name": "Aisha Khan",     "email": "aisha.k@example.com",   "plan": "pro",     "status": "active",  "country": "PK", "applies": 47, "createdAt": 1704067200000, "lastActiveAt": 1747867200000 },
+    { "id": "u_2",  "name": "Hamza Ali",      "email": "hamza.a@example.com",   "plan": "free",    "status": "active",  "country": "PK", "applies": 12, "createdAt": 1709251200000, "lastActiveAt": 1747700000000 },
+    { "id": "u_3",  "name": "Sara Iqbal",     "email": "sara.i@example.com",    "plan": "premium", "status": "active",  "country": "AE", "applies": 88, "createdAt": 1701475200000, "lastActiveAt": 1747890000000 },
+    { "id": "u_4",  "name": "Bilal Sheikh",   "email": "bilal.s@example.com",   "plan": "free",    "status": "blocked", "country": "PK", "applies":  3, "createdAt": 1714521600000, "lastActiveAt": 1745000000000 },
+    { "id": "u_5",  "name": "Mehak Raza",     "email": "mehak.r@example.com",   "plan": "pro",     "status": "active",  "country": "GB", "applies": 31, "createdAt": 1706745600000, "lastActiveAt": 1747800000000 },
+    { "id": "u_6",  "name": "Ali Hussain",    "email": "ali.h@example.com",     "plan": "free",    "status": "active",  "country": "PK", "applies":  8, "createdAt": 1719792000000, "lastActiveAt": 1747600000000 },
+    { "id": "u_7",  "name": "Zoya Malik",     "email": "zoya.m@example.com",    "plan": "pro",     "status": "active",  "country": "US", "applies": 55, "createdAt": 1696118400000, "lastActiveAt": 1747895000000 },
+    { "id": "u_8",  "name": "Usman Qureshi",  "email": "usman.q@example.com",   "plan": "free",    "status": "active",  "country": "PK", "applies": 19, "createdAt": 1722470400000, "lastActiveAt": 1747860000000 },
+    { "id": "u_9",  "name": "Nimra Butt",     "email": "nimra.b@example.com",   "plan": "premium", "status": "active",  "country": "CA", "applies": 71, "createdAt": 1693440000000, "lastActiveAt": 1747850000000 },
+    { "id": "u_10", "name": "Hassan Ahmed",   "email": "hassan.a@example.com",  "plan": "free",    "status": "blocked", "country": "PK", "applies":  1, "createdAt": 1730419200000, "lastActiveAt": 1742000000000 },
+    { "id": "u_11", "name": "Fatima Siddiqui","email": "fatima.s@example.com",  "plan": "pro",     "status": "active",  "country": "PK", "applies": 39, "createdAt": 1711929600000, "lastActiveAt": 1747880000000 },
+    { "id": "u_12", "name": "Ahmed Khan",     "email": "ahmed.k@example.com",   "plan": "free",    "status": "active",  "country": "DE", "applies": 14, "createdAt": 1717200000000, "lastActiveAt": 1747700000000 },
+    { "id": "u_13", "name": "Layla Raza",     "email": "layla.r@example.com",   "plan": "pro",     "status": "active",  "country": "PK", "applies": 62, "createdAt": 1690848000000, "lastActiveAt": 1747890000000 },
+    { "id": "u_14", "name": "Omar Sheikh",    "email": "omar.s@example.com",    "plan": "free",    "status": "active",  "country": "PK", "applies":  6, "createdAt": 1733011200000, "lastActiveAt": 1747500000000 },
+    { "id": "u_15", "name": "Maryam Iqbal",   "email": "maryam.i@example.com",  "plan": "premium", "status": "active",  "country": "SG", "applies": 93, "createdAt": 1688256000000, "lastActiveAt": 1747895000000 },
+    { "id": "u_16", "name": "Yusuf Hussain",  "email": "yusuf.h@example.com",   "plan": "free",    "status": "active",  "country": "PK", "applies":  4, "createdAt": 1735603200000, "lastActiveAt": 1747800000000 },
+    { "id": "u_17", "name": "Iqra Khan",      "email": "iqra.k@example.com",    "plan": "pro",     "status": "active",  "country": "PK", "applies": 28, "createdAt": 1714521600000, "lastActiveAt": 1747860000000 },
+    { "id": "u_18", "name": "Daniyal Ali",    "email": "daniyal.a@example.com", "plan": "free",    "status": "active",  "country": "AU", "applies": 11, "createdAt": 1719792000000, "lastActiveAt": 1747700000000 },
+    { "id": "u_19", "name": "Hira Malik",     "email": "hira.m@example.com",    "plan": "pro",     "status": "active",  "country": "US", "applies": 44, "createdAt": 1701475200000, "lastActiveAt": 1747895000000 },
+    { "id": "u_20", "name": "Saad Qureshi",   "email": "saad.q@example.com",    "plan": "free",    "status": "active",  "country": "PK", "applies": 17, "createdAt": 1727740800000, "lastActiveAt": 1747860000000 }
+  ],
+  "payments": [
+    { "id": "p_1",  "userId": "u_1",  "method": "JazzCash", "plan": "pro",     "amount": 6,  "currency": "USD", "ts": 1747500000000, "status": "succeeded" },
+    { "id": "p_2",  "userId": "u_3",  "method": "Stripe",   "plan": "premium", "amount": 18, "currency": "USD", "ts": 1747600000000, "status": "succeeded" },
+    { "id": "p_3",  "userId": "u_5",  "method": "EasyPaisa","plan": "pro",     "amount": 6,  "currency": "USD", "ts": 1747700000000, "status": "succeeded" },
+    { "id": "p_4",  "userId": "u_7",  "method": "Stripe",   "plan": "pro",     "amount": 6,  "currency": "USD", "ts": 1747800000000, "status": "succeeded" },
+    { "id": "p_5",  "userId": "u_9",  "method": "NayaPay",  "plan": "premium", "amount": 18, "currency": "USD", "ts": 1747850000000, "status": "succeeded" },
+    { "id": "p_6",  "userId": "u_11", "method": "JazzCash", "plan": "pro",     "amount": 6,  "currency": "USD", "ts": 1747860000000, "status": "succeeded" },
+    { "id": "p_7",  "userId": "u_13", "method": "Stripe",   "plan": "pro",     "amount": 6,  "currency": "USD", "ts": 1747870000000, "status": "succeeded" },
+    { "id": "p_8",  "userId": "u_15", "method": "Stripe",   "plan": "premium", "amount": 18, "currency": "USD", "ts": 1747880000000, "status": "succeeded" },
+    { "id": "p_9",  "userId": "u_17", "method": "EasyPaisa","plan": "pro",     "amount": 6,  "currency": "USD", "ts": 1747885000000, "status": "succeeded" },
+    { "id": "p_10", "userId": "u_19", "method": "Stripe",   "plan": "pro",     "amount": 6,  "currency": "USD", "ts": 1747890000000, "status": "succeeded" }
+  ],
+  "events": [
+    { "section": "Job Hunter",      "count": 8421 },
+    { "section": "AI Resume",       "count": 3104 },
+    { "section": "Interview Coach", "count": 2210 },
+    { "section": "AI Tools",        "count": 4112 },
+    { "section": "My Insights",     "count": 1850 },
+    { "section": "Pro Upgrade",     "count":  942 },
+    { "section": "Community",       "count": 1320 }
+  ]
+}

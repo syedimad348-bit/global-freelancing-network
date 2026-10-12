@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "jetro": {
+      "command": "C:\\Users\\syedi\\.jetro\\runtime\\node-win32-x64.exe",
+      "args": [
+        "C:\\Users\\syedi\\.jetro\\mcp-server\\index.js"
+      ],
+      "env": {
+        "JET_WORKSPACE": "d:\\global freelancing platform",
+        "JET_API_URL": "https://api.jetro.ai",
+        "PATH": "C:\\Users\\syedi\\.jetro\\runtime;C:\\Program Files\\Python314\\Scripts\\;C:\\Program Files\\Python314\\;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath;C:\\Program Files (x86)\\Common Files\\Intel\\Shared Libraries\\redist\\intel64\\compiler;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;D:\\vs code\\node.js\\;C:\\Program Files\\Git\\cmd;C:\\Program Files\\MongoDB\\Server\\8.2\\bin;C:\\Program Files\\WSL\\;C:\\Users\\syedi\\AppData\\Local\\agy\\bin;C:\\Users\\syedi\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\;C:\\Users\\syedi\\AppData\\Local\\Programs\\Python\\Python310\\;C:\\Program Files\\MySQL\\MySQL Shell 8.0\\bin\\;C:\\Users\\syedi\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\;C:\\Users\\syedi\\AppData\\Local\\Programs\\Python\\Python313\\;C:\\Users\\syedi\\AppData\\Local\\Microsoft\\WindowsApps;D:\\pktriot-0.15.5.win64\\pktriot-0.15.5;D:\\vs code\\Microsoft VS Code\\bin;C:\\Users\\syedi\\AppData\\Roaming\\npm"
+      }
+    }
+  }
+}
