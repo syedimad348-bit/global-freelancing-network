@@ -319,15 +319,15 @@ router.post("/subscription/stripe-session", protect, async (req, res) => {
   if (!process.env.STRIPE_SECRET_KEY || !process.env.STRIPE_PRICE_PRO || !process.env.STRIPE_PRICE_PREMIUM) {
     return res.status(400).json({ message: "Stripe is not configured." });
   }
-  const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-  const price = plan === "premium" ? process.env.STRIPE_PRICE_PREMIUM : process.env.STRIPE_PRICE_PRO;
-  const session = await stripe.checkout.sessions.create({
-    mode: "subscription",
-    line_items: [{ price, quantity: 1 }],
-    success_url: req.body?.successUrl || "http://localhost:3002/dashboard",
-    cancel_url: req.body?.cancelUrl || "http://localhost:3002/dashboard",
-    metadata: { userId: req.user.id, plan },
-  });
+     const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+   const price = plan === "premium" ? process.env.STRIPE_PRICE_PREMIUM : process.env.STRIPE_PRICE_PRO;
+   const session = await stripe.checkout.sessions.create({
+     mode: "subscription",
+     line_items: [{ price, quantity: 1 }],
+     success_url: `${process.env.FRONTEND_URL}/dashboard`,
+     cancel_url: `${process.env.FRONTEND_URL}/dashboard`,
+     metadata: { userId: req.user.id, plan },
+   });
   res.json({ checkoutUrl: session.url });
 });
 

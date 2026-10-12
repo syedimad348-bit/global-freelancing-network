@@ -43,7 +43,7 @@ app.get('/api/health', (_req, res) => {
       warning: live.warning || null,
       target: Number(process.env.JOB_TARGET_SIZE || 800),
     },
-    aiEngine: { configuredUrl: process.env.AI_ENGINE_URL || 'http://localhost:8001/analyze-resume' },
+    aiEngine: { configuredUrl: process.env.AI_ENGINE_URL || undefined },
   });
 });
 app.use('/api/jobs',     require('./routes/jobs'));

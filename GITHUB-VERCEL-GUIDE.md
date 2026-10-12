@@ -103,7 +103,7 @@ REACT_APP_API_URL=https://your-backend.com/api  # Production
 MONGO_URL=mongodb+srv://syedimad348_db_user:imad2005@cluster0.kutnn5h.mongodb.net/?appName=Cluster0
 ADZUNA_APP_ID=3f6446b2
 ADZUNA_APP_KEY=b15781c411fe27dcc32b2112a95f8acb
-RAPIDAPI_KEY=8de63d2e38mshfff23dd6037d498p1e2a51jsnae949ab05548
+RAPIDAPI_KEY=f2ea5188e5msh134673dfca5e4c0p1cc16ajsn2b3f40be1f7c
 PORT=8000
 JWT_SECRET=dailyradar_super_secret_key_2024
 JWT_REFRESH_SECRET=dailyradar_super_secret_refresh_key_2024

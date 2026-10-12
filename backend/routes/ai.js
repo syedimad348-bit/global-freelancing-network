@@ -78,11 +78,11 @@ router.post("/resume-analyze", protect, upload.single("file"), async (req, res) 
       try {
         const form = new FormData();
         form.append("file", file.buffer, { filename: file.originalname, contentType: "application/pdf" });
-        const response = await axios.post(
-          process.env.AI_ENGINE_URL || "http://localhost:8001/analyze-resume",
-          form,
-          { timeout: 30000, headers: form.getHeaders ? form.getHeaders() : {} }
-        );
+          const response = await axios.post(
+            process.env.AI_ENGINE_URL,
+            form,
+            { timeout: 30000, headers: form.getHeaders ? form.getHeaders() : {} }
+          );
         const normalized = {
           score: response.data.score ?? 0,
           grade: response.data.grade || "C",

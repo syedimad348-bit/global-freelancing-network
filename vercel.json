@@ -1,0 +1,40 @@
+{
+  "services": {
+    "frontend": {
+      "root": "frontend/"
+    },
+    "backend": {
+      "root": "backend/",
+      "framework": "express",
+      "bindings": [
+        {
+          "type": "service",
+          "service": "ai-engine",
+          "format": "url",
+          "env": "AI_ENGINE_URL"
+        }
+      ]
+    },
+    "ai-engine": {
+      "root": "ai-engine/",
+      "framework": "fastapi",
+      "entrypoint": "main:app"
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/fetch-jobs",
+      "schedule": "0 */3 * * *"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": { "service": "backend" }
+    },
+    {
+      "source": "/(.*)",
+      "destination": { "service": "frontend" }
+    }
+  ]
+}
