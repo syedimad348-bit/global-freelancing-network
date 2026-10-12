@@ -21,12 +21,6 @@
       "entrypoint": "main:app"
     }
   },
-  "crons": [
-    {
-      "path": "/api/cron/fetch-jobs",
-      "schedule": "0 */3 * * *"
-    }
-  ],
   "rewrites": [
     {
       "source": "/api/(.*)",

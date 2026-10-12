@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node server.js",
+    "worker:start": "node worker.js --watch",
+    "worker:run": "node worker.js",
     "dev": "concurrently \"node server.js\" \"cd ../frontend && npm start\""
   },
   "dependencies": {

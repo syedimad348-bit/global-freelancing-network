@@ -1,0 +1,25 @@
+[Unit]
+Description=Global Freelancing Network Job Fetching Worker
+After=network.target
+
+[Service]
+Type=simple
+User=www-data  # Change to your non-root user
+WorkingDirectory=/path/to/global-freelancing-platform/backend
+ExecStart=/usr/bin/node worker.js --watch
+Restart=always
+RestartSec=10
+StandardOutput=append:/var/log/global-freelancing-worker.log
+StandardError=append:/var/log/global-freelancing-worker-error.log
+Environment=NODE_ENV=production
+Environment=PORT=8000
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadOnlyPaths=/
+
+[Install]
+WantedBy=multi-user.target

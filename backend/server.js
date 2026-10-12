@@ -114,3 +114,38 @@ cron.schedule('0 */3 * * *', async () => {
 
 process.on('unhandledRejection', (reason) => console.error('Unhandled rejection:', reason));
 process.on('uncaughtException',  (error)  => console.error('Uncaught exception:',  error));
+
+// Worker mode for VPS - runs fetch jobs cron without HTTP server
+if (process.argv.includes('--worker')) {
+  console.log('🔧 Starting in worker mode (VPS scheduled job fetcher)...');
+  
+  // Warm cache on startup
+  refreshLiveJobCache()
+    .then((c) => console.log(`✅ Live cache ready: ${c.jobs.length} jobs`))
+    .catch((e) => console.log('Cache warm error:', e.message));
+  
+  // Run initial fetch if MongoDB is connected
+  if (mongoose.connection.readyState === 1) {
+    fetchAllJobs().catch((err) => console.log('Initial fetch error:', err.message));
+  }
+  
+  // Six-hour refresh keeps JSearch inside free-tier request budget
+  cron.schedule('0 */6 * * *', async () => {
+    console.log('⏰ [Worker] Six-hour maintenance: refresh cache, expiry cleanup...');
+    try {
+      await refreshLiveJobCache().catch((e) => console.log('Cache refresh error:', e.message));
+      
+      if (mongoose.connection.readyState === 1) {
+        await expireOldJobs();
+        await expireOldSavedJobs();
+        await fetchAllJobs().catch((err) => console.log('Fetch jobs error:', err.message));
+        await processEmailAlerts().catch((err) => console.log('Process alerts error:', err.message));
+      }
+    } catch (err) {
+      console.error('Worker cron error:', err.message);
+    }
+  });
+  
+  console.log('✅ Worker started - will run every 6 hours');
+  console.log('   (Use Ctrl+C to stop)');
+}

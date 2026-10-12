@@ -44,33 +44,122 @@ In your Vercel project dashboard:
    - `REACT_APP_API_URL`: Your backend API URL (we'll set this after deploying backend)
    - (Add any other frontend-specific variables as needed)
 
-## Step 5: Deploy Backend
+## Step 5: Deploy Backend to VPS (Virtual Private Server)
 
-For the backend, you have several options:
+For production deployment with job fetching every 6 hours, deploy the backend to a VPS (DigitalOcean, Linode, AWS EC2, etc.):
 
-### Option A: Deploy to Vercel Serverless
-1. Create another Vercel project for the backend
-2. Import the same repository
-3. Configure:
-   - Framework: Node.js
-   - Root Directory: `backend`
-   - Build Command: `npm ci` (or skip if no build needed)
-   - Output Directory: (leave blank)
-   - Install Command: `npm ci`
-   - Development Command: `node server.js`
+### Option A: Using Systemd Service (Recommended for 24/7 operation)
 
-### Option B: Deploy to Other Hosting
-You can deploy the backend to:
-- Render.com
-- Railway.app
-- Fly.io
-- AWS EC2
-- DigitalOcean
-- Or your own VPS
+1. **Copy backend files to VPS**
+   ```bash
+   # On your local machine
+   scp -r backend/ your-vps-user@your-vps-ip:/tmp/
+   
+   # On VPS
+   sudo mkdir -p /opt/global-freelancing-platform
+   sudo mv /tmp/backend /opt/global-freelancing-platform/
+   sudo chown -R $USER:$USER /opt/global-freelancing-platform/backend
+   ```
 
-### Option C: Keep Local Development Backend
-For development/testing, you can keep the backend running locally and point the frontend to it:
-- `REACT_APP_API_URL=http://localhost:8000/api`
+2. **Install Node.js dependencies on VPS**
+   ```bash
+   cd /opt/global-freelancing-platform/backend
+   npm ci
+   ```
+
+3. **Configure environment variables**
+   ```bash
+   cp .env.example .env
+   nano .env  # Edit with your actual values
+   ```
+   Required variables:
+   - `MONGO_URL` (your MongoDB Atlas connection string)
+   - `RAPIDAPI_KEY` (your RapidAPI key for JSearch)
+   - `ADZUNA_APP_ID` and `ADZUNA_APP_KEY` (for Adzuna)
+   - `JWT_SECRET` and `JWT_REFRESH_SECRET` (32+ character random strings)
+   - `FRONTEND_URL` (your Vercel frontend URL, e.g., `https://your-project.vercel.app`)
+
+4. **Install and start the systemd service**
+   ```bash
+   # Copy the service file
+   sudo cp vps-worker.service /etc/systemd/system/global-freelancing-worker.service
+   
+   # Update the WorkingDirectory and User in the service file if needed
+   sudo nano /etc/systemd/system/global-freelancing-worker.service
+   
+   # Reload systemd and start the service
+   sudo systemctl daemon-reload
+   sudo systemctl enable global-freelancing-worker.service
+   sudo systemctl start global-freelancing-worker.service
+   
+   # Check status
+   sudo systemctl status global-freelancing-worker.service
+   
+   # View logs
+   sudo journalctl -u global-freelancing-worker.service -f
+   ```
+
+### Option B: Using PM2 (Alternative)
+
+```bash
+# Install PM2 globally
+npm install -g pm2
+
+# Start the worker
+pm2 start worker.js --name "gfn-worker" --watch
+
+# Save and set up startup
+pm2 save
+pm2 startup
+```
+
+### Option C: Simple nohup (for testing)
+
+```bash
+nohup node worker.js --watch > worker.log 2>&1 &
+```
+
+## Step 6: Keep Frontend on Vercel Hobby
+
+The frontend remains deployed on Vercel Hobby tier:
+- No changes needed to frontend deployment
+- The frontend uses relative URLs (`API_BASE_URL = ""`) which work with Vercel's rewrite rules
+- All API calls go to `/api/*` which Vercel rewrites to your VPS backend
+
+## Environment Variables Summary
+
+### Frontend (.env.vercel - Vercel Environment Variables)
+```
+REACT_APP_API_URL=  # Leave empty for relative URLs (works with Vercel rewrites)
+```
+
+### Backend (.env - on VPS)
+```
+MONGO_URL=mongodb+srv://your-user:your-password@cluster0.example.mongodb.net/freelancing_db?retryWrites=true&w=majority
+ADZUNA_APP_ID=your_adzuna_app_id
+ADZUNA_APP_KEY=your_adzuna_app_key
+RAPIDAPI_KEY=your_rapidapi_key_here
+PORT=8000
+JWT_SECRET=your-32-character-jwt-access-secret-here
+JWT_REFRESH_SECRET=your-32-character-jwt-refresh-secret-here
+FRONTEND_URL=https://your-project.vercel.app  # Your Vercel frontend URL
+```
+
+## Verification
+
+1. **Check VPS worker logs**: `sudo journalctl -u global-freelancing-worker.service -f`
+2. **Test API endpoints**: `curl https://your-vps-domain.com/api/health`
+3. **Verify job fetching**: Check that jobs appear in the frontend after worker runs
+4. **Monitor resource usage**: The worker is lightweight and uses minimal resources
+
+## Notes
+
+- The worker runs every 6 hours (configurable in `worker.js`)
+- Uses the same job fetching logic as before - no changes to APIs or sources
+- Includes automatic job expiry (48 hours) and saved job cleanup
+- Processes email alerts as configured
+- Runs in cache-only mode if MongoDB is unavailable
+- Secure systemd service with restricted privileges
 
 ## Step 6: Configure Production API URL
 
@@ -148,8 +237,13 @@ Create a new page or section to display:
 cd backend
 node server.js
 
-# Run full job fetch
-node -e "require('./controllers/fetchJobs').fetchAllJobs().then(console.log).catch(console.error)"
+# Start worker mode (VPS job fetching, runs every 6 hours)
+cd backend
+node worker.js --watch
+
+# Run single job fetch cycle
+cd backend
+node worker.js
 
 # Check health endpoint
 curl http://localhost:8000/api/health
@@ -172,6 +266,27 @@ npm run build
 
 # Run tests
 npm test
+```
+
+### VPS Deployment
+```bash
+# On VPS - install dependencies
+cd /opt/global-freelancing-platform/backend
+npm ci
+
+# On VPS - start the worker as systemd service
+sudo systemctl start global-freelancing-worker.service
+sudo systemctl status global-freelancing-worker.service
+
+# On VPS - view logs
+sudo journalctl -u global-freelancing-worker.service -f
+```
+
+### Git Workflow
+```bash
+# On local machine
+git branch -M main
+git push -u origin main
 ```
 
 ## Troubleshooting
