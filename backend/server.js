@@ -67,6 +67,12 @@ app.use(errorHandler);
 
 // ── Start server immediately ──────────────────────────────────────────────────
 const PORT = process.env.PORT || 8000;
+
+// ── Export the Express app for Vercel serverless deployment ───────────────────
+// Vercel requires the server module to export a callable handler (module.exports = app).
+module.exports = app;
+module.exports.app = app;
+
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
   // Warm live cache on startup (always works, no DB needed)
