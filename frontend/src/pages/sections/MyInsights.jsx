@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { getInsights, loadUsage } from '../../lib/usage';
-import { Briefcase, BarChart3, FileText, Mic, CalendarCheck } from 'lucide-react';
+import { Briefcase, BarChart3, FileText, Mic } from 'lucide-react';
 
 export default function MyInsights({ user }) {
   const [insights, setInsights] = useState(getInsights());
