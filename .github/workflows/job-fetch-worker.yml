@@ -1,0 +1,112 @@
+name: Job Fetching Worker (Twice Daily - Pakistan Time)
+
+on:
+  schedule:
+    # Run at 11:00 AM Pakistan Time (06:00 UTC) and 6:00 PM Pakistan Time (13:00 UTC)
+    - cron: '0 6 * * *'   # 06:00 UTC = 11:00 AM PKT
+    - cron: '0 13 * * *'  # 13:00 UTC = 06:00 PM PKT
+  workflow_dispatch:
+    # Allow manual trigger for testing
+    inputs:
+      force:
+        description: 'Force run even if recently run'
+        required: false
+        default: 'false'
+
+jobs:
+  fetch-jobs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      # Prevent overlapping runs
+      group: job-fetch-worker
+      cancel-in-progress: true
+    
+    steps:
+      # ── Step 1: Checkout repository ──────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      # ── Step 2: Setup Node.js ─────────────────────────────────────
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+      
+      # ── Step 3: Install backend dependencies ──────────────────────
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          npm ci
+      
+      # ── Step 4: Run job fetching worker ───────────────────────────
+      - name: Run job fetching worker
+        env:
+          # MongoDB connection (required for database operations)
+          MONGO_URL: ${{ secrets.MONGO_URL }}
+          
+          # Job aggregation APIs
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+          ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
+          ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
+          
+          # Authentication & Security
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+          
+          # Frontend URL (for CORS and redirect URLs)
+          FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
+          
+          # Optional: WhatsApp integration
+          WHATSAPP_PROVIDER: ${{ secrets.WHATSAPP_PROVIDER || 'none' }}
+          WHATSAPP_API_KEY: ${{ secrets.WHATSAPP_API_KEY }}
+          WHATSAPP_PHONE_NUMBER_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+          
+          # Optional: Email SMTP alerts
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          SMTP_FROM: ${{ secrets.SMTP_FROM }}
+          
+          # Optional: Stripe & PayPal
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_PRICE_PRO: ${{ secrets.STRIPE_PRICE_PRO }}
+          STRIPE_PRICE_PREMIUM: ${{ secrets.STRIPE_PRICE_PREMIUM }}
+          PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
+          PAYPAL_CLIENT_SECRET: ${{ secrets.PAYPAL_CLIENT_SECRET }}
+          PAYPAL_ENV: ${{ secrets.PAYPAL_ENV }}
+          
+          # Optional: Other API keys
+          USAJOBS_API_KEY: ${{ secrets.USAJOBS_API_KEY }}
+          CAREERJET_TERMS: ${{ secrets.CAREERJET_TERMS }}
+          JOOBLE_API_KEY: ${{ secrets.JOOBLE_API_KEY }}
+          FINDWORK_TOKEN: ${{ secrets.FINDWORK_TOKEN }}
+          
+          # AI Engine (optional - backend uses fallback if not configured)
+          AI_ENGINE_URL: ${{ secrets.AI_ENGINE_URL }}
+          
+          # Server configuration
+          NODE_ENV: production
+          PORT: 8000
+        run: |
+          cd backend
+          echo "🔧 Starting job fetching worker..."
+          echo "📅 Schedule: 11:00 AM and 6:00 PM Pakistan Time (UTC+5)"
+          echo "===================================================="
+          node worker.js
+          echo "===================================================="
+          echo "✅ Worker completed successfully"
+      
+      # ── Step 5: Upload logs on failure ────────────────────────────
+      - name: Upload worker logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: worker-logs-${{ github.run_id }}
+          path: |
+            backend/*.log
+            backend/*.txt
+          retention-days: 7

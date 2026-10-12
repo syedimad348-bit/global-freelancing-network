@@ -2,13 +2,12 @@
 /**
  * Global Freelancing Network - Job Fetching Worker
  * 
- * This script runs the job fetching process every 6 hours on VPS.
- * It uses the same logic as the backend server but runs as a standalone worker.
+ * This script runs the job fetching process on demand or continuously.
+ * It uses the same logic as the backend server.
  * 
  * Usage:
  *   node worker.js          # Run once and exit
  *   node worker.js --watch  # Run continuously (runs every 6 hours)
- *   npm run worker:start    # Start as systemd service
  */
 
 const { fetchAllJobs, expireOldJobs, expireOldSavedJobs } = require('./controllers/fetchJobs');
@@ -24,7 +23,7 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 // Configuration
 const JOB_MAX_AGE_HOURS = 48; // Jobs older than 48 hours are removed
-const INTERVAL_HOURS = 6;     // Run every 6 hours
+const INTERVAL_HOURS = 6;     // Run every 6 hours in watch mode
 
 /**
  * Run the complete job fetching cycle

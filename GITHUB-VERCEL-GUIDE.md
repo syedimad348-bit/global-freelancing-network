@@ -1,4 +1,4 @@
-# GitHub-Verel Deployment Setup Guide
+# GitHub-Vercel Deployment Setup Guide
 
 ## Step 1: Create GitHub Repository
 
@@ -35,297 +35,143 @@ git push -u origin main
    - Install Command: `npm ci`
 5. Click "Deploy"
 
-## Step 4: Configure Environment Variables in Vercel
+## Step 4: Configure Vercel Environment Variables
 
 In your Vercel project dashboard:
 
 1. Go to Settings → Environment Variables
-2. Add these variables (Production and Preview):
-   - `REACT_APP_API_URL`: Your backend API URL (we'll set this after deploying backend)
-   - (Add any other frontend-specific variables as needed)
+2. Set `REACT_APP_API_URL` to empty (uses relative URLs with Vercel rewrites)
+3. Add `FRONTEND_URL` with your Vercel project URL (e.g., `https://your-project.vercel.app`)
 
-## Step 5: Deploy Backend to VPS (Virtual Private Server)
+## Step 5: Configure GitHub Actions for Job Fetching
 
-For production deployment with job fetching every 6 hours, deploy the backend to a VPS (DigitalOcean, Linode, AWS EC2, etc.):
+The job-fetching worker runs automatically twice daily via GitHub Actions:
+- **11:00 AM Pakistan Time (06:00 UTC)**
+- **6:00 PM Pakistan Time (13:00 UTC)**
 
-### Option A: Using Systemd Service (Recommended for 24/7 operation)
+### Add Required Secrets to GitHub
 
-1. **Copy backend files to VPS**
-   ```bash
-   # On your local machine
-   scp -r backend/ your-vps-user@your-vps-ip:/tmp/
-   
-   # On VPS
-   sudo mkdir -p /opt/global-freelancing-platform
-   sudo mv /tmp/backend /opt/global-freelancing-platform/
-   sudo chown -R $USER:$USER /opt/global-freelancing-platform/backend
-   ```
+1. Go to your GitHub repository → Settings → Secrets and variables → Actions → New repository secret
+2. Add each secret with its name and value:
 
-2. **Install Node.js dependencies on VPS**
-   ```bash
-   cd /opt/global-freelancing-platform/backend
-   npm ci
-   ```
+| Secret Name | Description | Required |
+|-------------|-------------|----------|
+| `MONGO_URL` | MongoDB Atlas connection string | Yes |
+| `RAPIDAPI_KEY` | RapidAPI key for JSearch | Yes |
+| `ADZUNA_APP_ID` | Adzuna App ID | Yes |
+| `ADZUNA_APP_KEY` | Adzuna App Key | Yes |
+| `JWT_SECRET` | JWT signing secret (32+ chars) | Yes |
+| `JWT_REFRESH_SECRET` | JWT refresh secret | Yes |
+| `FRONTEND_URL` | Your Vercel frontend URL | Yes |
+| `PORT` | Server port (default: 8000) | No |
 
-3. **Configure environment variables**
-   ```bash
-   cp .env.example .env
-   nano .env  # Edit with your actual values
-   ```
-   Required variables:
-   - `MONGO_URL` (your MongoDB Atlas connection string)
-   - `RAPIDAPI_KEY` (your RapidAPI key for JSearch)
-   - `ADZUNA_APP_ID` and `ADZUNA_APP_KEY` (for Adzuna)
-   - `JWT_SECRET` and `JWT_REFRESH_SECRET` (32+ character random strings)
-   - `FRONTEND_URL` (your Vercel frontend URL, e.g., `https://your-project.vercel.app`)
+Optional secrets (only add if configured):
+| Secret Name | Description |
+|-------------|-------------|
+| `WHATSAPP_PROVIDER` | WhatsApp provider (e.g., "twilio") |
+| `WHATSAPP_API_KEY` | WhatsApp API key |
+| `WHATSAPP_PHONE_NUMBER_ID` | WhatsApp phone number ID |
+| `SMTP_HOST` | SMTP server for email alerts |
+| `SMTP_PORT` | SMTP port |
+| `SMTP_USER` | SMTP username |
+| `SMTP_PASS` | SMTP password |
+| `SMTP_FROM` | Sender email address |
+| `STRIPE_SECRET_KEY` | Stripe API key |
+| `STRIPE_PRICE_PRO` | Stripe Pro plan price ID |
+| `STRIPE_PRICE_PREMIUM` | Stripe Premium plan price ID |
+| `PAYPAL_CLIENT_ID` | PayPal client ID |
+| `PAYPAL_CLIENT_SECRET` | PayPal client secret |
+| `PAYPAL_ENV` | PayPal environment (sandbox/production) |
+| `USAJOBS_API_KEY` | USAJOBS API key |
+| `CAREERJET_TERMS` | Careerjet terms |
+| `JOOBLE_API_KEY` | Jooble API key |
+| `FINDWORK_TOKEN` | Findwork token |
+| `AI_ENGINE_URL` | AI engine URL (optional) |
 
-4. **Install and start the systemd service**
-   ```bash
-   # Copy the service file
-   sudo cp vps-worker.service /etc/systemd/system/global-freelancing-worker.service
-   
-   # Update the WorkingDirectory and User in the service file if needed
-   sudo nano /etc/systemd/system/global-freelancing-worker.service
-   
-   # Reload systemd and start the service
-   sudo systemctl daemon-reload
-   sudo systemctl enable global-freelancing-worker.service
-   sudo systemctl start global-freelancing-worker.service
-   
-   # Check status
-   sudo systemctl status global-freelancing-worker.service
-   
-   # View logs
-   sudo journalctl -u global-freelancing-worker.service -f
-   ```
+### Initial Workflow Run
 
-### Option B: Using PM2 (Alternative)
+After adding secrets:
 
-```bash
-# Install PM2 globally
-npm install -g pm2
+1. Go to Actions tab in your GitHub repository
+2. Find **Job Fetching Worker (Twice Daily - Pakistan Time)** workflow
+3. Click "Run workflow" → "Deploy with inputs"
+4. Click "Run workflow" button
+5. Wait 1-3 minutes, then check the workflow results
 
-# Start the worker
-pm2 start worker.js --name "gfn-worker" --watch
+## Step 6: Verify Deployment
 
-# Save and set up startup
-pm2 save
-pm2 startup
-```
+1. **Check Vercel frontend**: Visit your Vercel project URL
+2. **Verify API health**: Visit `https://your-vercel-project.vercel.app/api/health` 
+3. **Check job count**: Jobs should appear in the frontend
+4. **Monitor Actions**: Go to GitHub → Actions to see scheduled runs
 
-### Option C: Simple nohup (for testing)
+## Backend API Endpoints
 
-```bash
-nohup node worker.js --watch > worker.log 2>&1 &
-```
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/health` | Health check (database status, job counts) |
+| `GET /api/jobs` | Get jobs (supports filtering) |
+| `GET /api/jobs/sources/status` | Source health monitoring |
+| `POST /api/auth/login` | User login |
+| `POST /api/auth/register` | User registration |
+| `POST /api/ai/resume-analyze` | AI resume analysis |
 
-## Step 6: Keep Frontend on Vercel Hobby
+## Frontend Routing
 
-The frontend remains deployed on Vercel Hobby tier:
-- No changes needed to frontend deployment
-- The frontend uses relative URLs (`API_BASE_URL = ""`) which work with Vercel's rewrite rules
-- All API calls go to `/api/*` which Vercel rewrites to your VPS backend
+The frontend uses relative APIs (`API_BASE_URL = ""`) which work with Vercel's rewrite rules:
+- `/api/*` → Backend service
+- `/(.*)` → Frontend service
 
-## Environment Variables Summary
+## Job Fetching Details
 
-### Frontend (.env.vercel - Vercel Environment Variables)
-```
-REACT_APP_API_URL=  # Leave empty for relative URLs (works with Vercel rewrites)
-```
-
-### Backend (.env - on VPS)
-```
-MONGO_URL=mongodb+srv://your-user:your-password@cluster0.example.mongodb.net/freelancing_db?retryWrites=true&w=majority
-ADZUNA_APP_ID=your_adzuna_app_id
-ADZUNA_APP_KEY=your_adzuna_app_key
-RAPIDAPI_KEY=your_rapidapi_key_here
-PORT=8000
-JWT_SECRET=your-32-character-jwt-access-secret-here
-JWT_REFRESH_SECRET=your-32-character-jwt-refresh-secret-here
-FRONTEND_URL=https://your-project.vercel.app  # Your Vercel frontend URL
-```
-
-## Verification
-
-1. **Check VPS worker logs**: `sudo journalctl -u global-freelancing-worker.service -f`
-2. **Test API endpoints**: `curl https://your-vps-domain.com/api/health`
-3. **Verify job fetching**: Check that jobs appear in the frontend after worker runs
-4. **Monitor resource usage**: The worker is lightweight and uses minimal resources
-
-## Notes
-
-- The worker runs every 6 hours (configurable in `worker.js`)
-- Uses the same job fetching logic as before - no changes to APIs or sources
-- Includes automatic job expiry (48 hours) and saved job cleanup
-- Processes email alerts as configured
-- Runs in cache-only mode if MongoDB is unavailable
-- Secure systemd service with restricted privileges
-
-## Step 6: Configure Production API URL
-
-Once your backend is deployed:
-
-1. Get your backend URL (e.g., `https://your-backend.vercel.app` or `https://your-backend.onrender.com`)
-2. In your frontend Vercel project:
-   - Settings → Environment Variables
-   - Set `REACT_APP_API_URL` to `https://your-backend-domain.com/api`
-3. Redeploy the frontend
-
-## Step 7: Test End-to-End
-
-1. Visit your frontend URL
-2. Check that jobs are loading from your deployed backend
-3. Test all filters (remote, country, type, source, folder)
-4. Verify source health monitoring is working
-5. Test premium charts on the dashboard
-
-## Environment Variables Summary
-
-### Frontend (.env)
-```
-REACT_APP_API_URL=http://localhost:8000/api  # Development
-REACT_APP_API_URL=https://your-backend.com/api  # Production
-```
-
-### Backend (.env)
-```
-MONGO_URL=mongodb+srv://syedimad348_db_user:imad2005@cluster0.kutnn5h.mongodb.net/?appName=Cluster0
-ADZUNA_APP_ID=3f6446b2
-ADZUNA_APP_KEY=b15781c411fe27dcc32b2112a95f8acb
-RAPIDAPI_KEY=f2ea5188e5msh134673dfca5e4c0p1cc16ajsn2b3f40be1f7c
-PORT=8000
-JWT_SECRET=dailyradar_super_secret_key_2024
-JWT_REFRESH_SECRET=dailyradar_super_secret_refresh_key_2024
-FRONTEND_URL=http://localhost:3000  # Development
-FRONTEND_URL=https://your-frontend.com  # Production
-```
-
-## Next Steps for Development
-
-### 1. JSearch API Key Rotation
-The JSearch API key is currently exhausted (185/185 monthly requests). You need to:
-- Get a new RapidAPI key or rotate the existing one
-- Update `RAPIDAPI_KEY` in backend/.env
-- Restart the backend
-
-### 2. Add API Keys for Remaining Sources
-Four sources require API keys:
-- USAJOBS: Add `USAJOBS_API_KEY` to backend/.env
-- Careerjet: Add `CAREERJET_TERMS` to backend/.env
-- Jooble: Add `JOOBLE_API_KEY` to backend/.env
-- Findwork: Add `FINDWORK_TOKEN` to backend/.env
-
-### 3. Implement Frontend Source Health Dashboard
-Create a new page or section to display:
-- Source health status from `/api/sources/status`
-- Circuit breaker states
-- Failure counts and recovery status
-- Last successful fetch times
-
-### 4. Test All Features
-- Verify job counts consistency across dashboard and Job Hunter
-- Test all filter combinations
-- Verify 48h job expiry is working
-- Test source failure recovery mechanisms
-- Check premium charts render correctly
-
-## Useful Commands
-
-### Backend
-```bash
-# Start backend
-cd backend
-node server.js
-
-# Start worker mode (VPS job fetching, runs every 6 hours)
-cd backend
-node worker.js --watch
-
-# Run single job fetch cycle
-cd backend
-node worker.js
-
-# Check health endpoint
-curl http://localhost:8000/api/health
-
-# Check jobs count
-curl http://localhost:8000/api/jobs?limit=1 | jq '.total'
-
-# Check source status
-curl http://localhost:8000/api/sources/status | jq .
-```
-
-### Frontend
-```bash
-# Start development
-cd frontend
-npm start
-
-# Build for production
-npm run build
-
-# Run tests
-npm test
-```
-
-### VPS Deployment
-```bash
-# On VPS - install dependencies
-cd /opt/global-freelancing-platform/backend
-npm ci
-
-# On VPS - start the worker as systemd service
-sudo systemctl start global-freelancing-worker.service
-sudo systemctl status global-freelancing-worker.service
-
-# On VPS - view logs
-sudo journalctl -u global-freelancing-worker.service -f
-```
-
-### Git Workflow
-```bash
-# On local machine
-git branch -M main
-git push -u origin main
-```
+- **Schedule**: Every 6 hours (11 AM and 6 PM Pakistan time)
+- **Sources**: 19+ job aggregators (Remotive, RemoteOK, JSearch, etc.)
+- **Expiry**: Jobs older than 48 hours are automatically removed
+- **Health Monitoring**: Real-time source status via `/api/jobs/sources/status`
+- **Rate Limiting**: Respects provider quotas; includes exponential backoff
 
 ## Troubleshooting
 
-### Common Issues
+### Job Fetch Workflow Fails
 
-#### "Cannot find module" errors
-- Run `npm install` in both backend and frontend directories
-- Delete node_modules and package-lock.json, then reinstall
+1. Check Actions tab for error messages
+2. Verify all required secrets are set correctly
+3. Check MongoDB connection string - ensure it's accessible from GitHub Actions
+4. Verify RAPIDAPI_KEY has sufficient quota
 
-#### Port already in use
-- Kill existing processes: `taskkill /F /IM node.exe` (Windows) or `pkill -f node` (Mac/Linux)
-- Or change the PORT in backend/.env
+### Empty Job Results
 
-#### CORS errors
-- Ensure FRONTEND_URL is set correctly in backend/.env
-- Check that the backend is running and accessible
-- Verify API URL in frontend matches backend URL
+1. Run job fetch manually via Actions → "Run workflow"
+2. Test using the API: `curl https://your-vercel-project.vercel.app/api/jobs?limit=5`
+3. Check source health: `curl https://your-vercel-project.vercel.app/api/jobs/sources/status`
+4. Verify API keys have not expired or hit rate limits
 
-#### Empty job results
-- Check if sources are working via `/api/sources/status`
-- Verify API keys are valid
-- Check backend logs for fetch errors
-- Ensure cron jobs are running (for live cache updates)
+### CORS Errors
+
+Ensure `FRONTEND_URL` is set correctly in both:
+- Vercel Environment Variables
+- GitHub Actions secrets
 
 ## Final Notes
 
 Your Global Freelancing Network platform is now set up for:
-- ✅ Local development with full functionality
-- ✅ GitHub version control
-- ✅ Automated deployment to Vercel via GitHub Actions
-- ✅ Scalable architecture with 19+ job sources
-- ✅ Reliable job data with health monitoring and failure recovery
-- ✅ Premium user experience with charts and analytics
+- ✅ **Frontend on Vercel Hobby** - Free hosting, no infrastructure costs
+- ✅ **Job fetching via GitHub Actions** - Runs twice daily automatically (every 6 hours)
+- ✅ **MongoDB integration** - Connects to MongoDB Atlas
+- ✅ **19+ job sources** - Full aggregator coverage
+- ✅ **Source health monitoring** - Real-time status reporting
+- ✅ **48-hour job expiry** - Automatic cleanup
+- ✅ **Complete API suite** - Auth, AI tools, filters, etc.
 
-The system is ready for you to:
-1. Add remaining API keys for full source coverage
-2. Implement the frontend source health dashboard
-3. Scale to production usage
-4. Add additional features as needed
+The system runs fully automatically:
+1. Frontend served by Vercel Hobby (free)
+2. Jobs fetched twice daily via GitHub Actions (free for public repos, 2000 mins/month for private)
+3. No VPS or local PC required
+
+Next steps:
+1. Implement source health dashboard in frontend (optional)
+2. Configure email alerts (optional - requires SMTP setup)
+3. Add additional API keys for remaining sources if needed
+4. Add premium charts to dashboard (already built in)
 
 Happy coding!
