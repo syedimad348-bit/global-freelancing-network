@@ -8,7 +8,7 @@ let jsearchMonthlyCount = 0;
 const JSEARCH_MONTHLY_LIMIT = 185;
 
 // ── Job expiry + cleanup configuration ───────────────────────────────────────
-const JOB_MAX_AGE_HOURS = 48;
+const JOB_MAX_AGE_HOURS = 3;
 const JOB_FRESH_HOURS = 48;
 const SALVED_JOB_MAX_AGE_HOURS = 48;
 
