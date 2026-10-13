@@ -7,7 +7,7 @@ Fetches jobs from multiple job boards using JobSpy and saves them to MongoDB
 import os
 import sys
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List, Dict, Any, Optional
 import pandas as pd
 from pymongo import MongoClient
@@ -172,7 +172,7 @@ def map_jobspy_to_schema(job: pd.Series) -> Dict[str, Any]:
         'tags': tags,
         'salary': salary[:100],
         'postedAt': parse_date(job.get('date_posted')),
-        'fetchedAt': datetime.now(datetime.UTC),
+        'fetchedAt': datetime.now(timezone.utc),
         'remoteType': remote_type,
         'country': country,
         'sourceHealth': 1,  # New source starts with neutral health
