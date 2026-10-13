@@ -14,6 +14,9 @@ dotenv.config();
 
 const app = express();
 
+// Track MongoDB connection promise for health checks
+let mongoConnectionPromise = null;
+
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
@@ -32,7 +35,10 @@ app.use(cookieParser());
 
 // ── Routes (registered before DB — serve from cache when DB unavailable) ──────
 app.get('/', (_req, res) => res.json({ message: 'JobRadar API is running.' }));
-app.get('/api/health', (_req, res) => {
+app.get('/api/health', async (_req, res) => {
+  if (mongoConnectionPromise && mongoose.connection.readyState === 2) {
+    await Promise.race([mongoConnectionPromise, new Promise((resolve) => setTimeout(resolve, 3000))]);
+  }
   const live = require('./services/liveJobCache').getLiveJobCache();
   const dbState = mongoose.connection.readyState;
   const dbStatus = dbState === 1 ? 'connected' : 'disconnected';
@@ -97,7 +103,7 @@ function encodeMongoURI(uri) {
 
 if (process.env.MONGO_URL) {
   const safeURI = encodeMongoURI(process.env.MONGO_URL);
-  mongoose.connect(safeURI)
+  mongoConnectionPromise = mongoose.connect(safeURI)
     .then(async () => {
       console.log('✅ MongoDB connected');
       await fetchAllJobs();
@@ -109,7 +115,7 @@ if (process.env.MONGO_URL) {
 } else if (process.env.MONGO_URI) {
   // Allow MONGO_URI as temporary fallback during migration
   const safeURI = encodeMongoURI(process.env.MONGO_URI);
-  mongoose.connect(safeURI)
+  mongoConnectionPromise = mongoose.connect(safeURI)
     .then(async () => {
       console.log('✅ MongoDB connected via MONGO_URI (fallback)');
       await fetchAllJobs();
