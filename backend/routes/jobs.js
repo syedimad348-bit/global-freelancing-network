@@ -116,6 +116,13 @@ router.get('/', async (req, res) => {
 
     const query = {};
 
+    const cursor    = req.query.cursor  || '';  // Keyset pagination cursor (fetchedAt timestamp)
+    const sortBy    = req.query.sort || 'newest';
+    const skip      = (page - 1) * limit;
+    const maxAgeHours = 168;
+
+    const query = {};
+
     if (search) {
       query.$or = [
         { title:   { $regex: search, $options: 'i' } },
@@ -148,13 +155,31 @@ router.get('/', async (req, res) => {
 
     let jobs = [];
     let total = 0;
+    let nextCursor = null;
 
     if (mongoose.connection.readyState === 1) {
       total = await Job.countDocuments(query);
-      jobs = await Job.find(query)
-        .sort({ fetchedAt: -1, postedAt: -1, createdAt: -1 })
-        .skip(skip)
-        .limit(limit);
+
+      // Keyset pagination using fetchedAt as cursor:
+      // - Without cursor: fetch first page (newest jobs)
+      // - With cursor: fetch jobs with fetchedAt newer than cursor (avoids offset shifting)
+      // This keeps similar-age jobs grouped together (no age mixing on a page)
+      let findQuery = { ...query };
+
+      if (cursor) {
+        findQuery.fetchedAt = { $gt: new Date(cursor) };
+      }
+
+      jobs = await Job.find(findQuery)
+        .sort({ fetchedAt: -1, postedAt: -1, createdAt: -1, _id: -1 })
+        .limit(limit + 1);
+
+      if (jobs.length > limit) {
+        jobs = jobs.slice(0, limit);
+        nextCursor = jobs[jobs.length - 1].fetchedAt
+          ? jobs[jobs.length - 1].fetchedAt.toISOString()
+          : null;
+      }
     } else {
       // Fallback to live cache
       const live = getLiveJobCache();
@@ -188,17 +213,30 @@ router.get('/', async (req, res) => {
         filtered = filtered.filter((job) => job.remoteType !== 'onsite');
       }
 
-      // Sort
+      // Sort: newest first by fetchedAt, then postedAt, then _id for stability
       filtered.sort((a, b) => {
-        const ta = a.fetchedAt ? new Date(a.fetchedAt).getTime() : (a.postedAt ? new Date(a.postedAt).getTime() : 0);
-        const tb = b.fetchedAt ? new Date(b.fetchedAt).getTime() : (b.postedAt ? new Date(b.postedAt).getTime() : 0);
-        if (sortBy === 'oldest') return ta - tb;
-        if (sortBy === 'company') return (a.company || '').localeCompare(b.company || '');
-        return tb - ta;
+        const ta = a.fetchedAt ? new Date(a.fetchedAt).getTime() : 0;
+        const tb = b.fetchedAt ? new Date(b.fetchedAt).getTime() : 0;
+        if (ta !== tb) return tb - ta;
+        const pa = a.postedAt ? new Date(a.postedAt).getTime() : 0;
+        const pb = b.postedAt ? new Date(b.postedAt).getTime() : 0;
+        if (pa !== pb) return pb - pa;
+        return String(b._id).localeCompare(String(a._id));
       });
 
+      // Keyset-style slicing: skip jobs at or before cursor
+      let startIdx = 0;
+      if (cursor) {
+        const cursorDate = new Date(cursor);
+        startIdx = filtered.findIndex((j) => {
+          const jDate = j.fetchedAt ? new Date(j.fetchedAt) : null;
+          return jDate && jDate <= cursorDate;
+        });
+        if (startIdx < 0) startIdx = filtered.length;
+      }
+
+      jobs = filtered.slice(startIdx, startIdx + limit);
       total = filtered.length;
-      jobs = filtered.slice(skip, skip + limit);
     }
 
     // Add freshness label
@@ -213,11 +251,19 @@ router.get('/', async (req, res) => {
       return { ...j.toObject ? j.toObject() : j, freshness };
     });
 
+    // Determine next cursor for keyset pagination
+    if (jobs.length > 0) {
+      const lastJob = jobs[jobs.length - 1];
+      nextCursor = lastJob.fetchedAt ? lastJob.fetchedAt.toISOString() : null;
+    }
+
     res.json({
       page,
       pages: Math.ceil(total / limit),
       total,
       jobs: labeledJobs,
+      nextCursor,
+      cursorBased: true,  // Indicates keyset pagination is in use
       maxAgeHours,
     });
   } catch (err) {
