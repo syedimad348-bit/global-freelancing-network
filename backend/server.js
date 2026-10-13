@@ -81,12 +81,24 @@ const PORT = process.env.PORT || 8000;
 module.exports = app;
 module.exports.app = app;
 
+// Warm live cache on module load (works for both local server and Vercel cold starts)
+let cacheWarmed = false;
+async function warmLiveCache() {
+  if (cacheWarmed) return;
+  cacheWarmed = true;
+  try {
+    const c = await refreshLiveJobCache();
+    console.log(`✅ Live cache ready: ${c.jobs.length} jobs`);
+  } catch (e) {
+    console.log('Cache warm error:', e.message);
+  }
+}
+
+// Call warmLiveCache on module load
+warmLiveCache();
+
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
-  // Warm live cache on startup (always works, no DB needed)
-  refreshLiveJobCache()
-    .then((c) => console.log(`✅ Live cache ready: ${c.jobs.length} jobs`))
-    .catch((e) => console.log('Cache warm error:', e.message));
 });
 
 // ── Database connection (non-fatal) ───────────────────────────────────────────
@@ -95,6 +107,16 @@ function encodeMongoURI(uri) {
     const match = uri.match(/^(mongodb(?:\+srv)?:\/\/)([^:]+):(.+)@(.+)$/);
     if (!match) return uri;
     const [, scheme, user, pass, rest] = match;
+    // Ensure database name is included in the URI
+    const [hostPart, queryPart] = rest.split('?');
+    const pathParts = hostPart.split('/');
+    const hasDatabase = pathParts.length > 1 && pathParts[1] && pathParts[1].trim() !== '';
+    if (!hasDatabase) {
+      const databaseName = 'freelance_network';
+      const cleanHost = pathParts[0];
+      const newRest = cleanHost + '/' + databaseName + (queryPart ? '?' + queryPart : '');
+      return `${scheme}${encodeURIComponent(user)}:${encodeURIComponent(pass)}@${newRest}`;
+    }
     return `${scheme}${encodeURIComponent(user)}:${encodeURIComponent(pass)}@${rest}`;
   } catch {
     return uri;
