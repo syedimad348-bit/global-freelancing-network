@@ -10,8 +10,7 @@
  *   node worker.js --watch  # Run continuously (runs every 6 hours)
  * 
  * Environment Variables:
- *   MONGO_URI  - MongoDB connection string (required)
- *   MONGO_URL  - Alternative MongoDB connection string (fallback if MONGO_URI not set)
+ *   MONGO_URL  - MongoDB connection string (required)
  */
 
 const { fetchAllJobs, expireOldJobs, expireOldSavedJobs } = require('./controllers/fetchJobs');
@@ -31,12 +30,12 @@ const INTERVAL_HOURS = 6;     // Run every 6 hours in watch mode
 
 /**
  * Resolve MongoDB connection string from environment variables.
- * Prefers MONGO_URI (matches existing server.js convention).
- * Falls back to MONGO_URL for backward compatibility.
+ * Uses MONGO_URL (canonical variable standardized across project).
+ * Falls back to MONGO_URI for backward compatibility only.
  * Returns null if neither is set.
  */
 function resolveMongoURI() {
-  return process.env.MONGO_URI || process.env.MONGO_URL || null;
+  return process.env.MONGO_URL || process.env.MONGO_URI || null;
 }
 
 /**
@@ -102,12 +101,12 @@ async function main() {
   // Resolve MongoDB connection string
   const mongoURI = resolveMongoURI();
   
-  if (!mongoURI) {
-    console.error('❌ FATAL: No MongoDB connection string configured.');
-    console.error('   Set the MONGO_URI (or MONGO_URL) environment variable.');
-    console.error('   Example: MONGO_URI=mongodb+srv://user:pass@cluster.mongodb.net/db');
-    process.exit(1);
-  }
+   if (!mongoURI) {
+     console.error('❌ FATAL: No MongoDB connection string configured.');
+     console.error('   Set the MONGO_URL environment variable.');
+     console.error('   Example: MONGO_URL=mongodb+srv://user:pass@cluster.mongodb.net/db');
+     process.exit(1);
+   }
   
   // Connect to MongoDB (required - worker cannot run without it)
   try {
@@ -117,9 +116,9 @@ async function main() {
     });
     console.log('✅ MongoDB connected successfully');
   } catch (err) {
-    console.error('❌ FATAL: MongoDB connection failed:', err.message);
-    console.error('   Verify your MONGO_URI is correct and the cluster is accessible.');
-    process.exit(1);
+console.error('❌ FATAL: MongoDB connection failed:', err.message);
+     console.error('   Verify your MONGO_URL is correct and the cluster is accessible.');
+     process.exit(1);
   }
   
   // Verify connection is actually established

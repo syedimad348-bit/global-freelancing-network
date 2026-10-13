@@ -34,9 +34,11 @@ app.use(cookieParser());
 app.get('/', (_req, res) => res.json({ message: 'JobRadar API is running.' }));
 app.get('/api/health', (_req, res) => {
   const live = require('./services/liveJobCache').getLiveJobCache();
+  const dbState = mongoose.connection.readyState;
+  const dbStatus = dbState === 1 ? 'connected' : 'disconnected';
   res.json({
     ok: true,
-    database: mongoose.connection.readyState === 1 ? 'connected' : 'offline-cache-mode',
+    database: dbStatus,
     jobs: {
       liveCount: live.jobs?.length || 0,
       updatedAt: live.updatedAt,
@@ -93,16 +95,30 @@ function encodeMongoURI(uri) {
   }
 }
 
-if (process.env.MONGO_URL || process.env.MONGO_URI) {
-  const safeURI = encodeMongoURI(process.env.MONGO_URL || process.env.MONGO_URI);
+if (process.env.MONGO_URL) {
+  const safeURI = encodeMongoURI(process.env.MONGO_URL);
   mongoose.connect(safeURI)
     .then(async () => {
       console.log('✅ MongoDB connected');
       await fetchAllJobs();
     })
-    .catch((err) => console.log('⚠️  MongoDB unavailable — running on live cache only:', err.message));
+    .catch((err) => {
+      console.error('⚠️  MongoDB connection error:', err.message);
+      // Don't exit - let routes fall back to live cache
+    });
+} else if (process.env.MONGO_URI) {
+  // Allow MONGO_URI as temporary fallback during migration
+  const safeURI = encodeMongoURI(process.env.MONGO_URI);
+  mongoose.connect(safeURI)
+    .then(async () => {
+      console.log('✅ MongoDB connected via MONGO_URI (fallback)');
+      await fetchAllJobs();
+    })
+    .catch((err) => {
+      console.error('⚠️  MongoDB connection error via MONGO_URI:', err.message);
+    });
 } else {
-  console.log('⚠️  No MONGO_URI — running on live cache only');
+  console.warn('⚠️  No MONGO_URL or MONGO_URI — routes will fall back to live cache');
 }
 
 // A six-hour refresh keeps the optional JSearch source inside its free-tier

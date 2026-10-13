@@ -45,7 +45,7 @@ jobs:
       - name: Run job fetching worker
         env:
           # MongoDB connection (required - worker will fail without this)
-          MONGO_URI: ${{ secrets.MONGO_URI }}
+          MONGO_URL: ${{ secrets.MONGO_URL }}
           
           # Job aggregation APIs
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
