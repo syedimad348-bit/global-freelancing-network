@@ -41,7 +41,7 @@ export default function MagicLogin() {
         <p className="mt-2 text-sm text-ink-muted">{status.message}</p>
         <div className="mt-6 flex justify-center">
           {status.kind === 'loading' ? (
-            <div className="w-10 h-10 rounded-full border-4 border-brand-200 border-t-brand-600 animate-spin" />
+            <div className="w-10 h-10 rounded-full border-4 border-emerald-200 border-t-emerald-600 animate-spin" />
           ) : (
             <Button variant="secondary" onClick={() => navigate('/login')}>Back to login</Button>
           )}

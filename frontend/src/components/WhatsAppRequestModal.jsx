@@ -93,7 +93,7 @@ export default function WhatsAppRequestModal({ tool, isOpen, onClose }) {
           className="relative w-full max-w-lg bg-white rounded-2xl shadow-elevated border border-line overflow-hidden z-10"
         >
           {/* Header */}
-          <div className="px-6 py-5 bg-gradient-to-r from-sidebar to-[#2E1065] text-white flex items-center justify-between">
+          <div className="px-6 py-5 bg-gradient-to-r from-sidebar to-sidebar text-white flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-emerald-400 ring-1 ring-white/15">
                 <MessageSquare className="w-5 h-5" />

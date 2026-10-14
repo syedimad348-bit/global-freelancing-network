@@ -6,9 +6,9 @@ const tones = {
   amber:   'bg-amber-50 text-amber-700 border border-amber-200',
   rose:    'bg-rose-50 text-rose-700 border border-rose-200',
   sky:     'bg-sky-50 text-sky-700 border border-sky-200',
-  violet:  'bg-purple-50 text-purple-700 border border-purple-200',
+  violet:  'bg-emerald-50 text-emerald-700 border border-emerald-200',
   neutral: 'bg-surface-subtle text-ink-muted border border-line',
-  purple:  'bg-brand-50 text-brand-600 border border-brand-100 font-medium',
+  purple:  'bg-emerald-50 text-emerald-600 border border-emerald-200 font-medium',
 };
 
 export default function Badge({ tone = 'brand', children, className = '', dot = false }) {

@@ -4,11 +4,11 @@ import { canUse } from '../../lib/tiers';
 
 const PAGE_SIZE = 24;
 const REELS = [
-  { id: 'r1', title: '3 ChatGPT prompts that cut my resume-writing time by 70%', author: 'Aisha Khan', likes: 2410, plays: 18200, tag: 'Resume',    cover: 'from-brand-500 to-violet-500' },
-  { id: 'r2', title: 'I ranked the top 5 free AI image tools — winner surprised me', author: 'Sara Iqbal', likes: 1890, plays: 14400, tag: 'Design',  cover: 'from-pink-500 to-rose-500' },
+  { id: 'r1', title: '3 ChatGPT prompts that cut my resume-writing time by 70%', author: 'Aisha Khan', likes: 2410, plays: 18200, tag: 'Resume',    cover: 'from-emerald-500 to-emerald-400' },
+  { id: 'r2', title: 'I ranked the top 5 free AI image tools — winner surprised me', author: 'Sara Iqbal', likes: 1890, plays: 14400, tag: 'Design',  cover: 'from-emerald-500 to-emerald-300' },
   { id: 'r3', title: 'Notion AI vs Mem AI: which one I actually kept', author: 'Mehak Raza', likes: 1620, plays: 12100, tag: 'Productivity', cover: 'from-emerald-500 to-cyan-500' },
   { id: 'r4', title: 'How I built a job-tracker in 9 minutes with v0.dev', author: 'Hamza Ali', likes: 3110, plays: 22800, tag: 'No-code',     cover: 'from-amber-500 to-orange-500' },
-  { id: 'r5', title: 'Cold-email script + ChatGPT = 12 interviews in a week', author: 'Layla Raza', likes: 2780, plays: 19600, tag: 'Career',  cover: 'from-violet-500 to-fuchsia-500' },
+  { id: 'r5', title: 'Cold-email script + ChatGPT = 12 interviews in a week', author: 'Layla Raza', likes: 2780, plays: 19600, tag: 'Career',  cover: 'from-emerald-500 to-emerald-300' },
   { id: 'r6', title: 'My favorite under-rated AI tool of the month', author: 'Global Freelancing Network', likes: 1990, plays: 15300, tag: 'Picks',           cover: 'from-sky-500 to-indigo-500' },
 ];
 
@@ -40,8 +40,8 @@ export default function AITools({ user }) {
   return (
     <div className="space-y-6">
       <div className="flex gap-2">
-        <button onClick={() => setTab('directory')} className={['px-4 py-2 rounded-xl text-sm font-bold border', tab === 'directory' ? 'bg-brand-500/15 text-brand-300 border-brand-400/40' : 'border-line text-ink-muted hover:text-ink'].join(' ')}>Directory</button>
-        <button onClick={() => setTab('reels')}    className={['px-4 py-2 rounded-xl text-sm font-bold border inline-flex items-center gap-1.5', tab === 'reels' ? 'bg-pink-500/15 text-pink-300 border-pink-400/40' : 'border-line text-ink-muted hover:text-ink'].join(' ')}>
+        <button onClick={() => setTab('directory')} className={['px-4 py-2 rounded-xl text-sm font-bold border', tab === 'directory' ? 'bg-emerald-500/15 text-emerald-300 border-emerald-400/40' : 'border-line text-ink-muted hover:text-ink'].join(' ')}>Directory</button>
+        <button onClick={() => setTab('reels')}    className={['px-4 py-2 rounded-xl text-sm font-bold border inline-flex items-center gap-1.5', tab === 'reels' ? 'bg-emerald-500/15 text-emerald-300 border-emerald-400/40' : 'border-line text-ink-muted hover:text-ink'].join(' ')}>
           🎬 Reels
           {!reelsAllowed && <span className="text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30 px-1.5 rounded">PRO</span>}
         </button>
@@ -74,7 +74,7 @@ export default function AITools({ user }) {
       ) : (
       <>
       <div className="card relative overflow-hidden">
-        <div aria-hidden className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-violet-500/15 blur-3xl" />
+        <div aria-hidden className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-emerald-500/15 blur-3xl" />
         <div className="relative flex flex-col md:flex-row md:items-end justify-between gap-5">
           <div>
             <div className="flex items-center gap-2 flex-wrap">
@@ -131,7 +131,7 @@ export default function AITools({ user }) {
             className="card hover:shadow-cardHover hover:border-line-strong transition-all block"
           >
             <div className="flex items-start gap-3">
-              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-violet-500/30 to-brand-500/30 grid place-items-center font-black text-white shrink-0">{t.name[0]}</div>
+              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500/30 to-emerald-500/30 grid place-items-center font-black text-white shrink-0">{t.name[0]}</div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 flex-wrap">
                   <h3 className="text-base font-bold text-ink truncate">{t.name}</h3>

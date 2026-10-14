@@ -44,9 +44,9 @@ export default function Register() {
     <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4 sm:p-6 lg:p-10 font-sans text-ink">
       <div className="w-full max-w-5xl bg-white rounded-3xl shadow-elevated border border-line overflow-hidden grid lg:grid-cols-12 min-h-[640px]">
         {/* ── Left Column: 3D Visual & Brand Showcase (5 cols) ──────────────── */}
-        <div className="lg:col-span-5 bg-gradient-to-br from-[#1E1035] via-[#2A1647] to-[#160B29] text-white p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-72 h-72 bg-brand-500/20 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="lg:col-span-5 bg-gradient-to-br from-emerald-900 to-emerald-800 text-white p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
           {/* Logo Header */}
           <div className="relative z-10">
@@ -70,12 +70,12 @@ export default function Register() {
               <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight leading-snug">
                 Join the International Freelancing Network
               </h2>
-              <p className="text-xs sm:text-sm text-purple-200 leading-relaxed">
+              <p className="text-xs sm:text-sm text-emerald-100 leading-relaxed">
                 Connect directly with overseas clients, access automated job aggregation, and request proprietary AI tricks.
               </p>
             </div>
 
-            <div className="space-y-2 text-xs text-purple-200/90 pt-2 border-t border-white/10 hidden sm:block">
+            <div className="space-y-2 text-xs text-emerald-200/90 pt-2 border-t border-white/10 hidden sm:block">
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                 <span>Zero platform commissions on direct connects</span>
@@ -88,7 +88,7 @@ export default function Register() {
           </div>
 
           {/* Footer note */}
-          <div className="relative z-10 text-[11px] text-purple-300/80 flex items-center gap-1.5">
+          <div className="relative z-10 text-[11px] text-emerald-300/80 flex items-center gap-1.5">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <span>Compliant with international data privacy standards</span>
           </div>

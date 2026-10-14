@@ -115,7 +115,7 @@ export default function MyInsights({ user }) {
           {[
             { label: 'Saved',   v: 0, color: 'bg-white/10' },
             { label: 'Applied', v: insights.totalApplies, color: 'bg-brand-500' },
-            { label: 'Phone',   v: 0, color: 'bg-violet-500' },
+            { label: 'Phone',   v: 0, color: 'bg-emerald-500' },
             { label: 'Onsite',  v: 0, color: 'bg-amber-500' },
             { label: 'Offer',   v: 0, color: 'bg-emerald-500' },
           ].map((s) => (
@@ -154,10 +154,10 @@ export default function MyInsights({ user }) {
 function BigCard({ tone, label, value, sub }) {
   const styles = {
     cyan:   'from-cyan-500 to-blue-600',
-    violet: 'from-violet-500 to-fuchsia-600',
-    amber:  'from-amber-500 to-orange-600',
-    pink:   'from-pink-500 to-rose-600',
-  }[tone] || 'from-brand-500 to-violet-500';
+    violet: 'from-emerald-500 to-emerald-300',
+    amber:  'from-emerald-500 to-emerald-300',
+    pink:   'from-emerald-500 to-emerald-300',
+  }[tone] || 'from-emerald-500 to-emerald-300';
   return (
     <div className={['rounded-2xl p-5 text-white relative overflow-hidden bg-gradient-to-br shadow-card', styles].join(' ')}>
       <div aria-hidden className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/15 blur-2xl" />

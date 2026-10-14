@@ -71,13 +71,13 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4 sm:p-6 lg:p-10 font-sans text-ink">
+    <div className="min-h-screen bg-canvas flex items-center justify-center p-4 sm:p-6 lg:p-10 font-sans text-ink">
       <div className="w-full max-w-5xl bg-white rounded-3xl shadow-elevated border border-line overflow-hidden grid lg:grid-cols-12 min-h-[640px]">
         {/* ── Left Column: 3D Visual & Brand Showcase (5 cols) ──────────────── */}
-        <div className="lg:col-span-5 bg-gradient-to-br from-[#1E1035] via-[#2A1647] to-[#160B29] text-white p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden">
+        <div className="lg:col-span-5 bg-gradient-to-br from-emerald-900 to-emerald-800 text-white p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden">
           {/* Subtle background glow */}
-          <div className="absolute top-0 right-0 w-72 h-72 bg-brand-500/20 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
           {/* Logo Header */}
           <div className="relative z-10">
@@ -99,7 +99,7 @@ export default function Login() {
               />
               <div
                 style={{ display: 'none' }}
-                className="w-36 h-36 rounded-2xl bg-gradient-to-tr from-brand-600 to-accent-violet items-center justify-center text-white shadow-glow"
+                className="w-36 h-36 rounded-2xl bg-gradient-to-tr from-emerald-600 to-emerald-700 items-center justify-center text-white shadow-glow"
               >
                 <Sparkles className="w-16 h-16 animate-pulse" />
               </div>
@@ -109,12 +109,12 @@ export default function Login() {
               <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight leading-snug">
                 Accelerate Your Global Freelance Career
               </h2>
-              <p className="text-xs sm:text-sm text-purple-200 leading-relaxed">
+              <p className="text-xs sm:text-sm text-emerald-100 leading-relaxed">
                 Aggregated jobs from Upwork, LinkedIn, and Remotive paired with 20 elite AI productivity tricks.
               </p>
             </div>
 
-            <div className="space-y-2 text-xs text-purple-200/90 pt-2 border-t border-white/10 hidden sm:block">
+            <div className="space-y-2 text-xs text-emerald-200/90 pt-2 border-t border-white/10 hidden sm:block">
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                 <span>Real-time deduplicated job aggregation</span>
@@ -127,7 +127,7 @@ export default function Login() {
           </div>
 
           {/* Footer note */}
-          <div className="relative z-10 text-[11px] text-purple-300/80 flex items-center gap-1.5">
+          <div className="relative z-10 text-[11px] text-emerald-300/80 flex items-center gap-1.5">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <span>Bank-grade encrypted authentication</span>
           </div>
@@ -150,7 +150,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={handleDemoSignIn}
-                className="text-xs font-bold px-3 py-1.5 rounded-full border border-brand-200 bg-brand-50 text-brand-700 hover:bg-brand-100 transition-colors"
+                className="text-xs font-bold px-3 py-1.5 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-400 hover:bg-emerald-100 transition-colors"
                 title="Sign in with preconfigured demo account"
               >
                 Use Demo

@@ -83,7 +83,7 @@ export const TRICKS_CATALOGUE = [
     desc: 'Gold-standard generative image engine for photorealistic creative art, marketing collateral, and UI mockups.',
     icon: 'Image',
     badge: 'High Res',
-    color: 'from-purple-600 to-pink-600',
+    color: 'from-emerald-600 to-emerald-400',
     tags: ['Photorealism', 'Art', 'Creative'],
   },
   {
@@ -95,7 +95,7 @@ export const TRICKS_CATALOGUE = [
     desc: 'Versatile creative production suite for game assets, marketing graphics, concept art, and fine-tuned models.',
     icon: 'Palette',
     badge: 'Creative',
-    color: 'from-violet-600 to-fuchsia-600',
+    color: 'from-emerald-600 to-emerald-400',
     tags: ['Game Assets', 'Concept Art', 'Canvases'],
   },
   {
@@ -107,7 +107,7 @@ export const TRICKS_CATALOGUE = [
     desc: 'Specialized generative design model famous for rendering typography and readable text inside graphic compositions.',
     icon: 'Type',
     badge: 'Typography',
-    color: 'from-pink-500 to-rose-600',
+    color: 'from-emerald-500 to-emerald-300',
     tags: ['Logos', 'Typography', 'Posters'],
   },
   {
@@ -131,7 +131,7 @@ export const TRICKS_CATALOGUE = [
     desc: 'Gen-2 & Gen-3 Alpha cinema-grade video generation, camera motion controls, and generative video effects.',
     icon: 'Video',
     badge: 'Cinema',
-    color: 'from-violet-500 to-indigo-600',
+    color: 'from-emerald-500 to-emerald-300',
     tags: ['Cinematic', 'Gen-3', 'VFX'],
   },
   {
@@ -179,7 +179,7 @@ export const TRICKS_CATALOGUE = [
     desc: 'Full-song AI composition engine generating vocals, lyrics, and production-ready music from a single text prompt.',
     icon: 'Music',
     badge: 'Full Music',
-    color: 'from-fuchsia-500 to-pink-600',
+    color: 'from-emerald-500 to-emerald-300',
     tags: ['Vocals', 'Soundtrack', 'Composition'],
   },
   {
@@ -203,7 +203,7 @@ export const TRICKS_CATALOGUE = [
     desc: 'The global standard UI/UX design and prototyping platform, now enhanced with generative layout and design systems AI.',
     icon: 'Figma',
     badge: 'Industry Standard',
-    color: 'from-purple-500 to-rose-500',
+    color: 'from-emerald-500 to-emerald-300',
     tags: ['UI/UX', 'Prototypes', 'Design Systems'],
   },
   {
@@ -239,7 +239,7 @@ export const TRICKS_CATALOGUE = [
     desc: 'Self-hostable workflow automation platform with native AI agent nodes, LangChain connectors, and 400+ integrations.',
     icon: 'Workflow',
     badge: 'Open / Cloud',
-    color: 'from-rose-500 to-orange-500',
+    color: 'from-emerald-500 to-emerald-300',
     tags: ['Self-Hosted', 'AI Agents', 'APIs'],
   },
   {

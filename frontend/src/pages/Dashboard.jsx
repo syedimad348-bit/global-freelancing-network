@@ -117,7 +117,7 @@ export default function Dashboard() {
       {/* ── Purple Sidebar (Compact, Luxury SaaS styling) ────────────────────── */}
       <aside
         className={[
-          'fixed inset-y-0 left-0 z-50 bg-[#1E1035] text-white flex flex-col transition-all duration-300 ease-in-out border-r border-sidebar-border',
+          'fixed inset-y-0 left-0 z-50 bg-gradient-to-b from-[#064E3B] to-[#047857] text-white flex flex-col transition-all duration-300 ease-in-out border-r border-emerald-500/20',
           sidebarCollapsed ? 'w-[76px]' : 'w-64',
           mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
         ].join(' ')}
@@ -149,16 +149,16 @@ export default function Dashboard() {
                 title={sidebarCollapsed ? item.label : undefined}
                 className={[
                   'group relative w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150',
-                  isActive
-                    ? 'bg-gradient-to-r from-brand-600 to-[#9055FD] text-white shadow-sm shadow-brand-500/20'
-                    : 'text-purple-200 hover:text-white hover:bg-white/[0.08]',
+isActive
+                     ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-sm shadow-emerald-500/20'
+                     : 'text-emerald-100 hover:text-white hover:bg-white/[0.08]',
                 ].join(' ')}
               >
                 <Icon
-                  className={[
+className={[
                     'w-5 h-5 shrink-0 transition-colors',
-                    isActive ? 'text-white' : 'text-purple-300 group-hover:text-white',
-                  ].join(' ')}
+                    isActive ? 'text-white' : 'text-emerald-200 group-hover:text-white',
+                ].join(' ')}
                 />
 
                 {!sidebarCollapsed && (
@@ -183,12 +183,12 @@ export default function Dashboard() {
         {/* Upgrade / Account Panel at Bottom */}
         <div className="p-3 border-t border-white/10 space-y-2">
           {!sidebarCollapsed && tier?.name === 'Free' && (
-            <div className="p-3 rounded-xl bg-gradient-to-br from-brand-900/80 to-[#2A1647] border border-white/10 text-xs space-y-2">
+            <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-900/80 to-emerald-800 border border-white/10 text-xs space-y-2">
               <div className="flex items-center gap-1.5 text-amber-300 font-bold">
                 <Zap className="w-3.5 h-3.5 fill-current" />
                 <span>Upgrade to Pro</span>
               </div>
-              <p className="text-[11px] text-purple-200 leading-snug">
+              <p className="text-[11px] text-emerald-200 leading-snug">
                 Unlock automated match scoring and WhatsApp trick access.
               </p>
               <button
@@ -202,18 +202,18 @@ export default function Dashboard() {
 
           {/* User profile capsule */}
           <div className="flex items-center gap-3 px-2 py-2 rounded-xl bg-white/[0.04]">
-            <div className="w-8 h-8 rounded-full bg-brand-500 flex items-center justify-center text-white font-bold text-xs ring-2 ring-white/20 shrink-0">
+            <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-xs ring-2 ring-white/20 shrink-0">
               {(user?.name || 'Imad').slice(0, 2).toUpperCase()}
             </div>
             {!sidebarCollapsed && (
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-bold text-white truncate">{user?.name || 'Imad'}</p>
-                <p className="text-[10px] text-purple-300 truncate">{tier?.name || 'Free'} Plan</p>
+                <p className="text-[10px] text-emerald-200 truncate">{tier?.name || 'Free'} Plan</p>
               </div>
             )}
             <button
               onClick={handleLogout}
-              className="p-1.5 rounded-lg text-purple-300 hover:text-white hover:bg-white/10 transition-colors"
+              className="p-1.5 rounded-lg text-emerald-300 hover:text-white hover:bg-white/10 transition-colors"
               title="Sign Out"
               aria-label="Sign out"
             >
@@ -290,7 +290,7 @@ export default function Dashboard() {
               onClick={() => setActive('profile')}
               className="flex items-center gap-2 pl-2 border-l border-line cursor-pointer hover:opacity-80 transition-opacity"
             >
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-600 to-accent-violet flex items-center justify-center text-white font-bold text-xs shadow-xs">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-emerald-600 to-emerald-700 flex items-center justify-center text-white font-bold text-xs shadow-xs">
                 {(user?.name || 'Imad').slice(0, 2).toUpperCase()}
               </div>
               <span className="hidden xl:inline text-xs font-bold text-ink max-w-[120px] truncate">
@@ -616,7 +616,7 @@ function DashboardOverview({ user, setActive, onOpenTrickModal }) {
         <div className="card p-5 space-y-3 hover:border-emerald-300 transition-all">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-ink-muted">Saved Jobs</span>
-            <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
               <Bookmark className="w-5 h-5" />
             </div>
           </div>
@@ -786,7 +786,7 @@ function DashboardOverview({ user, setActive, onOpenTrickModal }) {
                           <h4 className="text-sm font-bold text-ink truncate group-hover:text-brand-600 transition-colors">
                             {job.title}
                           </h4>
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                             {job.source || 'LinkedIn'}
                           </span>
                         </div>
@@ -865,7 +865,7 @@ function DashboardOverview({ user, setActive, onOpenTrickModal }) {
                     </div>
                     <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-brand-500 to-accent-violet rounded-full transition-all duration-500"
+                        className="h-full bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-full transition-all duration-500"
                         style={{ width: `${proj.progress}%` }}
                       />
                     </div>
@@ -1201,7 +1201,7 @@ function CircularProgressGauge({ percentage = 88, label = '88%', subtitle = 'Rea
         />
         <defs>
           <linearGradient id="gaugeGradient" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#7C3AED" />
+            <stop offset="0%" stopColor="#10B981" />
             <stop offset="100%" stopColor="#A855F7" />
           </linearGradient>
         </defs>

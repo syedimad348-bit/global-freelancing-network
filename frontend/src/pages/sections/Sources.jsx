@@ -24,7 +24,7 @@ const STATUS_CONFIG = {
   Healthy: { icon: CheckCircle2, color: 'text-emerald-600 bg-emerald-100', label: 'Healthy', description: 'Source responding normally' },
   Degraded: { icon: AlertTriangle, color: 'text-amber-600 bg-amber-100', label: 'Degraded', description: 'Source responding with errors' },
   Retrying: { icon: Loader2, color: 'text-blue-600 bg-blue-100 animate-spin', label: 'Retrying', description: 'Circuit breaker half-open, testing recovery' },
-  'Authentication Required': { icon: Shield, color: 'text-purple-600 bg-purple-100', label: 'Auth Required', description: 'API credentials needed' },
+  'Authentication Required': { icon: Shield, color: 'text-emerald-600 bg-emerald-100', label: 'Auth Required', description: 'API credentials needed' },
   Disabled: { icon: XCircle, color: 'text-slate-500 bg-slate-100', label: 'Disabled', description: 'Source manually disabled' },
   Unknown: { icon: Minus, color: 'text-slate-500 bg-slate-100', label: 'Unknown', description: 'Status not available' },
 };
@@ -235,7 +235,7 @@ export default function Sources() {
                   >
                     <td className="px-4 py-3 font-medium text-ink">
                       <div className="flex items-center gap-2">
-                        {source.auth && <Shield className="w-4 h-4 text-purple-500" title="Requires authentication" />}
+                        {source.auth && <Shield className="w-4 h-4 text-emerald-500" title="Requires authentication" />}
                         {source.type.startsWith('RSS') && <WifiOff className="w-4 h-4 text-slate-400" title="RSS Feed" />}
                         {source.type.startsWith('API') && !source.auth && <Server className="w-4 h-4 text-brand-500" title="API Endpoint" />}
                         {source.name}
@@ -356,7 +356,7 @@ function SummaryCard({ label, value, icon: Icon, tone }) {
     emerald: 'bg-emerald-50 border-emerald-200 text-emerald-700',
     amber: 'bg-amber-50 border-amber-200 text-amber-700',
     blue: 'bg-blue-50 border-blue-200 text-blue-700',
-    purple: 'bg-purple-50 border-purple-200 text-purple-700',
+    purple: 'bg-emerald-50 border-emerald-200 text-emerald-700',
     cyan: 'bg-cyan-50 border-cyan-200 text-cyan-700',
   };
 

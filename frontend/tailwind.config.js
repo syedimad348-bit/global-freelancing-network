@@ -9,19 +9,19 @@ module.exports = {
         mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
       },
       colors: {
-        // Light clean SaaS workspace + Deep Purple Sidebar
-        canvas: '#F8FAFC',       // Slate 50 workspace background
+        // Light clean SaaS workspace + Deep Green Premium Sidebar
+        canvas: '#F0FDF8',       // Mint 50 workspace background
         surface: '#FFFFFF',      // Pure white card background
-        'surface-subtle': '#F1F5F9', // Slate 100 secondary
-        'surface-alt': '#F8FAFC',
+        'surface-subtle': '#ECFDF5', // Mint 100 secondary
+        'surface-alt': '#F0FDF8',
         sidebar: {
-          DEFAULT: '#1E1035',    // Deep luxury purple sidebar
-          hover: '#2A1647',
-          active: '#381C5E',
-          card: '#291746',
+          DEFAULT: '#064E3B',    // Deep emerald green sidebar
+          hover: '#065F46',
+          active: '#047857',
+          card: '#059669',
           border: 'rgba(255, 255, 255, 0.08)',
           text: '#FFFFFF',
-          muted: '#C4B5FD',
+          muted: '#A7F3D0',
         },
         ink: {
           DEFAULT: '#0F172A',    // Slate 900 dark charcoal headings/primary
@@ -35,21 +35,21 @@ module.exports = {
           strong: '#CBD5E1',     // Slate 300
         },
         brand: {
-          50: '#FAF5FF',
-          100: '#F3E8FF',
-          200: '#E9D5FF',
-          300: '#D8B4FE',
-          400: '#C084FC',
-          500: '#7C3AED',        // Primary restrained purple
-          600: '#6D28D9',
-          700: '#5B21B6',
-          800: '#4C1D95',
-          900: '#2E1065',
+          50: '#ECFDF5',
+          100: '#D1FAE5',
+          200: '#A7F3D0',
+          300: '#6EE7B7',
+          400: '#34D399',
+          500: '#10B981',        // Primary emerald green
+          600: '#059669',
+          700: '#047857',
+          800: '#065F46',
+          900: '#064E3B',
         },
         accent: {
-          purple: '#7C3AED',
-          violet: '#8B5CF6',
-          indigo: '#6366F1',
+          purple: '#10B981',
+          violet: '#34D399',
+          indigo: '#06B6D4',
           emerald: '#10B981',
           cyan: '#06B6D4',
           amber: '#F59E0B',
@@ -69,9 +69,9 @@ module.exports = {
         'glow-sm': '0 2px 10px -1px rgba(124, 58, 237, 0.25)',
       },
       backgroundImage: {
-        'brand-gradient': 'linear-gradient(135deg, #7C3AED 0%, #6D28D9 50%, #4F46E5 100%)',
-        'purple-soft': 'linear-gradient(135deg, #FAF5FF 0%, #EDE9FE 100%)',
-        'hero-gradient': 'linear-gradient(135deg, #2E1065 0%, #1E1035 100%)',
+        'brand-gradient': 'linear-gradient(135deg, #10B981 0%, #059669 50%, #047857 100%)',
+        'green-soft': 'linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)',
+        'hero-gradient': 'linear-gradient(135deg, #064E3B 0%, #047857 100%)',
       },
     },
   },

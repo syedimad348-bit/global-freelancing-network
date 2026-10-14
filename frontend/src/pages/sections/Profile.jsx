@@ -49,7 +49,7 @@ export default function Profile({ user }) {
             {p.dpUrl ? (
               <img src={p.dpUrl} alt="avatar" className="w-32 h-32 rounded-2xl object-cover border-4 border-surface shadow-glow" />
             ) : (
-              <div className="w-32 h-32 rounded-2xl bg-brand-gradient text-white text-5xl font-black grid place-items-center border-4 border-surface shadow-glow">
+              <div className="w-32 h-32 rounded-2xl bg-emerald-gradient text-white text-5xl font-black grid place-items-center border-4 border-surface shadow-glow">
                 {(p.name || user?.name || 'U')[0]}
               </div>
             )}
@@ -128,7 +128,7 @@ function SkillsCard({ skills }) {
       <div className="flex flex-wrap gap-2 mb-3 min-h-[36px]">
         {skills.length === 0 && <p className="text-sm text-ink-muted">Add the tools, languages, and frameworks you know.</p>}
         {skills.map((s) => (
-          <span key={s} className="chip bg-brand-500/15 text-brand-300 border border-brand-400/30">
+          <span key={s} className="chip bg-emerald-500/15 text-emerald-300 border border-emerald-400/30">
             {s} <button onClick={() => removeSkill(s)} className="ml-1 text-ink-subtle hover:text-rose-300">✕</button>
           </span>
         ))}
@@ -155,7 +155,7 @@ function ExperienceCard({ list }) {
         <button onClick={() => setOpen((v) => !v)} className="btn-ghost h-9 text-sm">{open ? 'Cancel' : '+ Add experience'}</button>
       </div>
       {open && (
-        <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4 p-4 rounded-xl border border-brand-400/30 bg-brand-500/5">
+        <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4 p-4 rounded-xl border border-emerald-400/30 bg-emerald-500/5">
           <input value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })} placeholder="Role · e.g. Senior Frontend Engineer" className="input h-10" />
           <input value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} placeholder="Company · e.g. Acme Inc." className="input h-10" />
           <input value={form.period} onChange={(e) => setForm({ ...form, period: e.target.value })} placeholder="Period · e.g. 2022 — Present" className="input h-10 md:col-span-2" />
