@@ -58,6 +58,7 @@ app.use('/api/jobs',     require('./routes/jobs'));
 app.use('/api/auth',     require('./routes/auth'));
 app.use('/api/ai',       require('./routes/ai'));
 app.use('/api/features', require('./routes/features'));
+app.use('/api/admin',    require('./routes/admin'));
 
 // ── Serve frontend in production ──────────────────────────────────────────────
 const fs = require('fs');

@@ -80,6 +80,112 @@ router.get('/stats', async (req, res) => {
   }
 });
 
+// GET enhanced filters with counts
+router.get('/filters/enhanced', async (req, res) => {
+  try {
+    let sources = [];
+    let types = [];
+    let folders = [];
+    let remoteTypes = [];
+    let countries = [];
+    
+    if (mongoose.connection.readyState === 1) {
+      // Get counts from MongoDB
+      const [sourceCounts, typeCounts, folderCounts, remoteTypeCounts, countryCounts] = await Promise.all([
+        Job.aggregate([
+          { $group: { _id: "$source", count: { $sum: 1 } } },
+          { $sort: { count: -1 } }
+        ]),
+        Job.aggregate([
+          { $group: { _id: "$type", count: { $sum: 1 } } },
+          { $sort: { count: -1 } }
+        ]),
+        Job.aggregate([
+          { $group: { _id: "$folder", count: { $sum: 1 } } },
+          { $sort: { count: -1 } }
+        ]),
+        Job.aggregate([
+          { $group: { _id: "$remoteType", count: { $sum: 1 } } },
+          { $sort: { count: -1 } }
+        ]),
+        Job.aggregate([
+          { $group: { _id: "$country", count: { $sum: 1 } } },
+          { $sort: { count: -1 } }
+        ])
+      ]);
+      
+      sources = sourceCounts.map(item => ({ 
+        name: item._id || 'Unknown', 
+        count: item.count 
+      })).filter(item => item.name);
+      
+      types = typeCounts.map(item => ({ 
+        name: item._id || 'Unknown', 
+        count: item.count 
+      })).filter(item => item.name);
+      
+      folders = folderCounts.map(item => ({ 
+        name: item._id || 'Unknown', 
+        count: item.count 
+      })).filter(item => item.name);
+      
+      remoteTypes = remoteTypeCounts.map(item => ({ 
+        name: item._id || 'Unknown', 
+        count: item.count 
+      })).filter(item => item.name);
+      
+      countries = countryCounts.map(item => ({ 
+        name: item._id || 'Unknown', 
+        count: item.count 
+      })).filter(item => item.name);
+    } else {
+      // Fallback to live cache
+      const live = getLiveJobCache();
+      const sourceCounts = {};
+      const typeCounts = {};
+      const folderCounts = {};
+      const remoteTypeCounts = {};
+      const countryCounts = {};
+      
+      (live.jobs || []).forEach((job) => {
+        const src = job.source || 'Unknown';
+        const typ = job.type || 'Unknown';
+        const fol = job.folder || 'Unknown';
+        const rem = job.remoteType || 'Unknown';
+        const cnt = job.country || 'Unknown';
+        
+        sourceCounts[src] = (sourceCounts[src] || 0) + 1;
+        typeCounts[typ] = (typeCounts[typ] || 0) + 1;
+        folderCounts[fol] = (folderCounts[fol] || 0) + 1;
+        remoteTypeCounts[rem] = (remoteTypeCounts[rem] || 0) + 1;
+        countryCounts[cnt] = (countryCounts[cnt] || 0) + 1;
+      });
+      
+      sources = Object.entries(sourceCounts).map(([name, count]) => ({ name, count })).filter(item => item.name);
+      types = Object.entries(typeCounts).map(([name, count]) => ({ name, count })).filter(item => item.name);
+      folders = Object.entries(folderCounts).map(([name, count]) => ({ name, count })).filter(item => item.name);
+      remoteTypes = Object.entries(remoteTypeCounts).map(([name, count]) => ({ name, count })).filter(item => item.name);
+      countries = Object.entries(countryCounts).map(([name, count]) => ({ name, count })).filter(item => item.name);
+    }
+    
+    res.json({
+      sources: sources.map(item => item.name),
+      types: types.map(item => item.name),
+      folders: folders.map(item => item.name),
+      remoteTypes: remoteTypes.map(item => item.name),
+      countries: countries.map(item => item.name),
+      sourceCounts: sources,
+      typeCounts: types,
+      folderCounts: folders,
+      remoteTypeCounts: remoteTypes,
+      countryCounts: countries,
+      cached: mongoose.connection.readyState !== 1
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error getting enhanced filters' });
+  }
+});
+
 // GET live cache status for dashboard
 router.get('/live-cache-status', (req, res) => {
   const live = getLiveJobCache();
