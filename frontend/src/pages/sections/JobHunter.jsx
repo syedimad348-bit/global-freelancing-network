@@ -251,20 +251,10 @@ export default function JobHunter({ user }) {
             <Pill active={remote === 'remote'} onClick={() => setRemote('remote')}>Remote</Pill>
             <Pill active={remote === 'onsite'} onClick={() => setRemote('onsite')}>Onsite</Pill>
           </div>
-          <div className="flex items-center gap-2">
-            <Pill active={country === 'All' || country === 'Worldwide'}    onClick={() => setCountry('Worldwide')}>Worldwide</Pill>
-            <Pill active={country === 'Pakistan'} onClick={() => setCountry('Pakistan')}>Pakistan</Pill>
+<div className="flex items-center gap-2">
+              <Pill active={country === 'All' || country === 'Worldwide'}    onClick={() => setCountry('Worldwide')}>Worldwide</Pill>
+            </div>
           </div>
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
-            className="input h-11 max-w-[180px]"
-            aria-label="Sort jobs"
-          >
-            <option value="newest">Sort: Newest</option>
-            <option value="company">Sort: Company A→Z</option>
-          </select>
-        </div>
 
         <div className="flex flex-wrap items-center gap-2 text-xs">
           <FilterSelect
@@ -414,7 +404,6 @@ function FilterSelect({ label, value, onChange, options }) {
 
 function JobCard({ job, saved, onSave, onOpen }) {
   const c = srcColor(job.source);
-  const timeLabel = formatRelative(job.postedAt || job.fetchedAt);
   const isRemote = /(remote|worldwide|global)/i.test(job.location || '');
   return (
     <motion.div
@@ -458,16 +447,28 @@ function JobCard({ job, saved, onSave, onOpen }) {
             Remote
           </span>
         )}
-        {(job.tags || []).slice(0, 3).map((t) => (
-          <span key={t} className="text-[11px] px-2 py-0.5 rounded-full bg-canvas border border-line text-ink-muted">
-            {t}
-          </span>
-        ))}
+        {(job.tags || []).slice(0, 3).map((t) => {
+          const tagColors = [
+            'bg-sky-500/15 text-sky-300 ring-sky-400/30',
+            'bg-indigo-500/15 text-indigo-300 ring-indigo-400/30',
+            'bg-emerald-500/15 text-emerald-300 ring-emerald-400/30',
+            'bg-violet-500/15 text-violet-300 ring-violet-400/30',
+            'bg-fuchsia-500/15 text-fuchsia-300 ring-fuchsia-400/30',
+            'bg-teal-500/15 text-teal-300 ring-teal-400/30',
+            'bg-amber-500/15 text-amber-300 ring-amber-400/30',
+            'bg-lime-500/15 text-lime-300 ring-lime-400/30',
+          ];
+          const colorClass = tagColors[Math.abs(t.split('').reduce((a, c) => a + c.charCodeAt(0), 0)) % tagColors.length];
+          return (
+            <span key={t} className={`text-[11px] px-2 py-0.5 rounded-full bg-canvas border border-line font-medium ${colorClass}`}>
+              {t}
+            </span>
+          );
+        })}
       </div>
 
       <div className="mt-4 flex items-center justify-between">
         <span className="text-sm font-bold text-ink">{job.salary || ''}</span>
-        <span className="text-xs text-ink-subtle">{timeLabel}</span>
       </div>
     </motion.div>
   );
@@ -514,7 +515,6 @@ function JobDrawer({ job, saved, onSave, onClose }) {
 
           <div className="mt-6 grid grid-cols-2 gap-3">
             {job.salary && <Info label="Salary"   value={job.salary} />}
-            <Info label="Posted"   value={formatRelative(job.postedAt || job.fetchedAt)} />
             <Info label="Source"   value={job.source} />
             <Info label="Category" value={job.folder || job.category || '—'} />
           </div>
@@ -536,14 +536,14 @@ function JobDrawer({ job, saved, onSave, onClose }) {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackApply(job)}
-              className="flex-1 inline-flex items-center justify-center gap-2 h-11 rounded-xl bg-brand-gradient text-white font-bold shadow-glow hover:brightness-110 transition-all"
+              className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-emerald-500 text-white font-bold text-base shadow-[0_4px_14px_-4px_rgba(16,185,129,0.5)] hover:bg-emerald-600 hover:shadow-[0_6px_20px_-4px_rgba(16,185,129,0.6)] active:scale-[0.98] transition-all duration-150"
             >
-              Apply on {job.source} →
+              Apply Now
             </a>
             <button
               onClick={onSave}
               className={[
-                'h-11 px-4 rounded-xl border font-semibold inline-flex items-center gap-2',
+                'h-12 px-4 rounded-xl border font-semibold inline-flex items-center gap-2',
                 saved ? 'bg-amber-500/15 border-amber-400/30 text-amber-300' : 'border-line text-ink-muted hover:text-ink',
               ].join(' ')}
             >
