@@ -223,11 +223,6 @@ router.get('/', async (req, res) => {
     const query = {};
 
     const cursor    = req.query.cursor  || '';  // Keyset pagination cursor (fetchedAt timestamp)
-    const sortBy    = req.query.sort || 'newest';
-    const skip      = (page - 1) * limit;
-    const maxAgeHours = 168;
-
-    const query = {};
 
     if (search) {
       query.$or = [
