@@ -15,13 +15,13 @@ module.exports = {
         'surface-subtle': '#ECFDF5', // Mint 100 secondary
         'surface-alt': '#F0FDF8',
         sidebar: {
-          DEFAULT: '#064E3B',    // Deep emerald green sidebar
-          hover: '#065F46',
-          active: '#047857',
-          card: '#059669',
+          DEFAULT: '#5B21B6',    // Deep purple sidebar
+          hover: '#6D28D9',
+          active: '#7C3AED',
+          card: '#8B5CF6',
           border: 'rgba(255, 255, 255, 0.08)',
           text: '#FFFFFF',
-          muted: '#A7F3D0',
+          muted: '#C4B5FD',
         },
         ink: {
           DEFAULT: '#0F172A',    // Slate 900 dark charcoal headings/primary

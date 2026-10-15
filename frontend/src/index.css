@@ -45,6 +45,10 @@
     box-shadow: 0 10px 30px -5px rgba(4, 120, 87, 0.25);
   }
   
+  .purple-sidebar {
+    @apply bg-gradient-to-b from-purple-600 to-purple-500 text-white;
+  }
+  
   .focus-ring {
     @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:border-emerald-500;
   }

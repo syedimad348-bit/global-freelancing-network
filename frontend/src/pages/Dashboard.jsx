@@ -117,7 +117,7 @@ export default function Dashboard() {
       {/* ── Purple Sidebar (Compact, Luxury SaaS styling) ────────────────────── */}
       <aside
         className={[
-          'fixed inset-y-0 left-0 z-50 bg-gradient-to-b from-[#064E3B] to-[#047857] text-white flex flex-col transition-all duration-300 ease-in-out border-r border-emerald-500/20',
+          'fixed inset-y-0 left-0 z-50 bg-gradient-to-b from-purple-600 to-purple-500 text-white flex flex-col transition-all duration-300 ease-in-out border-r border-purple-500/20',
           sidebarCollapsed ? 'w-[76px]' : 'w-64',
           mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
         ].join(' ')}
@@ -150,15 +150,15 @@ export default function Dashboard() {
                 className={[
                   'group relative w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150',
 isActive
-                     ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-sm shadow-emerald-500/20'
-                     : 'text-emerald-100 hover:text-white hover:bg-white/[0.08]',
+                      ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-sm shadow-purple-500/20'
+                      : 'text-purple-100 hover:text-white hover:bg-white/[0.08]',
                 ].join(' ')}
               >
                 <Icon
 className={[
-                    'w-5 h-5 shrink-0 transition-colors',
-                    isActive ? 'text-white' : 'text-emerald-200 group-hover:text-white',
-                ].join(' ')}
+                      'w-5 h-5 shrink-0 transition-colors',
+                      isActive ? 'text-white' : 'text-purple-200 group-hover:text-white',
+                    ].join(' ')}
                 />
 
                 {!sidebarCollapsed && (
@@ -169,7 +169,7 @@ className={[
                   <span
                     className={[
                       'px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase',
-                      isActive ? 'bg-white/20 text-white' : 'bg-brand-500/20 text-brand-200',
+                      isActive ? 'bg-white/20 text-white' : 'bg-purple-500/20 text-purple-200',
                     ].join(' ')}
                   >
                     {item.badge.text}
@@ -183,7 +183,7 @@ className={[
         {/* Upgrade / Account Panel at Bottom */}
         <div className="p-3 border-t border-white/10 space-y-2">
           {!sidebarCollapsed && tier?.name === 'Free' && (
-            <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-900/80 to-emerald-800 border border-white/10 text-xs space-y-2">
+            <div className="p-3 rounded-xl bg-gradient-to-br from-purple-900/80 to-purple-800 border border-white/10 text-xs space-y-2">
               <div className="flex items-center gap-1.5 text-amber-300 font-bold">
                 <Zap className="w-3.5 h-3.5 fill-current" />
                 <span>Upgrade to Pro</span>
@@ -202,18 +202,18 @@ className={[
 
           {/* User profile capsule */}
           <div className="flex items-center gap-3 px-2 py-2 rounded-xl bg-white/[0.04]">
-            <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-xs ring-2 ring-white/20 shrink-0">
+            <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold text-xs ring-2 ring-white/20 shrink-0">
               {(user?.name || 'Imad').slice(0, 2).toUpperCase()}
             </div>
             {!sidebarCollapsed && (
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-bold text-white truncate">{user?.name || 'Imad'}</p>
-                <p className="text-[10px] text-emerald-200 truncate">{tier?.name || 'Free'} Plan</p>
+                <p className="text-[10px] text-purple-200 truncate">{tier?.name || 'Free'} Plan</p>
               </div>
             )}
             <button
               onClick={handleLogout}
-              className="p-1.5 rounded-lg text-emerald-300 hover:text-white hover:bg-white/10 transition-colors"
+              className="p-1.5 rounded-lg text-purple-300 hover:text-white hover:bg-white/10 transition-colors"
               title="Sign Out"
               aria-label="Sign out"
             >

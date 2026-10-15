@@ -77,8 +77,8 @@ export default function Tricks() {
   return (
     <div className="space-y-8 pb-12">
       {/* Hero Banner */}
-      <div className="relative rounded-2xl bg-gradient-to-r from-emerald-900 to-emerald-800 text-white p-7 sm:p-9 shadow-elevated overflow-hidden border border-emerald-50/20">
-        <div className="absolute right-0 top-0 -bottom-10 w-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="relative rounded-2xl bg-gradient-to-r from-white to-gray-100 text-white p-7 sm:p-9 shadow-elevated overflow-hidden border border-gray-100/20">
+        <div className="absolute right-0 top-0 -bottom-10 w-96 bg-purple-500/5 rounded-full blur-3xl pointer-events-none" />
         <div className="relative max-w-2xl space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-white/10 text-brand-200 border border-white/15">
             <Sparkles className="w-3.5 h-3.5 text-brand-300" />
@@ -87,7 +87,7 @@ export default function Tricks() {
           <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
             AI Tricks & High-Impact Productivity Suite
           </h2>
-          <p className="text-sm sm:text-base text-emerald-100 leading-relaxed">
+          <p className="text-sm sm:text-base text-ink leading-relaxed">
             Gain an unfair advantage in international freelancing. Discover verified tools, access proprietary prompt workflows, and request access resources delivered via WhatsApp.
           </p>
         </div>
