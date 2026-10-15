@@ -95,7 +95,7 @@ export default function WhatsAppRequestModal({ tool, isOpen, onClose }) {
           {/* Header */}
           <div className="px-6 py-5 bg-gradient-to-r from-sidebar to-sidebar text-white flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-purple-400 ring-1 ring-white/15">
+              <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-emerald-400 ring-1 ring-white/15">
                 <MessageSquare className="w-5 h-5" />
               </div>
               <div>
@@ -117,15 +117,15 @@ export default function WhatsAppRequestModal({ tool, isOpen, onClose }) {
             {successData ? (
               /* Success State */
               <div className="text-center py-4 space-y-4">
-                <div className="w-16 h-16 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center mx-auto ring-8 ring-purple-50/50">
+                <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto ring-8 ring-emerald-50/50">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
                 <div className="space-y-2">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-800">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
                     Request ID: #{successData.requestId || 'GFN-REQ'}
                   </span>
                   <h4 className="text-xl font-black text-ink">Access Request Registered</h4>
-                  <p className="text-sm font-medium text-purple-700 bg-purple-50 border border-purple-200 rounded-xl p-4 leading-relaxed">
+                  <p className="text-sm font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl p-4 leading-relaxed">
                     “Thank you for your interest! Please wait. The relevant link and details will be shared with you on WhatsApp as soon as possible.”
                   </p>
                 </div>
@@ -141,7 +141,7 @@ export default function WhatsAppRequestModal({ tool, isOpen, onClose }) {
                   </div>
                   <div className="flex justify-between">
                     <span className="font-semibold text-ink-soft">Queue Status:</span>
-                    <span className="text-purple-600 font-semibold">Registered in dispatch queue</span>
+                    <span className="text-emerald-600 font-semibold">Registered in dispatch queue</span>
                   </div>
                 </div>
 
