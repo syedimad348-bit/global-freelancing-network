@@ -188,10 +188,11 @@ export default function JobHunter() {
     }
   };
 
+  // Opens the job's own original application link in a new browser tab.
+  // The Apply Now control is an anchor with href=job.url; this handler only
+  // consumes the application credit (and records the activity).
   const handleApply = async (job) => {
     if (!appliesUnlimited && appliesLeft <= 0) return;
-
-    if (job.url) window.open(job.url, '_blank', 'noopener,noreferrer');
 
     let next = appliesLeft;
     let unlimited = appliesUnlimited;
@@ -485,7 +486,7 @@ function JobCard({ job, saved, appliesLeft, onSave, onApply, onOpen, appliesUnli
     <motion.div
       layout
       whileHover={{ y: -2 }}
-      className="group relative rounded-2xl bg-[rgb(11,15,14)] border border-white/10 p-5 hover:shadow-cardShadow transition-shadow cursor-pointer"
+      className="group relative rounded-2xl bg-sidebar border border-white/10 p-5 hover:shadow-cardShadow transition-shadow cursor-pointer"
       onClick={onOpen}
     >
       <div className="flex items-start justify-between gap-3">
@@ -550,17 +551,20 @@ function JobCard({ job, saved, appliesLeft, onSave, onApply, onOpen, appliesUnli
 
       <div className="mt-4 flex items-center justify-between">
         {appliesUnlimited || appliesLeft > 0 ? (
-          <button
-            onClick={() => onApply(job)}
-            className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-white text-emerald-600 border border-emerald-200 font-bold text-base shadow-sm hover:bg-emerald-50 hover:shadow-[0_6px_20px_-4px_rgba(16,185,129,0.6)] active:scale-[0.98] transition-all duration-150"
+          <a
+            href={job.url || '/dashboard'}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => { e.stopPropagation(); onApply(job); }}
+            className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-white text-emerald-700 border border-emerald-200 font-extrabold text-base shadow-sm hover:bg-emerald-50 hover:shadow-[0_6px_20px_-4px_rgba(16,185,129,0.6)] active:scale-[0.98] transition-all duration-150"
           >
             Apply Now
-          </button>
+          </a>
         ) : (
           <a
             href="/dashboard/pro"
             onClick={(e) => e.stopPropagation()}
-            className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-amber-400 text-ink font-bold text-base shadow-sm hover:bg-amber-300 transition-all duration-150"
+            className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-amber-400 text-ink font-extrabold text-base shadow-sm hover:bg-amber-300 transition-all duration-150"
           >
             Upgrade to Premium
           </a>
@@ -633,12 +637,15 @@ function JobDrawer({ job, saved, onSave, appliesLeft, appliesUnlimited, onApply,
           <div className="mt-8 space-y-3">
             <div className="flex gap-3">
               {appliesUnlimited || appliesLeft > 0 ? (
-                <button
-                  onClick={() => onApply(job)}
-                  className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-white text-emerald-600 border border-emerald-200 font-bold text-base shadow-sm hover:bg-emerald-50 hover:shadow-[0_6px_20px_-4px_rgba(16,185,129,0.6)] active:scale-[0.98] transition-all duration-150"
+                <a
+                  href={job.url || '/dashboard'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => { e.stopPropagation(); onApply(job); }}
+                  className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-white text-emerald-700 border border-emerald-200 font-extrabold text-base shadow-sm hover:bg-emerald-50 hover:shadow-[0_6px_20px_-4px_rgba(16,185,129,0.6)] active:scale-[0.98] transition-all duration-150"
                 >
                   Apply Now
-                </button>
+                </a>
               ) : (
                 <a
                   href="/dashboard/pro"
