@@ -136,7 +136,7 @@ export default function HeroCharacter({ relaxed = false }) {
             <span className="text-emerald-300">★</span> Resume A+
           </FloatingChip>
           <FloatingChip className="bottom-10 right-0" delay={0.8}>
-            <span className="text-violet-300">◆</span> Interview ready
+            <span className="text-emerald-300">◆</span> Interview ready
           </FloatingChip>
         </>
       )}

@@ -8,11 +8,11 @@ const PAGE_SIZE = 24;
 
 const SOURCE_COLOR = {
   LinkedIn:       { bg: 'bg-sky-500/15',     text: 'text-sky-300',     ring: 'ring-sky-400/30'     },
-  Indeed:         { bg: 'bg-indigo-500/15',  text: 'text-indigo-300',  ring: 'ring-indigo-400/30'  },
+  Indeed:         { bg: 'bg-emerald-500/15',  text: 'text-emerald-300',  ring: 'ring-emerald-400/30'  },
   Upwork:         { bg: 'bg-emerald-500/15', text: 'text-emerald-300', ring: 'ring-emerald-400/30' },
-  Remotive:       { bg: 'bg-violet-500/15',  text: 'text-violet-300',  ring: 'ring-violet-400/30'  },
-  RemoteOK:       { bg: 'bg-fuchsia-500/15', text: 'text-fuchsia-300', ring: 'ring-fuchsia-400/30' },
-  WeWorkRemotely: { bg: 'bg-teal-500/15',    text: 'text-teal-300',    ring: 'ring-teal-400/30'    },
+  Remotive:       { bg: 'bg-emerald-500/15',  text: 'text-emerald-300',  ring: 'ring-emerald-400/30'  },
+  RemoteOK:       { bg: 'bg-cyan-500/15',     text: 'text-cyan-300',     ring: 'ring-cyan-400/30'     },
+  WeWorkRemotely: { bg: 'bg-emerald-500/15',  text: 'text-emerald-300',  ring: 'ring-emerald-400/30'   },
   Arbeitnow:      { bg: 'bg-amber-500/15',   text: 'text-amber-300',   ring: 'ring-amber-400/30'   },
   Jobicy:         { bg: 'bg-lime-500/15',    text: 'text-lime-300',    ring: 'ring-lime-400/30'    },
   TheMuse:        { bg: 'bg-pink-500/15',    text: 'text-pink-300',    ring: 'ring-pink-400/30'    },
@@ -450,11 +450,11 @@ function JobCard({ job, saved, onSave, onOpen }) {
         {(job.tags || []).slice(0, 3).map((t) => {
           const tagColors = [
             'bg-sky-500/15 text-sky-300 ring-sky-400/30',
-            'bg-indigo-500/15 text-indigo-300 ring-indigo-400/30',
             'bg-emerald-500/15 text-emerald-300 ring-emerald-400/30',
-            'bg-violet-500/15 text-violet-300 ring-violet-400/30',
-            'bg-fuchsia-500/15 text-fuchsia-300 ring-fuchsia-400/30',
-            'bg-teal-500/15 text-teal-300 ring-teal-400/30',
+            'bg-emerald-500/15 text-emerald-300 ring-emerald-400/30',
+            'bg-emerald-500/15 text-emerald-300 ring-emerald-400/30',
+            'bg-cyan-500/15 text-cyan-300 ring-cyan-400/30',
+            'bg-emerald-500/15 text-emerald-300 ring-emerald-400/30',
             'bg-amber-500/15 text-amber-300 ring-amber-400/30',
             'bg-lime-500/15 text-lime-300 ring-lime-400/30',
           ];

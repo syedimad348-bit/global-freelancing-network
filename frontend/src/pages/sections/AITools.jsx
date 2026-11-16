@@ -9,7 +9,7 @@ const REELS = [
   { id: 'r3', title: 'Notion AI vs Mem AI: which one I actually kept', author: 'Mehak Raza', likes: 1620, plays: 12100, tag: 'Productivity', cover: 'from-emerald-500 to-cyan-500' },
   { id: 'r4', title: 'How I built a job-tracker in 9 minutes with v0.dev', author: 'Hamza Ali', likes: 3110, plays: 22800, tag: 'No-code',     cover: 'from-amber-500 to-orange-500' },
   { id: 'r5', title: 'Cold-email script + ChatGPT = 12 interviews in a week', author: 'Layla Raza', likes: 2780, plays: 19600, tag: 'Career',  cover: 'from-emerald-500 to-emerald-300' },
-  { id: 'r6', title: 'My favorite under-rated AI tool of the month', author: 'Global Freelancing Network', likes: 1990, plays: 15300, tag: 'Picks',           cover: 'from-sky-500 to-indigo-500' },
+  { id: 'r6', title: 'My favorite under-rated AI tool of the month', author: 'Global Freelancing Network', likes: 1990, plays: 15300, tag: 'Picks',           cover: 'from-emerald-500 to-cyan-500' },
 ];
 
 export default function AITools({ user }) {

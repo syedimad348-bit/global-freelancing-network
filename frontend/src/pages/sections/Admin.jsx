@@ -28,7 +28,7 @@ export default function Admin({ user }) {
   return (
     <div className="space-y-6">
       <div className="card relative overflow-hidden">
-        <div aria-hidden className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-violet-500/20 blur-3xl" />
+        <div aria-hidden className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-emerald-500/20 blur-3xl" />
         <div className="relative">
           <span className="inline-flex items-center gap-2 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 px-3 py-1 text-xs font-bold uppercase tracking-wider">
             🛡 Owner Console
@@ -41,7 +41,7 @@ export default function Admin({ user }) {
       {/* KPIs */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <Kpi label="Total users"        value={m.totalUsers}         delta={`${m.activeUsers24h} active 24h`} tone="brand" />
-        <Kpi label="Pro / Premium"      value={m.proUsers}           delta={`${Math.round((m.proUsers / Math.max(1, m.totalUsers)) * 100)}% conversion`} tone="violet" />
+        <Kpi label="Pro / Premium"      value={m.proUsers}           delta={`${Math.round((m.proUsers / Math.max(1, m.totalUsers)) * 100)}% conversion`} tone="emerald" />
         <Kpi label="Total applies"      value={m.totalApplies.toLocaleString()} delta="lifetime" tone="emerald" />
         <Kpi label="Revenue (lifetime)" value={`$${m.totalRevenue}`} delta={`+$${m.last24Revenue} in 24h`} tone="amber" />
       </div>
@@ -117,7 +117,7 @@ export default function Admin({ user }) {
                   <tr key={p.id} className="border-b border-line/60 last:border-0">
                     <td className="py-2 px-2 text-ink-muted">{new Date(p.ts).toLocaleDateString()}</td>
                     <td className="py-2 px-2 text-ink font-semibold">{u?.name || p.userId}</td>
-                    <td className="py-2 px-2"><Badge tone={p.plan === 'premium' ? 'violet' : 'brand'}>{p.plan}</Badge></td>
+                    <td className="py-2 px-2"><Badge tone={p.plan === 'premium' ? 'emerald' : 'brand'}>{p.plan}</Badge></td>
                     <td className="py-2 px-2 text-ink">{p.method}</td>
                     <td className="py-2 px-2 text-right font-bold text-ink">${p.amount}</td>
                     <td className="py-2 px-2 text-right"><Badge tone="emerald">{p.status}</Badge></td>
@@ -147,7 +147,7 @@ function UserRow({ u, onChange }) {
         <p className="text-ink font-semibold">{u.name}</p>
         <p className="text-[11px] text-ink-subtle">{u.email}</p>
       </td>
-      <td className="py-2 px-2"><Badge tone={u.plan === 'premium' ? 'violet' : u.plan === 'pro' ? 'brand' : 'slate'}>{u.plan}</Badge></td>
+      <td className="py-2 px-2"><Badge tone={u.plan === 'premium' ? 'emerald' : u.plan === 'pro' ? 'brand' : 'slate'}>{u.plan}</Badge></td>
       <td className="py-2 px-2 text-ink-muted">{u.country}</td>
       <td className="py-2 px-2 text-ink font-bold">{u.applies}</td>
       <td className="py-2 px-2"><Badge tone={u.status === 'blocked' ? 'rose' : 'emerald'}>{u.status}</Badge></td>
@@ -161,7 +161,7 @@ function UserRow({ u, onChange }) {
 }
 
 function Kpi({ label, value, delta, tone }) {
-  const dot = { brand:'bg-brand-500', violet:'bg-violet-500', emerald:'bg-emerald-500', amber:'bg-amber-500' }[tone] || 'bg-brand-500';
+  const dot = { brand:'bg-brand-500', emerald:'bg-emerald-500', amber:'bg-amber-500' }[tone] || 'bg-brand-500';
   return (
     <div className="card">
       <p className="text-xs uppercase tracking-wider font-semibold text-ink-subtle">{label}</p>
@@ -184,7 +184,6 @@ function Tab({ active, onClick, children }) {
 function Badge({ tone, children }) {
   const cls = {
     brand:   'bg-brand-500/15 text-brand-300 border-brand-400/30',
-    violet:  'bg-violet-500/15 text-violet-300 border-violet-400/30',
     emerald: 'bg-emerald-500/15 text-emerald-300 border-emerald-400/30',
     amber:   'bg-amber-500/15 text-amber-300 border-amber-400/30',
     rose:    'bg-rose-500/15 text-rose-300 border-rose-400/30',

@@ -11,8 +11,6 @@ const variants = {
     'bg-accent-rose text-white hover:brightness-105 active:scale-[0.98]',
   outline:
     'bg-white text-brand-600 border border-brand-200 hover:bg-brand-50 hover:border-brand-300',
-  purple:
-    'bg-gradient-to-r from-brand-600 to-accent-violet text-white shadow-sm hover:brightness-105 active:scale-[0.98]',
 };
 
 const sizes = {

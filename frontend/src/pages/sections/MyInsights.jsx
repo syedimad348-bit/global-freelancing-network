@@ -50,21 +50,21 @@ export default function MyInsights({ user }) {
           </div>
         </div>
         <BigCard tone="cyan" label="Total Applies" value={insights.totalApplies.toLocaleString()} sub={`${insights.last7Count} in last 7 days`} />
-        <BigCard tone="violet" label="Mock Interviews" value={insights.interviewsCount} sub={insights.avgInterview ? `Avg ${insights.avgInterview}/100` : 'No score yet'} />
+        <BigCard tone="emerald" label="Mock Interviews" value={insights.interviewsCount} sub={insights.avgInterview ? `Avg ${insights.avgInterview}/100` : 'No score yet'} />
         <BigCard tone="amber" label="Resume Score" value={insights.bestResume || '—'} sub={insights.resumeAnalysesCount ? `${insights.resumeAnalysesCount} analyses` : 'Run your first'} />
       </div>
 
       {/* Big area chart + gauge */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="card lg:col-span-2 relative overflow-hidden">
-          <div aria-hidden className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-neon-cyan/15 blur-3xl" />
+          <div aria-hidden className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-emerald-500/15 blur-3xl" />
           <div className="relative">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Activity overview</p>
                 <h3 className="text-lg font-black text-ink">Applies over the past 7 days</h3>
               </div>
-              <span className="stat-pill bg-neon-cyan/15 text-neon-cyan border border-neon-cyan/30">Live</span>
+              <span className="stat-pill bg-emerald-500/15 text-emerald-300 border border-emerald-400/30">Live</span>
             </div>
             <AreaChart data={insights.week} />
           </div>
@@ -100,7 +100,7 @@ export default function MyInsights({ user }) {
                       <span className="text-ink-muted">{s.value} applies</span>
                     </div>
                     <div className="h-2.5 rounded-full bg-white/[0.06] overflow-hidden">
-                      <motion.div initial={{ width: 0 }} animate={{ width: `${pct}%` }} transition={{ duration: 0.6 }} className="h-full bg-cyan-blue rounded-full" />
+                      <motion.div initial={{ width: 0 }} animate={{ width: `${pct}%` }} transition={{ duration: 0.6 }} className="h-full bg-emerald-500 rounded-full" />
                     </div>
                   </div>
                 );
@@ -153,7 +153,7 @@ export default function MyInsights({ user }) {
 
 function BigCard({ tone, label, value, sub }) {
   const styles = {
-    cyan:   'from-cyan-500 to-blue-600',
+    cyan:   'from-emerald-500 to-emerald-700',
     violet: 'from-emerald-500 to-emerald-300',
     amber:  'from-emerald-500 to-emerald-300',
     pink:   'from-emerald-500 to-emerald-300',
@@ -178,14 +178,14 @@ function AreaChart({ data }) {
       <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" className="w-full h-44">
         <defs>
           <linearGradient id="ag" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#22D3EE" stopOpacity="0.55" />
-            <stop offset="100%" stopColor="#22D3EE" stopOpacity="0" />
+            <stop offset="0%" stopColor="#10B981" stopOpacity="0.55" />
+            <stop offset="100%" stopColor="#10B981" stopOpacity="0" />
           </linearGradient>
         </defs>
         <polygon points={area} fill="url(#ag)" />
-        <polyline points={points} fill="none" stroke="#22D3EE" strokeWidth="0.7" />
+        <polyline points={points} fill="none" stroke="#10B981" strokeWidth="0.7" />
         {data.map((d, i) => (
-          <circle key={i} cx={i * step} cy={h - (d.applications / max) * (h - 4) - 2} r="0.9" fill="#A855F7" />
+          <circle key={i} cx={i * step} cy={h - (d.applications / max) * (h - 4) - 2} r="0.9" fill="#059669" />
         ))}
       </svg>
       <div className="mt-2 grid grid-cols-7 text-center text-[10px] text-ink-subtle">
@@ -206,8 +206,8 @@ function Gauge({ value }) {
           strokeDasharray={`${dash} ${c}`} />
         <defs>
           <linearGradient id="gg" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#22D3EE" />
-            <stop offset="100%" stopColor="#A855F7" />
+            <stop offset="0%" stopColor="#10B981" />
+            <stop offset="100%" stopColor="#059669" />
           </linearGradient>
         </defs>
       </svg>
@@ -234,7 +234,7 @@ function Hint({ icon, label, sub }) {
     <div className="rounded-xl border border-line bg-white/[0.03] px-4 py-3">
       <p className="text-2xl">{icon}</p>
       <p className="mt-2 text-sm font-bold text-ink">{label}</p>
-      <p className="text-xs text-neon-cyan mt-0.5">{sub}</p>
+      <p className="text-xs text-emerald-300 mt-0.5">{sub}</p>
     </div>
   );
 }

@@ -47,7 +47,7 @@ export const TRICKS_CATALOGUE = [
     desc: 'Google\'s multimodal AI with native 1M+ context window, live web search grounding, and Workspace integration.',
     icon: 'Layers',
     badge: 'Multimodal',
-    color: 'from-blue-500 to-indigo-600',
+    color: 'from-emerald-500 to-cyan-600',
     tags: ['Multimodal', 'Research', 'Workspace'],
   },
   {
@@ -59,7 +59,7 @@ export const TRICKS_CATALOGUE = [
     desc: 'Real-time conversational search engine with cited academic and web sources for deep freelancing market intel.',
     icon: 'Search',
     badge: 'Research',
-    color: 'from-cyan-500 to-blue-600',
+    color: 'from-emerald-500 to-cyan-500',
     tags: ['Citations', 'Search', 'Intel'],
   },
   {
@@ -71,7 +71,7 @@ export const TRICKS_CATALOGUE = [
     desc: 'High-performance open reasoning model excelling at mathematics, algorithmic code, and deep logical analysis.',
     icon: 'Cpu',
     badge: 'Reasoning',
-    color: 'from-blue-600 to-cyan-500',
+    color: 'from-emerald-600 to-cyan-500',
     tags: ['Logic', 'Math', 'Coding'],
   },
   {
@@ -191,7 +191,7 @@ export const TRICKS_CATALOGUE = [
     desc: 'Intuitive graphic design suite packed with Magic Studio AI features for social decks, brand kits, and presentations.',
     icon: 'Layout',
     badge: 'Essential',
-    color: 'from-teal-400 to-blue-500',
+    color: 'from-emerald-400 to-cyan-500',
     tags: ['Presentations', 'Social', 'Brand Kit'],
   },
   {
@@ -215,7 +215,7 @@ export const TRICKS_CATALOGUE = [
     desc: 'AI-first code editor built on VS Code with codebase-wide indexing, instant agentic edits, and predictive autocomplete.',
     icon: 'Terminal',
     badge: 'Top Coder',
-    color: 'from-slate-900 to-indigo-900',
+    color: 'from-slate-900 to-emerald-900',
     tags: ['VS Code Fork', 'Full-Repo Context', 'Agent'],
   },
   {

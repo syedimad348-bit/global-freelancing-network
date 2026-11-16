@@ -41,8 +41,8 @@ export default function Profile({ user }) {
       <div className="card-glow !p-0 overflow-hidden">
         <div className="relative h-44">
           <div aria-hidden className="absolute inset-0 grid-bg opacity-20" />
-          <div aria-hidden className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-neon-cyan/30 blur-3xl" />
-          <div aria-hidden className="absolute -bottom-20 -left-20 w-72 h-72 rounded-full bg-neon-violet/30 blur-3xl" />
+          <div aria-hidden className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-emerald-500/30 blur-3xl" />
+          <div aria-hidden className="absolute -bottom-20 -left-20 w-72 h-72 rounded-full bg-emerald-500/20 blur-3xl" />
         </div>
         <div className="px-6 pb-6 -mt-16 flex flex-col md:flex-row items-start md:items-end gap-5">
           <div className="relative">
@@ -53,7 +53,7 @@ export default function Profile({ user }) {
                 {(p.name || user?.name || 'U')[0]}
               </div>
             )}
-            <button onClick={onPick} className="absolute -bottom-2 -right-2 h-9 w-9 rounded-full bg-neon-cyan text-canvas grid place-items-center font-bold shadow-glow-cyan border-4 border-surface" title="Upload photo">📷</button>
+            <button onClick={onPick} className="absolute -bottom-2 -right-2 h-9 w-9 rounded-full bg-emerald-500 text-white grid place-items-center font-bold shadow-glow border-4 border-surface" title="Upload photo">📷</button>
             <input ref={fileRef} type="file" accept="image/*" onChange={onFile} className="hidden" />
           </div>
           <div className="flex-1 min-w-0">
@@ -67,9 +67,9 @@ export default function Profile({ user }) {
           </div>
           <div className="text-center min-w-[140px]">
             <p className="text-[10px] uppercase font-bold tracking-wider text-ink-subtle">Profile strength</p>
-            <p className="text-3xl font-black text-cyan-violet">{completeness}%</p>
+            <p className="text-3xl font-black text-emerald-600">{completeness}%</p>
             <div className="mt-2 h-2 rounded-full bg-white/10 overflow-hidden">
-              <div className="h-full rounded-full bg-cyan-violet" style={{ width: `${completeness}%` }} />
+              <div className="h-full rounded-full bg-emerald-500" style={{ width: `${completeness}%` }} />
             </div>
           </div>
         </div>

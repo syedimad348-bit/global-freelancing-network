@@ -160,7 +160,7 @@ export default function Pro() {
               <th className="text-left py-2">Feature</th>
               <th className="text-center py-2">Free</th>
               <th className="text-center py-2 text-brand-300">Pro</th>
-              <th className="text-center py-2 text-violet-300">Premium</th>
+              <th className="text-center py-2 text-emerald-300">Premium</th>
             </tr>
           </thead>
           <tbody>

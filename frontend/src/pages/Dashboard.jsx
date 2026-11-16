@@ -54,7 +54,7 @@ const BASE_NAV = [
   { id: 'overview',  label: 'Dashboard',       icon: LayoutDashboard },
   { id: 'jobs',      label: 'Find Jobs',      icon: Briefcase, badge: { tone: 'mint', text: 'Live' } },
   { id: 'tools',     label: 'AI Tools',        icon: Wrench },
-  { id: 'tricks',    label: 'Tricks',          icon: Sparkles, badge: { tone: 'purple', text: '20 Tools' } },
+  { id: 'tricks',    label: 'Tricks',          icon: Sparkles, badge: { tone: 'emerald', text: '20 Tools' } },
   { id: 'insights',  label: 'My Insights',     icon: BarChart3 },
   { id: 'sources',   label: 'Job Sources',     icon: Globe, badge: { tone: 'emerald', text: 'Health' } },
   { id: 'profile',   label: 'My Profile',      icon: User },
@@ -723,7 +723,7 @@ function DashboardOverview({ user, setActive, onOpenTrickModal }) {
         <div className="card p-5 space-y-3 hover:border-emerald-300 transition-all">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-ink-muted">Applications</span>
-            <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
               <ArrowUpRight className="w-5 h-5" />
             </div>
           </div>
@@ -778,7 +778,7 @@ function DashboardOverview({ user, setActive, onOpenTrickModal }) {
           title="Source Distribution"
           subtitle="Jobs by platform · Live aggregation"
           icon={PieChart}
-          tone="violet"
+          tone="emerald"
         >
           <DonutChart data={sourceDistribution} />
         </PremiumChartCard>
@@ -1312,11 +1312,11 @@ function PremiumChartCard({ title, subtitle, icon: Icon, tone = 'emerald', child
       icon: 'text-emerald-600',
       shadow: 'shadow-[0_10px_40px_-15px_rgba(16,185,129,0.4)]',
     },
-    violet: {
-      border: 'border-violet-200/50',
-      bg: 'bg-gradient-to-br from-violet-50/80 via-white to-violet-50/60',
-      icon: 'text-violet-600',
-      shadow: 'shadow-[0_10px_40px_-15px_rgba(139,92,246,0.4)]',
+    green: {
+      border: 'border-emerald-200/50',
+      bg: 'bg-gradient-to-br from-emerald-50/80 via-white to-emerald-50/60',
+      icon: 'text-emerald-600',
+      shadow: 'shadow-[0_10px_40px_-15px_rgba(16,185,129,0.4)]',
     },
     sky: {
       border: 'border-sky-200/50',
@@ -1376,7 +1376,7 @@ function TrendLineChart({ data }) {
                 style={{ height: `${appHeight}%` }}
               />
               <div
-                className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-violet-500/30 to-violet-500 rounded-t-sm transition-all duration-700 group-hover:from-violet-600/40"
+                className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-emerald-500/30 to-emerald-500 rounded-t-sm transition-all duration-700 group-hover:from-emerald-600/40"
                 style={{ height: `${savedHeight}%` }}
               />
             </div>

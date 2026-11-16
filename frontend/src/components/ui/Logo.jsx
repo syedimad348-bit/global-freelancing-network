@@ -22,7 +22,7 @@ if (collapsed) {
 
   return (
     <div className="inline-flex items-center gap-2.5 select-none">
-      <div className={`${s.box} rounded-xl bg-gradient-to-tr from-brand-600 to-accent-violet flex items-center justify-center text-white shadow-sm ring-1 ring-white/10 shrink-0`}>
+      <div className={`${s.box} rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-600 flex items-center justify-center text-white shadow-sm ring-1 ring-white/10 shrink-0`}>
         <svg className={s.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="10" />
           <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />

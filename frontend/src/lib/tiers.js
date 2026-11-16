@@ -48,7 +48,7 @@ export const TIERS = {
     name: 'Premium',
     badge: 'Premium',
     price: 18,
-    color: 'violet',
+    color: 'emerald',
     limits: {
       jobsPerDay:        Infinity,
       appliesPerDay:     Infinity,

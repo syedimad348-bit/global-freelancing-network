@@ -4,9 +4,9 @@
 
 const SOURCES = [
   { name: 'LinkedIn',   color: 'sky',     weight: 22, base: 'https://www.linkedin.com/jobs/',                       search: 'https://www.linkedin.com/jobs/search/?keywords=' },
-  { name: 'Indeed',     color: 'indigo',  weight: 18, base: 'https://www.indeed.com/jobs',                          search: 'https://www.indeed.com/jobs?q=' },
+  { name: 'Indeed',     color: 'emerald', weight: 18, base: 'https://www.indeed.com/jobs',                          search: 'https://www.indeed.com/jobs?q=' },
   { name: 'Upwork',     color: 'emerald', weight: 16, base: 'https://www.upwork.com/nx/jobs/search/',               search: 'https://www.upwork.com/nx/jobs/search/?q=' },
-  { name: 'Remotive',   color: 'violet',  weight: 12, base: 'https://remotive.com/remote-jobs',                     search: 'https://remotive.com/remote-jobs/search?search=' },
+  { name: 'Remotive',   color: 'emerald', weight: 12, base: 'https://remotive.com/remote-jobs',                     search: 'https://remotive.com/remote-jobs/search?search=' },
   { name: 'Arbeitnow',  color: 'amber',   weight: 10, base: 'https://www.arbeitnow.com/',                           search: 'https://www.arbeitnow.com/?search=' },
   { name: 'Adzuna',     color: 'rose',    weight: 12, base: 'https://www.adzuna.com/search',                        search: 'https://www.adzuna.com/search?q=' },
   { name: 'Freelancer', color: 'cyan',    weight: 10, base: 'https://www.freelancer.com/jobs/',                     search: 'https://www.freelancer.com/jobs/search/?keyword=' },

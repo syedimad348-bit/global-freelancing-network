@@ -150,7 +150,7 @@ export default function Sources() {
           </Badge>
           {stats.degraded > 0 && <Badge tone="amber" icon={AlertTriangle} className="flex items-center gap-1.5">{stats.degraded} Degraded</Badge>}
           {stats.retrying > 0 && <Badge tone="blue" icon={Loader2} className="flex items-center gap-1.5">{stats.retrying} Retrying</Badge>}
-          {stats.authRequired > 0 && <Badge tone="purple" icon={Shield} className="flex items-center gap-1.5">{stats.authRequired} Auth Required</Badge>}
+          {stats.authRequired > 0 && <Badge tone="emerald" icon={Shield} className="flex items-center gap-1.5">{stats.authRequired} Auth Required</Badge>}
           <button
             onClick={handleManualSync}
             disabled={loading}
@@ -168,7 +168,7 @@ export default function Sources() {
         <SummaryCard label="Healthy" value={stats.healthy} icon={CheckCircle2} tone="emerald" />
         <SummaryCard label="Degraded" value={stats.degraded} icon={AlertTriangle} tone="amber" />
         <SummaryCard label="Retrying" value={stats.retrying} icon={Loader2} tone="blue" />
-        <SummaryCard label="Auth Required" value={stats.authRequired} icon={Shield} tone="purple" />
+        <SummaryCard label="Auth Required" value={stats.authRequired} icon={Shield} tone="emerald" />
         <SummaryCard label="Disabled" value={stats.disabled} icon={XCircle} tone="slate" />
         <SummaryCard label="Jobs in Cache" value={stats.totalJobs} icon={Server} tone="cyan" />
       </div>
@@ -247,7 +247,7 @@ export default function Sources() {
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <Badge tone={source.config.color.includes('emerald') ? 'emerald' : source.config.color.includes('amber') ? 'amber' : source.config.color.includes('blue') ? 'blue' : source.config.color.includes('purple') ? 'purple' : 'slate'} icon={source.config.icon}>
+                      <Badge tone={source.config.color.includes('emerald') ? 'emerald' : source.config.color.includes('amber') ? 'amber' : source.config.color.includes('blue') ? 'blue' : 'slate'} icon={source.config.icon}>
                         {source.config.label}
                       </Badge>
                     </td>
@@ -356,7 +356,6 @@ function SummaryCard({ label, value, icon: Icon, tone }) {
     emerald: 'bg-emerald-50 border-emerald-200 text-emerald-700',
     amber: 'bg-amber-50 border-amber-200 text-amber-700',
     blue: 'bg-blue-50 border-blue-200 text-blue-700',
-    purple: 'bg-emerald-50 border-emerald-200 text-emerald-700',
     cyan: 'bg-cyan-50 border-cyan-200 text-cyan-700',
   };
 

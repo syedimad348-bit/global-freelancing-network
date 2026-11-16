@@ -8,7 +8,7 @@ const tones = {
   sky:     'bg-sky-50 text-sky-700 border border-sky-200',
   violet:  'bg-emerald-50 text-emerald-700 border border-emerald-200',
   neutral: 'bg-surface-subtle text-ink-muted border border-line',
-  purple:  'bg-emerald-50 text-emerald-600 border border-emerald-200 font-medium',
+  emerald: 'bg-emerald-50 text-emerald-600 border border-emerald-200 font-medium',
 };
 
 export default function Badge({ tone = 'brand', children, className = '', dot = false }) {
