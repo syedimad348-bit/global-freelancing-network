@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { apiFetch } from '../../lib/api';
-import { trackApply, appliesToday, getAppliesLeft, consumeApply } from '../../lib/usage';
-import { limitFor } from '../../lib/tiers';
+import { trackApply, getAppliesLeft, consumeApply } from '../../lib/usage';
 
 const PAGE_SIZE = 24;
 
@@ -38,11 +37,7 @@ export function formatRelative(iso) {
   return `${Math.floor(days / 7)}w ago`;
 }
 
-export default function JobHunter({ user }) {
-  const dailyCap = limitFor('appliesPerDay', user);
-  const usedToday = appliesToday();
-  const remaining = Math.max(0, dailyCap - usedToday);
-
+export default function JobHunter() {
   const [appliesLeft, setAppliesLeft] = useState(getAppliesLeft());
 
   useEffect(() => {
@@ -493,13 +488,16 @@ function JobCard({ job, saved, appliesLeft, onSave, onApply, onOpen }) {
       </div>
 
       <div className="mt-4 flex items-center justify-between">
-        <button
-          disabled={appliesLeft <= 0}
-          onClick={() => onApply(job)}
-          className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-emerald-500 text-white font-bold text-base shadow-[0_4px_14px_-4px_rgba(16,185,129,0.5)] hover:bg-emerald-600 hover:shadow-[0_6px_20px_-4px_rgba(16,185,129,0.6)] active:scale-[0.98] transition-all duration-150 disabled:opacity-50 disabled:pointer-events-none"
-        >
-          Apply Now
-        </button>
+        {appliesLeft > 0 ? (
+          <button
+            onClick={() => onApply(job)}
+            className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-emerald-500 text-white font-bold text-base shadow-[0_4px_14px_-4px_rgba(16,185,129,0.5)] hover:bg-emerald-600 hover:shadow-[0_6px_20px_-4px_rgba(16,185,129,0.6)] active:scale-[0.98] transition-all duration-150"
+          >
+            Apply Now
+          </button>
+        ) : (
+          <p className="flex-1 text-center text-sm font-semibold text-ink-muted">No applies left</p>
+        )}
       </div>
     </motion.div>
   );
@@ -566,13 +564,16 @@ function JobDrawer({ job, saved, onSave, appliesLeft, onApply, onClose }) {
           )}
 
           <div className="mt-8 flex gap-3">
-            <button
-              disabled={appliesLeft <= 0}
-              onClick={() => onApply(job)}
-              className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-emerald-500 text-white font-bold text-base shadow-[0_4px_14px_-4px_rgba(16,185,129,0.5)] hover:bg-emerald-600 hover:shadow-[0_6px_20px_-4px_rgba(16,185,129,0.6)] active:scale-[0.98] transition-all duration-150 disabled:opacity-50 disabled:pointer-events-none"
-            >
-              Apply Now
-            </button>
+            {appliesLeft > 0 ? (
+              <button
+                onClick={() => onApply(job)}
+                className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-emerald-500 text-white font-bold text-base shadow-[0_4px_14px_-4px_rgba(16,185,129,0.5)] hover:bg-emerald-600 hover:shadow-[0_6px_20px_-4px_rgba(16,185,129,0.6)] active:scale-[0.98] transition-all duration-150"
+              >
+                Apply Now
+              </button>
+            ) : (
+              <p className="flex-1 text-center text-sm font-semibold text-ink-muted">No applies left</p>
+            )}
             <button
               onClick={onSave}
               className={[
