@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Lock, Mail, User, ArrowRight, ShieldCheck, CheckCircle } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, User, ArrowRight } from 'lucide-react';
 import { registerRequest } from '../lib/api';
-import Logo from '../components/ui/Logo';
 
 export default function Register() {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
@@ -41,136 +40,91 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-canvas flex items-center justify-center p-4 sm:p-6 lg:p-10 font-sans text-ink">
-      <div className="w-full max-w-5xl bg-white rounded-3xl shadow-elevated border border-line overflow-hidden grid lg:grid-cols-12 min-h-[640px]">
-        {/* ── Left Column: 3D Visual & Brand Showcase (5 cols) ──────────────── */}
-        <div className="lg:col-span-5 bg-gradient-to-br from-emerald-900 to-emerald-800 text-white p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="min-h-screen bg-[#FAF9F4] text-ink font-sans antialiased relative overflow-hidden">
+      {/* decorative blobs */}
+      <div className="absolute -top-24 -left-24 w-64 h-64 rounded-full bg-emerald-100/60 blur-[100px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-amber-100/50 blur-[100px] pointer-events-none" />
+      <div className="absolute -bottom-24 left-1/4 w-72 h-72 rounded-full bg-emerald-50/70 blur-[90px] pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-60 h-60 rounded-full bg-amber-50/60 blur-[80px] pointer-events-none" />
 
-          {/* Logo Header */}
-          <div className="relative z-10">
-            <Logo size="md" inverted />
-          </div>
+      <div className="relative z-10 mx-auto w-full max-w-md p-4 sm:p-6">
+        <div className="relative rounded-3xl overflow-hidden bg-white border border-emerald-100 shadow-xl">
+          <div className="p-8 sm:p-10 lg:p-12">
 
-          {/* Center Graphic & Highlights */}
-          <div className="relative z-10 py-6 space-y-6 text-center lg:text-left">
-            <div className="relative mx-auto lg:mx-0 w-44 h-44 sm:w-52 sm:h-52 flex items-center justify-center">
-              <img
-                src="/images/hero-character.png"
-                alt="Global Freelancing illustration"
-                className="max-h-full max-w-full object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-300"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                }}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight leading-snug">
-                Join the International Freelancing Network
-              </h2>
-              <p className="text-xs sm:text-sm text-emerald-100 leading-relaxed">
-                Connect directly with overseas clients, access automated job aggregation, and request proprietary AI tricks.
-              </p>
-            </div>
-
-            <div className="space-y-2 text-xs text-emerald-200/90 pt-2 border-t border-white/10 hidden sm:block">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                <span>Zero platform commissions on direct connects</span>
+            {/* logo */}
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-600 to-amber-500 flex items-center justify-center shadow-lg">
+                <span className="w-5 h-5 text-white">🔥</span>
               </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                <span>Instant access to 20 verified AI productivity tools</span>
+              <div className="text-left">
+                <p className="text-sm font-bold text-ink leading-tight">Global Freelancing</p>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-ink-muted">Network</p>
               </div>
             </div>
-          </div>
 
-          {/* Footer note */}
-          <div className="relative z-10 text-[11px] text-emerald-300/80 flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>Compliant with international data privacy standards</span>
-          </div>
-        </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-ink tracking-tight mb-1">Create account</h2>
+            <p className="text-sm text-ink-muted mb-7">Join the international freelancing network.</p>
 
-        {/* ── Right Column: Clean White Form (7 cols) ───────────────────────── */}
-        <div className="lg:col-span-7 p-8 sm:p-12 flex flex-col justify-center max-w-xl mx-auto w-full">
-          <div className="space-y-6">
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-brand-600">
-                Get Started
-              </span>
-              <h1 className="text-2xl sm:text-3xl font-black text-ink tracking-tight mt-0.5">
-                Create your account
-              </h1>
-              <p className="text-xs text-ink-muted mt-1">
-                Enter your details to create your personalized career command center.
-              </p>
-            </div>
-
-            {/* Error Message */}
             {error && (
               <motion.div
                 initial={{ opacity: 0, y: -6 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-3.5 rounded-xl border border-rose-200 bg-rose-50 text-xs font-medium text-rose-700"
+                className="mb-5 p-3 rounded-lg border border-rose-200 bg-rose-50 text-xs font-medium text-rose-800"
               >
                 {error}
               </motion.div>
             )}
 
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3.5">
               {/* Full Name */}
               <div>
-                <label className="label">Full Name</label>
+                <label className="text-[10px] font-bold uppercase tracking-wider text-ink-subtle block mb-1.5">Full Name</label>
                 <div className="relative">
-                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-subtle" />
+                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500" />
                   <input
                     type="text"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     required
                     placeholder="e.g. Imad Ali"
-                    className="input pl-10 h-11 text-sm"
+                    className="w-full h-12 rounded-xl pl-11 pr-4 bg-white border border-line text-sm text-ink placeholder:text-ink-subtle transition-all duration-150 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/15"
                   />
                 </div>
               </div>
 
               {/* Email Address */}
               <div>
-                <label className="label">Email Address</label>
+                <label className="text-[10px] font-bold uppercase tracking-wider text-ink-subtle block mb-1.5">Email Address</label>
                 <div className="relative">
-                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-subtle" />
+                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500" />
                   <input
                     type="email"
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                     required
                     placeholder="name@example.com"
-                    className="input pl-10 h-11 text-sm"
+                    className="w-full h-12 rounded-xl pl-11 pr-4 bg-white border border-line text-sm text-ink placeholder:text-ink-subtle transition-all duration-150 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/15"
                   />
                 </div>
               </div>
 
               {/* Password */}
-              <div>
-                <label className="label">Password (min 6 characters)</label>
+              <div className="relative">
+                <label className="text-[10px] font-bold uppercase tracking-wider text-ink-subtle block mb-1.5">Password (min 6 characters)</label>
                 <div className="relative">
-                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-subtle" />
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     value={form.password}
                     onChange={(e) => setForm({ ...form, password: e.target.value })}
                     required
                     placeholder="Create a strong password"
-                    className="input pl-10 pr-10 h-11 text-sm"
+                    className="w-full h-12 rounded-xl pl-11 pr-11 bg-white border border-line text-sm text-ink placeholder:text-ink-subtle transition-all duration-150 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/15"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-subtle hover:text-ink transition-colors p-1"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-500 hover:text-emerald-600 p-1"
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -178,33 +132,29 @@ export default function Register() {
                 </div>
               </div>
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={loading}
-                className="btn-primary w-full h-11 text-sm font-bold shadow-sm"
+                className="w-full rounded-xl h-12 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white text-sm font-bold uppercase tracking-[0.15em] shadow-lg hover:brightness-105 active:scale-[0.98] transition-all duration-150 disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
               >
                 {loading ? (
-                  <span className="flex items-center gap-2">
-                    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
-                    </svg>
-                    Creating account…
-                  </span>
+                  <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                  </svg>
                 ) : (
-                  <span className="flex items-center gap-2">
-                    <span>Create Account</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </span>
+                  <>
+                    Create Account
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </>
                 )}
               </button>
             </form>
 
             {/* Login Link */}
-            <div className="text-center pt-2 border-t border-line text-xs text-ink-muted">
+            <div className="mt-6 text-center text-sm text-ink-soft">
               Already have an account?{' '}
-              <Link to="/login" className="font-bold text-brand-600 hover:text-brand-700 hover:underline">
+              <Link to="/login" className="font-bold text-emerald-600 hover:underline transition-colors">
                 Sign in
               </Link>
             </div>
