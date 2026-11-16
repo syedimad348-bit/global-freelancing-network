@@ -424,7 +424,7 @@ function JobCard({ job, saved, appliesLeft, onSave, onApply, onOpen }) {
     <motion.div
       layout
       whileHover={{ y: -2 }}
-      className="group relative card hover:shadow-cardHover transition-shadow cursor-pointer"
+      className="group relative rounded-2xl bg-emerald-50/80 border border-emerald-200/70 p-5 hover:shadow-cardHover transition-shadow cursor-pointer"
       onClick={onOpen}
     >
       <div className="flex items-start justify-between gap-3">
@@ -491,7 +491,7 @@ function JobCard({ job, saved, appliesLeft, onSave, onApply, onOpen }) {
         {appliesLeft > 0 ? (
           <button
             onClick={() => onApply(job)}
-            className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-emerald-500 text-white font-bold text-base shadow-[0_4px_14px_-4px_rgba(16,185,129,0.5)] hover:bg-emerald-600 hover:shadow-[0_6px_20px_-4px_rgba(16,185,129,0.6)] active:scale-[0.98] transition-all duration-150"
+            className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-white text-emerald-600 border border-emerald-200 font-bold text-base shadow-sm hover:bg-emerald-50 hover:shadow-[0_6px_20px_-4px_rgba(16,185,129,0.6)] active:scale-[0.98] transition-all duration-150"
           >
             Apply Now
           </button>
@@ -567,7 +567,7 @@ function JobDrawer({ job, saved, onSave, appliesLeft, onApply, onClose }) {
             {appliesLeft > 0 ? (
               <button
                 onClick={() => onApply(job)}
-                className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-emerald-500 text-white font-bold text-base shadow-[0_4px_14px_-4px_rgba(16,185,129,0.5)] hover:bg-emerald-600 hover:shadow-[0_6px_20px_-4px_rgba(16,185,129,0.6)] active:scale-[0.98] transition-all duration-150"
+                className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-white text-emerald-600 border border-emerald-200 font-bold text-base shadow-sm hover:bg-emerald-50 hover:shadow-[0_6px_20px_-4px_rgba(16,185,129,0.6)] active:scale-[0.98] transition-all duration-150"
               >
                 Apply Now
               </button>
