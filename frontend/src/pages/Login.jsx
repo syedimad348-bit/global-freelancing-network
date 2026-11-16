@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Eye, EyeOff, Lock, Mail, ArrowRight, ShieldCheck, Sparkles, CheckCircle } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, ArrowRight, Flame } from 'lucide-react';
 import { apiFetch, DEMO_CREDENTIALS } from '../lib/api';
 
 export default function Login() {
@@ -24,7 +23,6 @@ export default function Login() {
         method: 'POST',
         body: JSON.stringify({ email: email.trim(), password }),
       });
-
       if (data?.token) localStorage.setItem('token', data.token);
       if (data?.user) localStorage.setItem('user', JSON.stringify(data.user));
       navigate('/dashboard');
@@ -40,21 +38,14 @@ export default function Login() {
     setPassword(DEMO_CREDENTIALS.password);
     setError('');
     setBusy(true);
-
     try {
       const data = await apiFetch('/api/auth/login', {
         method: 'POST',
         body: JSON.stringify({ email: DEMO_CREDENTIALS.email, password: DEMO_CREDENTIALS.password }),
       }).catch(() => ({
         token: 'demo-jwt-token-gfn-2026',
-        user: {
-          _id: 'demo-user-id',
-          name: 'Imad Freelancer',
-          email: DEMO_CREDENTIALS.email,
-          plan: 'pro',
-        },
+        user: { _id: 'demo-user-id', name: 'Imad Freelancer', email: DEMO_CREDENTIALS.email, plan: 'pro' },
       }));
-
       if (data?.token) localStorage.setItem('token', data.token);
       if (data?.user) localStorage.setItem('user', JSON.stringify(data.user));
       navigate('/dashboard');
@@ -66,200 +57,141 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-canvas flex items-center justify-center p-4 sm:p-6 lg:p-10 font-sans text-ink">
-      <div className="w-full max-w-5xl bg-white rounded-3xl shadow-elevated border border-line overflow-hidden grid lg:grid-cols-12 min-h-[640px]">
+    <div className="min-h-screen bg-[#E9EDF0] flex items-center justify-center p-4 sm:p-6 font-sans">
+      <div className="w-full max-w-5xl rounded-[28px] overflow-hidden shadow-2xl grid md:grid-cols-2 min-h-[620px]">
 
-        {/* ── Left Column: Premium Gradients & Brand (5 cols) ──────────────── */}
-        <div className="lg:col-span-5 bg-gradient-to-br from-emerald-950 to-emerald-900 text-white p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden">
+        {/* ── LEFT: BLACK BRAND PANEL ─────────────────────────────────────── */}
+        <div className="relative bg-[#0B0B0B] text-white p-8 sm:p-12 flex flex-col justify-between overflow-hidden">
+          {/* corner accents */}
+          <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-[#22C55E]/10 blur-2xl pointer-events-none" />
 
-          {/* Subtle animated blobs */}
-          <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-emerald-500/15 blur-4xl pointer-events-none animate-float" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none animate-float" />
-
-          {/* Center Graphic & Highlights */}
-          <div className="relative z-10 py-8 lg:py-12 text-center lg:text-left">
-            <div className="relative mx-auto lg:mx-0 w-52 h-52 flex items-center justify-center mb-6">
-              <img
-                src="/images/hero-character.png"
-                alt="Global Freelancing illustration"
-                className="max-h-full max-w-full object-contain drop-shadow-3xl hover:scale-105 transition-transform duration-300"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                  e.currentTarget.nextSibling.style.display = 'flex';
-                }}
-              />
-              <div
-                style={{ display: 'none' }}
-                className="w-36 h-36 rounded-2xl bg-gradient-to-tr from-emerald-600 to-emerald-700 items-center justify-center text-white shadow-2xl"
-              >
-                <Sparkles className="w-16 h-16 animate-pulse" />
-              </div>
-            </div>
-
-            <div className="space-y-3 text-left lg:text-left">
-              <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-snug">
-                Accelerate Your Global Freelance Career
-              </h2>
-              <p className="text-base sm:text-lg text-emerald-100 leading-relaxed mb-6">
-                Aggregated jobs from Upwork, LinkedIn, and Remotive paired with 20 elite AI productivity tricks.
-              </p>
-
-              {/* Feature highlights */}
-              <div className="space-y-2 text-xs text-emerald-200/90 pt-2 border-t border-white/10 hidden sm:block">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>Real-time deduplicated job aggregation</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>Instant WhatsApp trick access requests</span>
-                </div>
-              </div>
-
-              {/* Security badge */}
-              <div className="relative z-10 text-[11px] text-emerald-300/80 flex items-center gap-1.5 mt-4">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span>Bank-grade encrypted authentication</span>
-              </div>
-            </div>
+          <div>
+            <h2 className="text-lg font-semibold text-white/90">Hello</h2>
+            <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight mt-1">
+              welcome to<span className="text-[#22C55E]">!</span>
+            </h1>
           </div>
 
-          {/* Footer note with sparkle */}
-          <div className="relative z-10 text-[10px] text-emerald-400/70 flex items-center gap-1.5 mt-2">
-            <Sparkles className="w-3 h-3 animate-pulse" />
-            <span>Trusted by 12K+ freelancers worldwide</span>
+          {/* Brand mark */}
+          <div className="flex flex-col items-center text-center my-6">
+            <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg">
+              <Flame className="w-9 h-9 text-[#2563EB]" fill="#2563EB" />
+            </div>
+            <h3 className="mt-4 text-2xl font-extrabold tracking-tight">Global Freelancing</h3>
+            <p className="mt-3 text-xs leading-relaxed text-white/60 max-w-[230px]">
+              Your global career, powered by AI. Real-time jobs from Upwork, LinkedIn and Remotive, plus 20 elite productivity tricks.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <button
+              type="button"
+              onClick={handleDemoSignIn}
+              className="w-full h-11 rounded-full border border-white/25 text-white/80 text-xs font-semibold tracking-widest uppercase hover:bg-white hover:text-black transition-colors"
+            >
+              Get Started
+            </button>
+            <div className="flex items-center justify-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-white/40">
+              <Link to="/register" className="hover:text-[#22C55E] transition-colors">Create New</Link>
+              <span className="opacity-40">|</span>
+              <span className="text-[#22C55E]">Log In</span>
+            </div>
           </div>
         </div>
 
-        {/* ── Right Column: Clean Glassmorphism Form (7 cols) ──────────────── */}
-        <div className="lg:col-span-7 p-8 sm:p-12 flex flex-col justify-center max-w-xl mx-auto w-full">
-          <div className="space-y-8">
+        {/* ── RIGHT: VIVID GREEN FORM PANEL ───────────────────────────────── */}
+        <div className="relative bg-[#3BE06B] p-8 sm:p-12 flex flex-col justify-center overflow-hidden">
+          {/* soft blob accents */}
+          <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-white/15 blur-2xl pointer-events-none" />
 
-            {/* Brand header on form */}
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Welcome Back</span>
-                <h1 className="text-2xl sm:text-3xl font-black text-ink tracking-tight mt-0.5">
-                  Sign in to your account
-                </h1>
-              </div>
+          <div className="relative w-full max-w-sm mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">welcome</h2>
+            <p className="mt-1 text-sm text-white/80">Login to your account to continue</p>
 
-              {/* Quick demo call-to-action */}
-              <button
-                type="button"
-                onClick={handleDemoSignIn}
-                className="text-xs font-bold px-3 py-1.5 rounded-full border border-emerald-200 bg-emerald-50/20 text-emerald-400 hover:bg-emerald-100/30 transition-colors"
-                title="Sign in with preconfigured demo account"
-              >
-                Use Demo
-              </button>
-            </div>
-
-            {/* Error Message */}
             {error && (
-              <motion.div
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="p-4 rounded-xl border border-rose-200 bg-rose-50/50 text-sm font-medium text-rose-400"
-              >
+              <div className="mt-4 p-3 rounded-xl bg-black/15 border border-black/20 text-xs font-medium text-black/80">
                 {error}
-              </motion.div>
+              </div>
             )}
 
-            {/* Login Form */}
-            <form onSubmit={handleLogin} className="space-y-5">
-
+            <form onSubmit={handleLogin} className="mt-7 space-y-4">
               {/* Email */}
-              <div>
-                <label className="label">Email Address</label>
-                <div className="relative">
-                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-subtle" />
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    placeholder="name@example.com"
-                    className="input pl-10 pr-10 h-12 text-sm bg-surface-subtle border-line focus:outline-none focus:border-emerald-500 focus:ring-emerald-500/20 transition-all"
-                  />
-                </div>
+              <div className="relative">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  placeholder="Email Address"
+                  className="w-full h-12 rounded-lg pl-11 pr-4 bg-white text-sm text-black placeholder:text-black/40 outline-none focus:ring-2 focus:ring-black/20"
+                />
               </div>
 
               {/* Password */}
-              <div>
-                <label className="label">Password</label>
-                <div className="relative">
-                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-subtle" />
-                  <div className="relative">
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      placeholder="Enter your password"
-                      className="input pl-10 pr-10 h-12 text-sm bg-surface-subtle border-line focus:outline-none focus:border-emerald-500 focus:ring-emerald-500/20 transition-all"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword((v) => !v)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-subtle hover:text-ink transition-colors p-1.5"
-                      aria-label={showPassword ? 'Hide password' : 'Show password'}
-                    >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
-                  </div>
-                </div>
+              <div className="relative">
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  placeholder="Password"
+                  className="w-full h-12 rounded-lg pl-11 pr-11 bg-white text-sm text-black placeholder:text-black/40 outline-none focus:ring-2 focus:ring-black/20"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-black/40 hover:text-black p-1"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
               </div>
 
-              {/* Remember Me */}
-              <div className="flex items-center gap-3">
+              {/* Remember me */}
+              <label className="flex items-center gap-2.5 cursor-pointer select-none">
+                <span className={`w-4 h-4 rounded-full grid place-items-center border ${rememberMe ? 'bg-black border-black' : 'border-black/40 bg-white'}`}>
+                  {rememberMe && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
+                </span>
                 <input
-                  id="remember-me"
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="w-4 h-4 rounded bg-emerald-50 border-emerald-200 focus:ring-emerald-500 cursor-pointer"
+                  className="sr-only"
                 />
-                <label htmlFor="remember-me" className="text-sm font-medium text-ink-soft cursor-pointer">
-                  Remember me on this browser
-                </label>
-              </div>
+                <span className="text-xs font-medium text-black/70">Remember me</span>
+              </label>
 
-              {/* Submit Button */}
+              {/* Sign in */}
               <button
                 type="submit"
                 disabled={busy}
-                className="btn-primary w-full h-12 text-sm font-bold shadow-lg shadow-emerald-500/20 transition-colors"
+                className="w-full h-12 rounded-lg bg-black text-white text-xs font-bold tracking-[0.2em] uppercase hover:bg-black/85 active:scale-[0.99] transition-all flex items-center justify-center gap-2"
               >
                 {busy ? (
-                  <span className="flex items-center gap-2">
+                  <>
                     <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
                     </svg>
-                    Signing you in…
-                  </span>
+                    Signing in…
+                  </>
                 ) : (
-                  <span className="flex items-center gap-2">
-                    <span>Sign In</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </span>
+                  <>
+                    Sign In
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </>
                 )}
               </button>
             </form>
 
-            {/* Registration Link */}
-            <div className="pt-4 border-t border-line text-xs text-ink-muted flex items-center justify-between">
-              <span>Don't have an account yet?</span>
-              <div className="flex items-center gap-2">
-                <Link
-                  to="/register"
-                  className="font-bold text-emerald-600 hover:text-emerald-500 transition-colors underline offset-2"
-                >
-                  Create an account
-                </Link>
-              </div>
-            </div>
+            <p className="mt-5 text-xs text-white/80 text-center">
+              Don't have an account?{' '}
+              <Link to="/register" className="font-bold text-black hover:underline">
+                Create one
+              </Link>
+            </p>
           </div>
         </div>
       </div>
