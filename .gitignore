@@ -45,3 +45,6 @@ coverage/
 *~
 .vercel
 .env*
+
+# Kilo local config
+.kilo/
