@@ -160,24 +160,24 @@ export default function Login() {
             <div className="grid grid-cols-3 gap-2 mb-8">
               <button
                 type="button"
-                className="w-full rounded-xl h-11 bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center gap-2 shadow-sm hover:bg-emerald-100 transition-colors disabled:opacity-50"
+                className="w-full rounded-xl h-11 bg-white text-ink border border-line flex items-center justify-center gap-2 shadow-sm hover:bg-[#F5F5F0] transition-colors disabled:opacity-50"
                 disabled={busy}
               >
                 <svg viewBox="0 0 24 24" className="w-5 h-5">
                   <path
-                    fill="currentColor"
+                    fill="#4285F4"
                     d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                   />
                   <path
-                    fill="currentColor"
+                    fill="#34A853"
                     d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
                   />
                   <path
-                    fill="currentColor"
+                    fill="#FBBC05"
                     d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
                   />
                   <path
-                    fill="currentColor"
+                    fill="#EA4335"
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   />
                 </svg>
@@ -185,21 +185,21 @@ export default function Login() {
               </button>
               <button
                 type="button"
-                className="w-full rounded-xl h-11 bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center gap-2 shadow-sm hover:bg-emerald-100 transition-colors disabled:opacity-50"
+                className="w-full rounded-xl h-11 bg-white text-ink border border-line flex items-center justify-center gap-2 shadow-sm hover:bg-[#F5F5F0] transition-colors disabled:opacity-50"
                 disabled={busy}
               >
-                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="#1877F2">
+                  <path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                 </svg>
                 <span className="text-xs font-semibold">Facebook</span>
               </button>
               <button
                 type="button"
-                className="w-full rounded-xl h-11 bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center gap-2 shadow-sm hover:bg-emerald-100 transition-colors disabled:opacity-50"
+                className="w-full rounded-xl h-11 bg-white text-ink border border-line flex items-center justify-center gap-2 shadow-sm hover:bg-[#F5F5F0] transition-colors disabled:opacity-50"
                 disabled={busy}
               >
-                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
-                  <path d="M19.119 15.286c.597.228 1.14.497 1.623.807 1.371-.85 2.438-2.027 3.267-3.569a8.87 8.87 0 0 0-.516-2.764c-.114-.164-.225-.33-.34-.5H12.003v-3.963h3.271l.327-3.16H12.003V2.63c0-.805.023-1.641.048-2.448 1.71-.577 3.604-.584 4.938.072 1.485.727 2.668 2.02 3.527 3.736-.757 2.045-2.04 3.875-3.805 5.274-.002.003-.003.006-.005.009-.52.502-1.13.925-1.801 1.268.65-.156 1.26-.351 1.83-.581-.212.66-.477 1.3-.788 1.923zM12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm-1.206 19.543c-.95 0-1.84-.223-2.63-.653-.248-.13-.52-.234-.816-.313.118.413.244.807.376 1.182.525 1.491 1.406 2.627 2.643 3.392-.736.36-1.58.49-2.42.49-.887 0-1.723-.18-2.494-.512z" />
+                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="#000000">
+                  <path fill="#000000" d="M19.119 15.286c.597.228 1.14.497 1.623.807 1.371-.85 2.438-2.027 3.267-3.569a8.87 8.87 0 0 0-.516-2.764c-.114-.164-.225-.33-.34-.5H12.003v-3.963h3.271l.327-3.16H12.003V2.63c0-.805.023-1.641.048-2.448 1.71-.577 3.604-.584 4.938.072 1.485.727 2.668 2.02 3.527 3.736-.757 2.045-2.04 3.875-3.805 5.274-.002.003-.003.006-.005.009-.52.502-1.13.925-1.801 1.268.65-.156 1.26-.351 1.83-.581-.212.66-.477 1.3-.788 1.923zM12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm-1.206 19.543c-.95 0-1.84-.223-2.63-.653-.248-.13-.52-.234-.816-.313.118.413.244.807.376 1.182.525 1.491 1.406 2.627 2.643 3.392-.736.36-1.58.49-2.42.49-.887 0-1.723-.18-2.494-.512z" />
                 </svg>
                 <span className="text-xs font-semibold">Apple</span>
               </button>
