@@ -140,18 +140,27 @@ export async function registerRequest(form) {
     setSession(data);
     return data;
   } catch (err) {
-    // Fall back to a local demo session so the user can still explore the app.
-    const session = {
-      accessToken: `demo.${Date.now()}.${Math.random().toString(36).slice(2)}`,
-      user: {
-        _id: `demo-${Date.now()}`,
-        email: form?.email || DEMO_CREDENTIALS.email,
-        name: form?.name || "New Talent",
-        plan: "demo",
-      },
-    };
-    setSession(session);
-    return session;
+    // Throw the error so Register.jsx can display it
+    // Only fall back to demo session for specific auth failures that are non-critical
+    if (err?.message?.includes('Email already registered')) {
+      throw err; // Let user know email is taken
+    }
+    if (err?.message?.includes('Network') || err?.message?.includes('Failed to fetch')) {
+      // Network error - fall back to demo so user can still try
+      const session = {
+        accessToken: `demo.${Date.now()}.${Math.random().toString(36).slice(2)}`,
+        user: {
+          _id: `demo-${Date.now()}`,
+          email: form?.email || DEMO_CREDENTIALS.email,
+          name: form?.name || "New Talent",
+          plan: "demo",
+        },
+      };
+      setSession(session);
+      return session;
+    }
+    // For all other errors, throw so the user sees the actual error message
+    throw err;
   }
 }
 

@@ -68,6 +68,9 @@ export default function Dashboard() {
   const [globalSearch, setGlobalSearch] = useState('');
   const [selectedTrickForModal, setSelectedTrickForModal] = useState(null);
   const [isTrickModalOpen, setIsTrickModalOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [notificationSeenCount, setNotificationSeenCount] = useState(0);
 
   const navigate = useNavigate();
 
@@ -96,6 +99,35 @@ export default function Dashboard() {
 
   const tier = getTier(user);
   const currentNavItem = navItems.find((n) => n.id === active) || navItems[0];
+
+  // ── Notification tracking ────────────────────────────────────────────────
+  const loadNotifications = useCallback(async () => {
+    try {
+      // Count live jobs from API
+      const jobsRes = await apiFetch('/api/jobs?limit=50').catch(() => ({ jobs: [] }));
+      const jobList = jobsRes?.jobs || [];
+      const unseenJobs = jobList.filter((j, i) => i < 5); // newest first
+      // We'll synthesize a notification list from recent activity
+      const notes = [
+        ...unseenJobs.map((j) => ({
+          id: j._id || j.url,
+          kind: 'job',
+          title: 'New job posted',
+          text: `${j.title || 'A role'} at ${j.company || j.source || 'a company'}`,
+          ts: j.postedAt || j.createdAt || Date.now(),
+        })),
+      ];
+      setNotifications(notes);
+    } catch (_e) {
+      // silent fail
+    }
+  }, []);
+
+  useEffect(() => {
+    loadNotifications();
+    const id = setInterval(loadNotifications, 60 * 1000); // refresh every 60s
+    return () => clearInterval(id);
+  }, [loadNotifications]);
 
   const handleSearchSubmit = (e) => {
     e?.preventDefault();
@@ -278,13 +310,70 @@ className={[
               </button>
             )}
 
-            <button
-              className="p-2 rounded-xl text-ink-muted hover:text-ink hover:bg-surface-subtle relative transition-colors"
-              aria-label="Notifications"
-            >
-              <Bell className="w-4 h-4" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-brand-500 ring-2 ring-white" />
-            </button>
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setNotificationsOpen((v) => !v);
+                  setNotificationSeenCount(notifications.length);
+                }}
+                className="p-2 rounded-xl text-ink-muted hover:text-ink hover:bg-surface-subtle relative transition-colors"
+                aria-label="Notifications"
+              >
+                <Bell className="w-4 h-4" />
+                {notifications.length > notificationSeenCount && (
+                  <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-emerald-500 text-white text-[9px] font-bold grid place-items-center ring-2 ring-white">
+                    {notifications.length - notificationSeenCount}
+                  </span>
+                )}
+              </button>
+
+              {notificationsOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setNotificationsOpen(false)} />
+                  <motion.div
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="absolute right-0 top-12 w-80 max-h-96 overflow-y-auto bg-white rounded-2xl border border-line shadow-elevated z-50"
+                  >
+                    <div className="px-4 py-3 border-b border-line flex items-center justify-between">
+                      <h3 className="text-sm font-black text-ink">Notifications</h3>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        {notifications.length} new
+                      </span>
+                    </div>
+                    <div className="p-2 space-y-1">
+                      {notifications.length === 0 ? (
+                        <p className="text-xs text-ink-muted text-center py-8">No new notifications</p>
+                      ) : (
+                        notifications.map((n) => (
+                          <button
+                            key={n.id}
+                            onClick={() => { setActive('jobs'); setNotificationsOpen(false); }}
+                            className="w-full text-left p-2.5 rounded-xl hover:bg-surface-subtle transition-colors flex items-start gap-2.5"
+                          >
+                            <span className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 grid place-items-center shrink-0">
+                              <Briefcase className="w-4 h-4" />
+                            </span>
+                            <span className="min-w-0 flex-1">
+                              <span className="block text-xs font-bold text-ink truncate">{n.title}</span>
+                              <span className="block text-[11px] text-ink-muted truncate">{n.text}</span>
+                            </span>
+                          </button>
+                        ))
+                      )}
+                    </div>
+                    <div className="px-4 py-2 border-t border-line">
+                      <button
+                        onClick={() => { setActive('jobs'); setNotificationsOpen(false); }}
+                        className="w-full text-xs font-bold text-emerald-600 hover:text-emerald-700 py-1"
+                      >
+                        View all jobs
+                      </button>
+                    </div>
+                  </motion.div>
+                </>
+              )}
+            </div>
 
             <div
               onClick={() => setActive('profile')}
@@ -554,13 +643,13 @@ function DashboardOverview({ user, setActive, onOpenTrickModal }) {
         </div>
 
         <div className="relative max-w-2xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/10 text-emerald-100 border border-white/10">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-white/10 text-white border border-white/20">
+            <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
             Global Freelancing Platform
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
-            Welcome back, {displayName} 👋
+            Welcome back, {displayName}
           </h1>
 
           <p className="text-sm sm:text-base text-emerald-50/85 leading-relaxed max-w-xl">
