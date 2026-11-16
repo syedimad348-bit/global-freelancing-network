@@ -146,10 +146,10 @@ export default function Dashboard() {
         />
       )}
 
-      {/* ── Purple Sidebar (Compact, Luxury SaaS styling) ────────────────────── */}
+      {/* ── Deep Forest Sidebar ───────────────────────────── */}
       <aside
         className={[
-          'fixed inset-y-0 left-0 z-50 bg-gradient-to-b from-[#064E3B] to-[#047857] text-white flex flex-col transition-all duration-300 ease-in-out border-r border-emerald-500/20',
+          'fixed inset-y-0 left-0 z-50 bg-gradient-to-b from-[#052E22] to-[#064E3B] text-white flex flex-col transition-all duration-300 ease-in-out border-r border-emerald-500/20',
           sidebarCollapsed ? 'w-[76px]' : 'w-64',
           mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
         ].join(' ')}
@@ -572,7 +572,7 @@ function DashboardOverview({ user, setActive, onOpenTrickModal }) {
   const sourceDistribution = useMemo(() => {
     const src = stats.sources || [];
     const total = stats.total || 1;
-    const colors = ['#10b981', '#8b5cf6', '#3b82f6', '#ec4899', '#f59e0b', '#06b6d4', '#84cc16', '#f97316'];
+    const colors = ['#10b981', '#059669', '#06b6d4', '#0d9488', '#d4af37', '#a87f23', '#84cc16', '#34d399'];
     return src.slice(0, 8).map((s, idx) => ({
       name: s._id,
       value: s.count,
@@ -611,8 +611,8 @@ function DashboardOverview({ user, setActive, onOpenTrickModal }) {
     const stages = [
       { key: 'applied', label: 'Applied', color: '#10b981' },
       { key: 'review', label: 'Review', color: '#06b6d4' },
-      { key: 'interview', label: 'Interview', color: '#3b82f6' },
-      { key: 'offer', label: 'Offer', color: '#f59e0b' },
+      { key: 'interview', label: 'Interview', color: '#0d9488' },
+      { key: 'offer', label: 'Offer', color: '#d4af37' },
     ];
     return stages.map((stage) => ({
       ...stage,
@@ -626,7 +626,7 @@ function DashboardOverview({ user, setActive, onOpenTrickModal }) {
     return skills.map((skill, idx) => ({
       skill,
       demand: 60 + Math.round((stats.total / 50) * (idx + 1) + (idx * 8)),
-      fill: ['#10b981', '#8b5cf6', '#3b82f6', '#ec4899', '#f59e0b', '#06b6d4', '#84cc16', '#f97316'][idx],
+      fill: ['#10b981', '#059669', '#06b6d4', '#0d9488', '#d4af37', '#a87f23', '#84cc16', '#34d399'][idx],
     }));
   }, [stats.total]);
 
@@ -1290,8 +1290,8 @@ function CircularProgressGauge({ percentage = 88, label = '88%', subtitle = 'Rea
         />
         <defs>
           <linearGradient id="gaugeGradient" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#10B981" />
-            <stop offset="100%" stopColor="#A855F7" />
+<stop offset="0%" stopColor="#10B981" />
+          <stop offset="100%" stopColor="#059669" />
           </linearGradient>
         </defs>
       </svg>
@@ -1408,7 +1408,7 @@ function DonutChart({ data }) {
           const y2 = 96 + radius * Math.sin(currentAngle * Math.PI / 180);
 
           const largeArc = angle > 180 ? 1 : 0;
-          const color = item.color || ['#10b981', '#8b5cf6', '#3b82f6', '#ec4899', '#f59e0b', '#06b6d4', '#84cc16', '#f97316'][idx % 8];
+          const color = item.color || ['#10b981', '#059669', '#06b6d4', '#0d9488', '#d4af37', '#a87f23', '#84cc16', '#34d399'][idx % 8];
 
           return <path d={`M 96 96 L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`} fill={color} />;
         })}

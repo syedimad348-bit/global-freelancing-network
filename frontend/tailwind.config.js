@@ -4,35 +4,36 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Plus Jakarta Sans', 'Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
-        display: ['Plus Jakarta Sans', 'Inter', 'ui-sans-serif', 'sans-serif'],
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        display: ['Sora', 'Inter', 'ui-sans-serif', 'sans-serif'],
+        serif: ['Instrument Serif', 'Georgia', 'ui-serif', 'serif'],
         mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
       },
       colors: {
-        // Light clean SaaS workspace + Deep Green Premium Sidebar
-        canvas: '#F0FDF8',       // Mint 50 workspace background
-        surface: '#FFFFFF',      // Pure white card background
-        'surface-subtle': '#ECFDF5', // Mint 100 secondary
-        'surface-alt': '#F0FDF8',
+        // Premium emerald + champagne palette
+        canvas: '#F7FAF8',           // Soft ivory-mint workspace
+        surface: '#FFFFFF',          // Pure white cards
+        'surface-subtle': '#F1F6F3', // Mint-tinted secondary
+        'surface-alt': '#F7FAF8',
         sidebar: {
-          DEFAULT: '#064E3B',    // Deep emerald green sidebar
-          hover: '#065F46',
-          active: '#047857',
-          card: '#059669',
+          DEFAULT: '#052E22',        // Deep forest
+          hover: '#0A3F30',
+          active: '#0E5741',
+          card: '#0C4A37',
           border: 'rgba(255, 255, 255, 0.08)',
           text: '#FFFFFF',
-          muted: '#A7F3D0',
+          muted: '#9FE8C9',
         },
         ink: {
-          DEFAULT: '#0F172A',    // Slate 900 dark charcoal headings/primary
-          soft: '#334155',       // Slate 700
-          muted: '#64748B',      // Slate 500 supporting text
-          subtle: '#94A3B8',     // Slate 400 captions/metadata
+          DEFAULT: '#0E1C16',        // Deep green-charcoal headings
+          soft: '#2E3B36',
+          muted: '#5C6B65',
+          subtle: '#8A9791',
         },
         line: {
-          DEFAULT: '#E2E8F0',    // Slate 200 light thin borders
-          subtle: '#F1F5F9',     // Slate 100
-          strong: '#CBD5E1',     // Slate 300
+          DEFAULT: '#E4EAE6',
+          subtle: '#EFF3F0',
+          strong: '#CBD6D0',
         },
         brand: {
           50: '#ECFDF5',
@@ -40,11 +41,23 @@ module.exports = {
           200: '#A7F3D0',
           300: '#6EE7B7',
           400: '#34D399',
-          500: '#10B981',        // Primary emerald green
+          500: '#10B981',           // Primary emerald
           600: '#059669',
           700: '#047857',
           800: '#065F46',
           900: '#064E3B',
+        },
+        gold: {
+          50: '#FBF6E9',
+          100: '#F5EACB',
+          200: '#EBD79A',
+          300: '#E0C46A',
+          400: '#D4AF37',           // Champagne gold
+          500: '#C39A2E',
+          600: '#A87F23',
+          700: '#85611A',
+          800: '#5E4512',
+          900: '#3D2D0C',
         },
         accent: {
           purple: '#10B981',
@@ -52,6 +65,7 @@ module.exports = {
           indigo: '#06B6D4',
           emerald: '#10B981',
           cyan: '#06B6D4',
+          gold: '#D4AF37',
           amber: '#F59E0B',
           rose: '#F43F5E',
         },
@@ -62,16 +76,19 @@ module.exports = {
         '3xl': '24px',
       },
       boxShadow: {
-        card: '0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 4px 16px -2px rgba(15, 23, 42, 0.04)',
-        cardHover: '0 10px 25px -4px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(124, 58, 237, 0.05)',
-        elevated: '0 20px 40px -15px rgba(15, 23, 42, 0.1)',
-        glow: '0 4px 20px -2px rgba(124, 58, 237, 0.35)',
-        'glow-sm': '0 2px 10px -1px rgba(124, 58, 237, 0.25)',
+        card: '0 1px 2px 0 rgba(14, 28, 22, 0.04), 0 6px 20px -6px rgba(14, 28, 22, 0.06)',
+        cardHover: '0 12px 30px -8px rgba(14, 28, 22, 0.10), 0 6px 16px -6px rgba(16, 185, 129, 0.08)',
+        elevated: '0 24px 48px -18px rgba(14, 28, 22, 0.16)',
+        glow: '0 6px 24px -4px rgba(16, 185, 129, 0.35)',
+        'glow-sm': '0 2px 12px -2px rgba(16, 185, 129, 0.28)',
+        gold: '0 6px 22px -4px rgba(212, 175, 55, 0.35)',
       },
       backgroundImage: {
-        'brand-gradient': 'linear-gradient(135deg, #10B981 0%, #059669 50%, #047857 100%)',
+        'brand-gradient': 'linear-gradient(135deg, #10B981 0%, #059669 55%, #047857 100%)',
+        'gold-gradient': 'linear-gradient(135deg, #E0C46A 0%, #D4AF37 50%, #A87F23 100%)',
         'green-soft': 'linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)',
-        'hero-gradient': 'linear-gradient(135deg, #064E3B 0%, #047857 100%)',
+        'hero-gradient': 'linear-gradient(135deg, #052E22 0%, #064E3B 55%, #047857 100%)',
+        'premium-sheen': 'linear-gradient(135deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 45%)',
       },
     },
   },
