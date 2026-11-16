@@ -56,142 +56,156 @@ export default function Login() {
     }
   };
 
+  const checkbox = (checked, onChange, id) => (
+    <span className={`w-4 h-4 rounded-sm grid place-items-center border-2 transition-colors ${checked ? 'bg-amber-500 border-amber-500' : 'border-amber-300 bg-white'}`}>
+      {checked && <span className="w-2 h-2 rounded-[2px] bg-white" />}
+      <input
+        id={id}
+        type="checkbox"
+        checked={checked}
+        onChange={onChange}
+        className="sr-only opacity-0"
+      />
+    </span>
+  );
+
   return (
-    <div className="min-h-screen bg-[#E9EDF0] flex items-center justify-center p-4 sm:p-6 font-sans">
-      <div className="w-full max-w-5xl rounded-[28px] overflow-hidden shadow-2xl grid md:grid-cols-2 min-h-[620px]">
+    <div className="min-h-screen bg-canvas text-ink font-sans antialiased">
+      <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-6 items-center min-h-[560px]">
 
-        {/* ── LEFT: BLACK BRAND PANEL ─────────────────────────────────────── */}
-        <div className="relative bg-[#0B0B0B] text-white p-8 sm:p-12 flex flex-col justify-between overflow-hidden">
-          {/* corner accents */}
-          <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-[#22C55E]/10 blur-2xl pointer-events-none" />
+          {/* ── LEFT: FOREST PANEL WITH GOLD ACCENTS ───────────────────────── */}
+          <div className="relative rounded-3xl overflow-hidden bg-gradient-to-b from-[#052E22] to-[#064E3B] text-white flex flex-col justify-between p-8 md:p-12 min-h-[520px]">
+            {/* decorative glows */}
+            <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-16 -left-16 w-64 h-64 rounded-full bg-amber-500/10 blur-3xl pointer-events-none" />
 
-          <div>
-            <h2 className="text-lg font-semibold text-white/90">Hello</h2>
-            <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight mt-1">
-              welcome to<span className="text-[#22C55E]">!</span>
-            </h1>
-          </div>
-
-          {/* Brand mark */}
-          <div className="flex flex-col items-center text-center my-6">
-            <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg">
-              <Flame className="w-9 h-9 text-[#2563EB]" fill="#2563EB" />
+            <div className="relative">
+              <h2 className="text-lg font-semibold text-white/80 tracking-[0.2em] uppercase">Global Freelancing Network</h2>
+              <h1 className="mt-3 text-4xl sm:text-5xl font-extrabold leading-tight text-white">
+                hello, welcome<span className="text-amber-400">!</span>
+              </h1>
             </div>
-            <h3 className="mt-4 text-2xl font-extrabold tracking-tight">Global Freelancing</h3>
-            <p className="mt-3 text-xs leading-relaxed text-white/60 max-w-[230px]">
-              Your global career, powered by AI. Real-time jobs from Upwork, LinkedIn and Remotive, plus 20 elite productivity tricks.
-            </p>
-          </div>
 
-          <div className="space-y-4">
-            <button
-              type="button"
-              onClick={handleDemoSignIn}
-              className="w-full h-11 rounded-full border border-white/25 text-white/80 text-xs font-semibold tracking-widest uppercase hover:bg-white hover:text-black transition-colors"
-            >
-              Get Started
-            </button>
-            <div className="flex items-center justify-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-white/40">
-              <Link to="/register" className="hover:text-[#22C55E] transition-colors">Create New</Link>
-              <span className="opacity-40">|</span>
-              <span className="text-[#22C55E]">Log In</span>
+            <div className="relative flex flex-col items-center text-center my-auto py-8">
+              <div className="w-20 h-20 rounded-full bg-amber-500/15 flex items-center justify-center shadow-lg">
+                <Flame className="w-9 h-9 text-amber-400" />
+              </div>
+              <h3 className="mt-4 text-2xl font-bold tracking-tight text-white">Global Freelancing</h3>
+              <p className="mt-3 text-sm leading-relaxed text-white/60 max-w-[260px]">
+                Your global career, powered by AI. Real-time jobs from Upwork, LinkedIn and Remotive, plus 20 elite productivity tricks.
+              </p>
             </div>
-          </div>
-        </div>
 
-        {/* ── RIGHT: VIVID GREEN FORM PANEL ───────────────────────────────── */}
-        <div className="relative bg-[#3BE06B] p-8 sm:p-12 flex flex-col justify-center overflow-hidden">
-          {/* soft blob accents */}
-          <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-white/15 blur-2xl pointer-events-none" />
-
-          <div className="relative w-full max-w-sm mx-auto">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">welcome</h2>
-            <p className="mt-1 text-sm text-white/80">Login to your account to continue</p>
-
-            {error && (
-              <div className="mt-4 p-3 rounded-xl bg-black/15 border border-black/20 text-xs font-medium text-black/80">
-                {error}
-              </div>
-            )}
-
-            <form onSubmit={handleLogin} className="mt-7 space-y-4">
-              {/* Email */}
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  placeholder="Email Address"
-                  className="w-full h-12 rounded-lg pl-11 pr-4 bg-white text-sm text-black placeholder:text-black/40 outline-none focus:ring-2 focus:ring-black/20"
-                />
-              </div>
-
-              {/* Password */}
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  placeholder="Password"
-                  className="w-full h-12 rounded-lg pl-11 pr-11 bg-white text-sm text-black placeholder:text-black/40 outline-none focus:ring-2 focus:ring-black/20"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-black/40 hover:text-black p-1"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-
-              {/* Remember me */}
-              <label className="flex items-center gap-2.5 cursor-pointer select-none">
-                <span className={`w-4 h-4 rounded-full grid place-items-center border ${rememberMe ? 'bg-black border-black' : 'border-black/40 bg-white'}`}>
-                  {rememberMe && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
-                </span>
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="sr-only"
-                />
-                <span className="text-xs font-medium text-black/70">Remember me</span>
-              </label>
-
-              {/* Sign in */}
+            <div className="relative flex flex-col items-center gap-4">
               <button
-                type="submit"
-                disabled={busy}
-                className="w-full h-12 rounded-lg bg-black text-white text-xs font-bold tracking-[0.2em] uppercase hover:bg-black/85 active:scale-[0.99] transition-all flex items-center justify-center gap-2"
+                type="button"
+                onClick={handleDemoSignIn}
+                className="w-full h-11 rounded-full border border-white/25 text-white/80 text-xs font-semibold tracking-widest uppercase hover:bg-white hover:text-[#052E22] hover:border-white transition-colors"
               >
-                {busy ? (
-                  <>
-                    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
-                    </svg>
-                    Signing in…
-                  </>
-                ) : (
-                  <>
-                    Sign In
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </>
-                )}
+                Get Started
               </button>
-            </form>
+              <div className="flex items-center justify-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-white/40">
+                <Link to="/register" className="hover:text-amber-400 transition-colors">Create New</Link>
+                <span className="opacity-40">|</span>
+                <span className="text-amber-400">Log In</span>
+              </div>
+            </div>
+          </div>
 
-            <p className="mt-5 text-xs text-white/80 text-center">
-              Don't have an account?{' '}
-              <Link to="/register" className="font-bold text-black hover:underline">
-                Create one
-              </Link>
-            </p>
+          {/* ── RIGHT: EMERALD + GOLD FORM PANEL ───────────────────────────── */}
+          <div className="relative rounded-3xl overflow-hidden bg-white shadow-2xl border border-emerald-200/40 min-h-[520px] flex flex-col justify-center p-8 md:p-10 lg:p-12">
+            {/* soft gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-50/60 to-emerald-50 pointer-events-none" />
+
+            <div className="relative">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-[#052E22] tracking-tight">welcome</h2>
+              <p className="mt-1 text-sm text-amber-600">Login to your account to continue</p>
+
+              {error && (
+                <div className="mt-4 p-3 rounded-lg bg-amber-50 border border-amber-200/30 text-xs font-medium text-amber-800">
+                  {error}
+                </div>
+              )}
+
+              <form onSubmit={handleLogin} className="mt-7 space-y-4">
+                {/* Email */}
+                <div>
+                  <label className="text-[11px] font-bold uppercase tracking-wider text-amber-700 block mb-1.5">Email Address</label>
+                  <div className="relative">
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-amber-400" />
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      placeholder="you@example.com"
+                      className="w-full h-12 rounded-xl pl-11 pr-4 bg-surface-subtle border border-line text-sm text-ink placeholder:text-ink-subtle transition-all duration-150 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/15"
+                    />
+                  </div>
+                </div>
+
+                {/* Password */}
+                <div>
+                  <label className="text-[11px] font-bold uppercase tracking-wider text-amber-700 block mb-1.5">Password</label>
+                  <div className="relative">
+                    <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-amber-400" />
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      placeholder="••••••••"
+                      className="w-full h-12 rounded-xl pl-11 pr-11 bg-surface-subtle border border-line text-sm text-ink placeholder:text-ink-subtle transition-all duration-150 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/15"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((v) => !v)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-amber-400 hover:text-amber-500 p-1"
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    >
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Remember me */}
+                <div className="flex items-center gap-3">
+                  {checkbox(rememberMe, (e) => setRememberMe(e.target.checked), 'remember')}
+                  <span className="text-sm font-medium text-ink-soft">Remember me</span>
+                </div>
+
+                {/* Sign in */}
+                <button
+                  type="submit"
+                  disabled={busy}
+                  className="w-full rounded-xl h-12 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white text-sm font-bold uppercase tracking-[0.15em] shadow-lg hover:shadow-emerald-500/20 hover:brightness-105 active:scale-[0.98] transition-all duration-150 disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-3"
+                >
+                  {busy ? (
+                    <>
+                      <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                      </svg>
+                      Signing in…
+                    </>
+                  ) : (
+                    <>
+                      Sign In
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </>
+                  )}
+                </button>
+              </form>
+
+              {/* Create account link */}
+              <p className="mt-7 text-sm text-ink-soft text-center">
+                Don't have an account?{' '}
+                <Link to="/register" className="font-bold text-emerald-600 hover:underline transition-colors">
+                  Create one
+                </Link>
+              </p>
+            </div>
           </div>
         </div>
       </div>
