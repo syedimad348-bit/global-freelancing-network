@@ -114,16 +114,16 @@ export default function Login() {
           </div>
 
           {/* ── RIGHT: EMERALD + GOLD FORM PANEL ───────────────────────────── */}
-          <div className="relative rounded-3xl overflow-hidden bg-white shadow-2xl border border-emerald-200/40 min-h-[520px] flex flex-col justify-center p-8 md:p-10 lg:p-12">
-            {/* soft gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-amber-50/60 to-emerald-50 pointer-events-none" />
+          <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#052E22] to-[#064E3B] shadow-2xl border border-emerald-500/30 min-h-[520px] flex flex-col justify-center p-8 md:p-10 lg:p-12">
+            {/* decorative glow */}
+            <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-emerald-500/15 blur-3xl pointer-events-none" />
 
             <div className="relative">
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-[#052E22] tracking-tight">welcome</h2>
-              <p className="mt-1 text-sm text-amber-600">Login to your account to continue</p>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">welcome</h2>
+              <p className="mt-1 text-sm text-amber-300">Login to your account to continue</p>
 
               {error && (
-                <div className="mt-4 p-3 rounded-lg bg-amber-50 border border-amber-200/30 text-xs font-medium text-amber-800">
+                <div className="mt-4 p-3 rounded-lg bg-white/10 border border-white/20 text-xs font-medium text-white/80">
                   {error}
                 </div>
               )}
@@ -131,7 +131,7 @@ export default function Login() {
               <form onSubmit={handleLogin} className="mt-7 space-y-4">
                 {/* Email */}
                 <div>
-                  <label className="text-[11px] font-bold uppercase tracking-wider text-amber-700 block mb-1.5">Email Address</label>
+                  <label className="text-[11px] font-bold uppercase tracking-wider text-amber-300 block mb-1.5">Email Address</label>
                   <div className="relative">
                     <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-amber-400" />
                     <input
@@ -140,14 +140,14 @@ export default function Login() {
                       onChange={(e) => setEmail(e.target.value)}
                       required
                       placeholder="you@example.com"
-                      className="w-full h-12 rounded-xl pl-11 pr-4 bg-surface-subtle border border-line text-sm text-ink placeholder:text-ink-subtle transition-all duration-150 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/15"
+                      className="w-full h-12 rounded-xl pl-11 pr-4 bg-white/10 border border-white/20 text-sm text-white placeholder:text-white/40 transition-all duration-150 focus:outline-none focus:border-amber-300 focus:ring-2 focus:ring-amber-300/25"
                     />
                   </div>
                 </div>
 
                 {/* Password */}
                 <div>
-                  <label className="text-[11px] font-bold uppercase tracking-wider text-amber-700 block mb-1.5">Password</label>
+                  <label className="text-[11px] font-bold uppercase tracking-wider text-amber-300 block mb-1.5">Password</label>
                   <div className="relative">
                     <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-amber-400" />
                     <input
@@ -156,12 +156,12 @@ export default function Login() {
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       placeholder="••••••••"
-                      className="w-full h-12 rounded-xl pl-11 pr-11 bg-surface-subtle border border-line text-sm text-ink placeholder:text-ink-subtle transition-all duration-150 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/15"
+                      className="w-full h-12 rounded-xl pl-11 pr-11 bg-white/10 border border-white/20 text-sm text-white placeholder:text-white/40 transition-all duration-150 focus:outline-none focus:border-amber-300 focus:ring-2 focus:ring-amber-300/25"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword((v) => !v)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-amber-400 hover:text-amber-500 p-1"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-amber-400 hover:text-amber-300 p-1"
                       aria-label={showPassword ? 'Hide password' : 'Show password'}
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -172,7 +172,7 @@ export default function Login() {
                 {/* Remember me */}
                 <div className="flex items-center gap-3">
                   {checkbox(rememberMe, (e) => setRememberMe(e.target.checked), 'remember')}
-                  <span className="text-sm font-medium text-ink-soft">Remember me</span>
+                  <span className="text-sm font-medium text-white/70">Remember me</span>
                 </div>
 
                 {/* Sign in */}
@@ -201,7 +201,7 @@ export default function Login() {
               {/* Create account link */}
               <p className="mt-7 text-sm text-ink-soft text-center">
                 Don't have an account?{' '}
-                <Link to="/register" className="font-bold text-emerald-600 hover:underline transition-colors">
+                <Link to="/register" className="font-bold text-amber-300 hover:underline transition-colors">
                   Create one
                 </Link>
               </p>
