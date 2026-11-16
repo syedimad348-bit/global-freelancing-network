@@ -391,6 +391,77 @@ router.post("/subscription/jazzcash-intent", protect, async (req, res) => {
   res.json({ intent: payload });
 });
 
+// ── Apply credits ────────────────────────────────────────────────────────────
+// Every account starts with FREE_APPLIES (17) apply credits. Each successful
+// "Apply Now" subtracts one, persisted per user in User.usage.appliesLeft so
+// the balance survives refresh and login. Pro/Premium have no apply cap.
+const FREE_APPLIES = 17;
+
+function appliesStateFor(user) {
+  if (!user) return { appliesLeft: FREE_APPLIES, plan: "free", unlimited: false };
+  const plan = user.plan || "free";
+  if (plan === "pro" || plan === "premium") {
+    return { appliesLeft: null, plan, unlimited: true };
+  }
+  const stored = user.usage?.appliesLeft;
+  const appliesLeft = typeof stored === "number" ? Math.max(0, stored) : FREE_APPLIES;
+  return { appliesLeft, plan, unlimited: false };
+}
+
+router.get("/applies", protect, async (req, res) => {
+  if (mongoose.connection.readyState !== 1 || !isMongoObjectId(req.user.id)) {
+    return res.json({ appliesLeft: FREE_APPLIES, plan: "free", unlimited: false, source: "offline" });
+  }
+  const user = await User.findById(req.user.id).lean();
+  if (!user) return res.status(404).json({ message: "User not found." });
+  res.json({ ...appliesStateFor(user), source: "database" });
+});
+
+router.post("/applies/consume", protect, async (req, res) => {
+  if (mongoose.connection.readyState !== 1 || !isMongoObjectId(req.user.id)) {
+    const fallback = Math.max(0, Number(req.body?.localLeft ?? FREE_APPLIES) - 1);
+    return res.json({ appliesLeft: fallback, plan: "free", unlimited: false, source: "offline" });
+  }
+  const user = await User.findById(req.user.id);
+  if (!user) return res.status(404).json({ message: "User not found." });
+
+  if (user.plan === "pro" || user.plan === "premium") {
+    return res.json({ appliesLeft: null, plan: user.plan, unlimited: true, consumed: true });
+  }
+
+  if (user.usage?.appliesLeft == null) {
+    user.usage = { ...(user.usage || {}), appliesLeft: FREE_APPLIES };
+  }
+  if ((user.usage.appliesLeft || 0) <= 0) {
+    return res.status(403).json({
+      message: "You have used all 17 free applications. Upgrade to Premium to keep applying.",
+      appliesLeft: 0,
+      plan: user.plan,
+      unlimited: false,
+      upgradeRequired: true,
+    });
+  }
+
+  user.usage.appliesLeft = Math.max(0, user.usage.appliesLeft - 1);
+  await user.save();
+  res.json({ appliesLeft: user.usage.appliesLeft, plan: user.plan, unlimited: false, consumed: true });
+});
+
+router.post("/applies/restore", protect, async (req, res) => {
+  if (mongoose.connection.readyState !== 1 || !isMongoObjectId(req.user.id)) {
+    return res.json({ appliesLeft: FREE_APPLIES, plan: "free", unlimited: false, source: "offline" });
+  }
+  const user = await User.findById(req.user.id);
+  if (!user) return res.status(404).json({ message: "User not found." });
+
+  if (user.plan === "pro" || user.plan === "premium") {
+    return res.json({ appliesLeft: null, plan: user.plan, unlimited: true });
+  }
+  user.usage = { ...(user.usage || {}), appliesLeft: FREE_APPLIES };
+  await user.save();
+  res.json({ appliesLeft: user.usage.appliesLeft, plan: user.plan, unlimited: false });
+});
+
 // ── In-memory fallback for WhatsApp Requests when MongoDB is offline ──────────
 const memoryWhatsAppRequests = [];
 const WhatsAppRequest = (() => {

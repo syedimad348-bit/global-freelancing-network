@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { apiFetch } from '../../lib/api';
-import { trackApply, getAppliesLeft, consumeApply } from '../../lib/usage';
+import { trackApply, getAppliesLeft, consumeApply, fetchAppliesLeft, consumeApplyApi } from '../../lib/usage';
 
 const PAGE_SIZE = 24;
 
@@ -38,12 +38,25 @@ export function formatRelative(iso) {
 }
 
 export default function JobHunter() {
-  const [appliesLeft, setAppliesLeft] = useState(getAppliesLeft());
+  const [appliesLeft, setAppliesLeft] = useState(() => getAppliesLeft());
+  const [appliesUnlimited, setAppliesUnlimited] = useState(false);
 
   useEffect(() => {
     const onApplies = () => setAppliesLeft(getAppliesLeft());
     window.addEventListener('applies-changed', onApplies);
     return () => window.removeEventListener('applies-changed', onApplies);
+  }, []);
+
+  // Hydrate applies from DB on mount
+  useEffect(() => {
+    let cancelled = false;
+    fetchAppliesLeft().then(({ appliesLeft: left, unlimited }) => {
+      if (!cancelled) {
+        setAppliesLeft(left);
+        setAppliesUnlimited(unlimited);
+      }
+    });
+    return () => { cancelled = true; };
   }, []);
 
   const [jobs,       setJobs]       = useState([]);
@@ -176,11 +189,37 @@ export default function JobHunter() {
   };
 
   const handleApply = async (job) => {
-    if (appliesLeft <= 0) return;
-    const left = consumeApply();
-    trackApply(job);
-    setAppliesLeft(left);
+    if (!appliesUnlimited && appliesLeft <= 0) return;
+
     if (job.url) window.open(job.url, '_blank', 'noopener,noreferrer');
+
+    let next = appliesLeft;
+    let unlimited = appliesUnlimited;
+
+    try {
+      const result = await consumeApplyApi();
+      if (result.upgradeRequired) {
+        // Server says out of applies; block the apply and prompt upgrade.
+        setAppliesLeft(0);
+        setAppliesUnlimited(false);
+        return;
+      }
+      if (result.unlimited) {
+        setAppliesUnlimited(true);
+        setAppliesLeft(null);
+      } else if (typeof result.appliesLeft === 'number') {
+        setAppliesLeft(result.appliesLeft);
+        next = result.appliesLeft;
+      }
+    } catch {
+      // Fallback to localStorage when backend is unavailable/demo session.
+      next = consumeApply();
+      unlimited = false;
+    }
+
+    trackApply(job);
+    setAppliesLeft(next);
+    setAppliesUnlimited(unlimited);
   };
 
   const freshCount = useMemo(() => {
@@ -224,7 +263,7 @@ export default function JobHunter() {
             <Stat label="Fresh &lt;1h" value={loading ? '…' : freshCount.toLocaleString()} />
             <Stat
               label="Applies left"
-              value={appliesLeft}
+              value={appliesUnlimited ? '∞' : (appliesLeft ?? 0)}
             />
           </div>
         </div>
@@ -237,6 +276,26 @@ export default function JobHunter() {
           </p>
         )}
       </div>
+
+      {appliesUnlimited ? null : appliesLeft <= 0 ? (
+        <div className="rounded-2xl border border-amber-400/40 bg-gradient-to-r from-amber-50 to-amber-100 px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-ink">
+          <div className="flex items-start gap-3">
+            <span className="mt-0.5 w-10 h-10 rounded-full bg-amber-500/20 text-amber-600 grid place-items-center shrink-0 font-black">0</span>
+            <div>
+              <p className="font-black text-lg text-ink">You've used all 17 free applications.</p>
+              <p className="text-sm text-ink-muted">
+                Your free apply credits are exhausted. Upgrade to Premium for unlimited job applications.
+              </p>
+            </div>
+          </div>
+          <a
+            href="/dashboard/pro"
+            className="shrink-0 inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl bg-ink text-white font-bold text-sm shadow-cardHover hover:bg-ink/90 transition-all"
+          >
+            Upgrade to Premium
+          </a>
+        </div>
+      ) : null}
 
       {warning && (
         <div className="rounded-xl border border-amber-400/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-300">
@@ -326,6 +385,7 @@ export default function JobHunter() {
               job={job}
               saved={saved.has(job._id || job.url)}
               appliesLeft={appliesLeft}
+              appliesUnlimited={appliesUnlimited}
               onSave={() => toggleSave(job._id || job.url)}
               onApply={() => handleApply(job)}
               onOpen={() => setActive(job)}
@@ -367,6 +427,7 @@ export default function JobHunter() {
             job={active}
             saved={saved.has(active._id || active.url)}
             appliesLeft={appliesLeft}
+            appliesUnlimited={appliesUnlimited}
             onSave={() => toggleSave(active._id || active.url)}
             onApply={() => handleApply(active)}
             onClose={() => setActive(null)}
@@ -417,29 +478,29 @@ function FilterSelect({ label, value, onChange, options }) {
   );
 }
 
-function JobCard({ job, saved, appliesLeft, onSave, onApply, onOpen }) {
+function JobCard({ job, saved, appliesLeft, onSave, onApply, onOpen, appliesUnlimited }) {
   const c = srcColor(job.source);
   const isRemote = /(remote|worldwide|global)/i.test(job.location || '');
   return (
     <motion.div
       layout
       whileHover={{ y: -2 }}
-      className="group relative rounded-2xl bg-emerald-50/80 border border-emerald-200/70 p-5 hover:shadow-cardHover transition-shadow cursor-pointer"
+      className="group relative rounded-2xl bg-[rgb(11,15,14)] border border-white/10 p-5 hover:shadow-cardShadow transition-shadow cursor-pointer"
       onClick={onOpen}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3 min-w-0">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 grid place-items-center font-black text-ink-muted shrink-0">
+          <div className="w-11 h-11 rounded-xl bg-white/10 border border-white/20 grid place-items-center font-black text-white/60 shrink-0">
             {(job.company || 'C').slice(0, 1)}
           </div>
           <div className="min-w-0">
-            <p className="text-xs font-semibold text-ink-subtle truncate">{job.company}</p>
-            <h3 className="text-base font-bold text-ink leading-snug truncate">{job.title}</h3>
-            <p className="text-xs text-ink-muted mt-0.5 truncate">
+            <p className="text-xs font-semibold text-white/60 truncate">{job.company}</p>
+            <h3 className="text-base font-bold text-white leading-snug truncate">{job.title}</h3>
+            <p className="text-xs text-white/40 mt-0.5 truncate">
               {job.location} · {job.type}
             </p>
             {job.tagline && (
-              <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-wider mt-1.5">
+              <p className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider mt-1.5">
                 {job.tagline}
               </p>
             )}
@@ -449,7 +510,7 @@ function JobCard({ job, saved, appliesLeft, onSave, onApply, onOpen }) {
           onClick={(e) => { e.stopPropagation(); onSave(); }}
           className={[
             'shrink-0 w-9 h-9 rounded-lg border flex items-center justify-center transition-colors',
-            saved ? 'bg-amber-500/15 border-amber-400/30 text-amber-300' : 'border-line text-ink-subtle hover:text-ink hover:border-ink/30',
+            saved ? 'bg-amber-500/15 border-amber-400/30 text-amber-300' : 'border-white/15 text-white/60 hover:text-white hover:border-white/20',
           ].join(' ')}
           aria-label={saved ? 'Unsave job' : 'Save job'}
           title={saved ? 'Saved' : 'Save'}
@@ -480,7 +541,7 @@ function JobCard({ job, saved, appliesLeft, onSave, onApply, onOpen }) {
           ];
           const colorClass = tagColors[Math.abs(t.split('').reduce((a, c) => a + c.charCodeAt(0), 0)) % tagColors.length];
           return (
-            <span key={t} className={`text-[11px] px-2 py-0.5 rounded-full bg-canvas border border-line font-medium ${colorClass}`}>
+            <span key={t} className={`text-[11px] px-2 py-0.5 rounded-full ${colorClass}`}>
               {t}
             </span>
           );
@@ -488,7 +549,7 @@ function JobCard({ job, saved, appliesLeft, onSave, onApply, onOpen }) {
       </div>
 
       <div className="mt-4 flex items-center justify-between">
-        {appliesLeft > 0 ? (
+        {appliesUnlimited || appliesLeft > 0 ? (
           <button
             onClick={() => onApply(job)}
             className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-white text-emerald-600 border border-emerald-200 font-bold text-base shadow-sm hover:bg-emerald-50 hover:shadow-[0_6px_20px_-4px_rgba(16,185,129,0.6)] active:scale-[0.98] transition-all duration-150"
@@ -496,14 +557,20 @@ function JobCard({ job, saved, appliesLeft, onSave, onApply, onOpen }) {
             Apply Now
           </button>
         ) : (
-          <p className="flex-1 text-center text-sm font-semibold text-ink-muted">No applies left</p>
+          <a
+            href="/dashboard/pro"
+            onClick={(e) => e.stopPropagation()}
+            className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-amber-400 text-ink font-bold text-base shadow-sm hover:bg-amber-300 transition-all duration-150"
+          >
+            Upgrade to Premium
+          </a>
         )}
       </div>
     </motion.div>
   );
 }
 
-function JobDrawer({ job, saved, onSave, appliesLeft, onApply, onClose }) {
+function JobDrawer({ job, saved, onSave, appliesLeft, appliesUnlimited, onApply, onClose }) {
   const c = srcColor(job.source);
   return (
     <motion.div
@@ -563,27 +630,41 @@ function JobDrawer({ job, saved, onSave, appliesLeft, onApply, onClose }) {
             </div>
           )}
 
-          <div className="mt-8 flex gap-3">
-            {appliesLeft > 0 ? (
+          <div className="mt-8 space-y-3">
+            <div className="flex gap-3">
+              {appliesUnlimited || appliesLeft > 0 ? (
+                <button
+                  onClick={() => onApply(job)}
+                  className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-white text-emerald-600 border border-emerald-200 font-bold text-base shadow-sm hover:bg-emerald-50 hover:shadow-[0_6px_20px_-4px_rgba(16,185,129,0.6)] active:scale-[0.98] transition-all duration-150"
+                >
+                  Apply Now
+                </button>
+              ) : (
+                <a
+                  href="/dashboard/pro"
+                  className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-amber-400 text-ink font-bold text-base shadow-sm hover:bg-amber-300 transition-all duration-150"
+                >
+                  Upgrade to Premium
+                </a>
+              )}
               <button
-                onClick={() => onApply(job)}
-                className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-white text-emerald-600 border border-emerald-200 font-bold text-base shadow-sm hover:bg-emerald-50 hover:shadow-[0_6px_20px_-4px_rgba(16,185,129,0.6)] active:scale-[0.98] transition-all duration-150"
+                onClick={onSave}
+                className={[
+                  'h-12 px-4 rounded-xl border font-semibold inline-flex items-center gap-2',
+                  saved ? 'bg-amber-500/15 border-amber-400/30 text-amber-300' : 'border-line text-ink-muted hover:text-ink',
+                ].join(' ')}
               >
-                Apply Now
+                <BookmarkIcon className="w-4 h-4" filled={saved} />
+                {saved ? 'Saved' : 'Save'}
               </button>
-            ) : (
-              <p className="flex-1 text-center text-sm font-semibold text-ink-muted">No applies left</p>
-            )}
-            <button
-              onClick={onSave}
-              className={[
-                'h-12 px-4 rounded-xl border font-semibold inline-flex items-center gap-2',
-                saved ? 'bg-amber-500/15 border-amber-400/30 text-amber-300' : 'border-line text-ink-muted hover:text-ink',
-              ].join(' ')}
-            >
-              <BookmarkIcon className="w-4 h-4" filled={saved} />
-              {saved ? 'Saved' : 'Save'}
-            </button>
+            </div>
+            <p className="text-xs text-ink-muted text-center">
+              {appliesUnlimited
+                ? 'Unlimited applies on your plan.'
+                : appliesLeft > 0
+                  ? `${appliesLeft} free ${appliesLeft === 1 ? 'apply' : 'applies'} left this account.`
+                  : 'You have used all 17 free applies. Upgrade to Premium for unlimited applies.'}
+            </p>
           </div>
         </div>
       </motion.aside>

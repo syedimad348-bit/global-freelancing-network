@@ -2,6 +2,8 @@
 // Adds: profile (avatar, bio, skills, experience, links), follow requests w/ accept/reject,
 // auto-reply DMs, 24h auto-clean of messages.
 
+import { apiFetch } from './api';
+
 const KEY = 'dr_usage_v1';
 const MSG_TTL_MS = 24 * 3600 * 1000;
 
@@ -147,6 +149,39 @@ export function consumeApply() {
   try { localStorage.setItem(APPLIES_LEFT_KEY, String(next)); } catch {}
   try { window.dispatchEvent(new CustomEvent('applies-changed')); } catch {}
   return next;
+}
+
+// ---- Apply credits (DB-persisted per account, server-authoritative) ----
+
+export async function fetchAppliesLeft() {
+  try {
+    const data = await apiFetch('/api/features/applies', {}, { retries: 1, requireAuth: true });
+    const unlimited = !!data?.unlimited;
+    const left = typeof data?.appliesLeft === 'number' ? data.appliesLeft : unlimited ? null : getAppliesLeft();
+    const value = unlimited ? null : (left ?? getAppliesLeft());
+    try { localStorage.setItem(APPLIES_LEFT_KEY, String(value ?? APPLIES_START)); } catch {}
+    return { appliesLeft: value, unlimited, plan: data?.plan || 'free' };
+  } catch {
+    return { appliesLeft: getAppliesLeft(), unlimited: false, plan: 'free' };
+  }
+}
+
+export async function consumeApplyApi() {
+  try {
+    const data = await apiFetch('/api/features/applies/consume', { method: 'POST', body: JSON.stringify({}) }, { retries: 0, requireAuth: true });
+    const unlimited = !!data?.unlimited;
+    const next = unlimited ? null : (typeof data?.appliesLeft === 'number' ? data.appliesLeft : getAppliesLeft());
+    try { localStorage.setItem(APPLIES_LEFT_KEY, String(next ?? APPLIES_START)); } catch {}
+    try { window.dispatchEvent(new CustomEvent('applies-changed')); } catch {}
+    return { appliesLeft: next, unlimited, consumed: true, upgradeRequired: !!data?.upgradeRequired };
+  } catch (err) {
+    const msg = String(err?.message || '');
+    const unlimitedFallBack = /unlimited|premium/i.test(msg);
+    const next = Math.max(0, getAppliesLeft() - 1);
+    try { localStorage.setItem(APPLIES_LEFT_KEY, String(next)); } catch {}
+    try { window.dispatchEvent(new CustomEvent('applies-changed')); } catch {}
+    return { appliesLeft: next, unlimited: unlimitedFallBack, consumed: false, upgradeRequired: msg.toLowerCase().includes('all 17 free') };
+  }
 }
 
 

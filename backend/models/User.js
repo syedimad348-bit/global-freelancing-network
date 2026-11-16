@@ -52,6 +52,7 @@ const userSchema = new mongoose.Schema(
       resumeAnalyses: { type: Number, default: 0 },
       aiFeatureCalls: { type: Number, default: 0 },
       jobViews: { type: Number, default: 0 },
+      appliesLeft: { type: Number, default: 17 },
     },
     emailAlertsEnabled: {
       type: Boolean,
