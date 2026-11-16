@@ -66,12 +66,12 @@ export default function Login() {
   );
 
   return (
-    <div className="min-h-screen bg-[#FAF9F4] text-ink font-sans antialiased relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-[#052E22] to-[#064E3B] text-ink font-sans antialiased relative overflow-hidden">
       {/* decorative blobs like reference */}
-      <div className="absolute -top-24 -left-24 w-64 h-64 rounded-full bg-emerald-100/60 blur-[100px] pointer-events-none" />
-      <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-amber-100/50 blur-[100px] pointer-events-none" />
-      <div className="absolute -bottom-24 left-1/4 w-72 h-72 rounded-full bg-emerald-50/70 blur-[90px] pointer-events-none" />
-      <div className="absolute bottom-10 right-10 w-60 h-60 rounded-full bg-amber-50/60 blur-[80px] pointer-events-none" />
+      <div className="absolute -top-24 -left-24 w-64 h-64 rounded-full bg-emerald-400/20 blur-[100px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-amber-300/15 blur-[100px] pointer-events-none" />
+      <div className="absolute -bottom-24 left-1/4 w-72 h-72 rounded-full bg-emerald-300/15 blur-[90px] pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-60 h-60 rounded-full bg-amber-200/10 blur-[80px] pointer-events-none" />
 
       {/* single login card */}
       <div className="relative z-10 mx-auto w-full max-w-md p-4 sm:p-6">
