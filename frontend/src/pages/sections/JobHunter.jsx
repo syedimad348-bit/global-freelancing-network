@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { apiFetch } from '../../lib/api';
-import { trackApply, appliesToday } from '../../lib/usage';
+import { trackApply, appliesToday, getAppliesLeft, consumeApply } from '../../lib/usage';
 import { limitFor } from '../../lib/tiers';
 
 const PAGE_SIZE = 24;
@@ -42,6 +42,14 @@ export default function JobHunter({ user }) {
   const dailyCap = limitFor('appliesPerDay', user);
   const usedToday = appliesToday();
   const remaining = Math.max(0, dailyCap - usedToday);
+
+  const [appliesLeft, setAppliesLeft] = useState(getAppliesLeft());
+
+  useEffect(() => {
+    const onApplies = () => setAppliesLeft(getAppliesLeft());
+    window.addEventListener('applies-changed', onApplies);
+    return () => window.removeEventListener('applies-changed', onApplies);
+  }, []);
 
   const [jobs,       setJobs]       = useState([]);
   const [total,      setTotal]      = useState(0);
@@ -172,6 +180,14 @@ export default function JobHunter({ user }) {
     }
   };
 
+  const handleApply = async (job) => {
+    if (appliesLeft <= 0) return;
+    const left = consumeApply();
+    trackApply(job);
+    setAppliesLeft(left);
+    if (job.url) window.open(job.url, '_blank', 'noopener,noreferrer');
+  };
+
   const freshCount = useMemo(() => {
     const cutoff = Date.now() - 60 * 60 * 1000;
     return jobs.filter((j) => {
@@ -213,7 +229,7 @@ export default function JobHunter({ user }) {
             <Stat label="Fresh &lt;1h" value={loading ? '…' : freshCount.toLocaleString()} />
             <Stat
               label="Applies left"
-              value={dailyCap === Infinity ? '∞' : remaining}
+              value={appliesLeft}
             />
           </div>
         </div>
@@ -314,7 +330,9 @@ export default function JobHunter({ user }) {
               key={job._id || job.url}
               job={job}
               saved={saved.has(job._id || job.url)}
+              appliesLeft={appliesLeft}
               onSave={() => toggleSave(job._id || job.url)}
+              onApply={() => handleApply(job)}
               onOpen={() => setActive(job)}
             />
           ))}
@@ -353,7 +371,9 @@ export default function JobHunter({ user }) {
           <JobDrawer
             job={active}
             saved={saved.has(active._id || active.url)}
+            appliesLeft={appliesLeft}
             onSave={() => toggleSave(active._id || active.url)}
+            onApply={() => handleApply(active)}
             onClose={() => setActive(null)}
           />
         )}
@@ -402,7 +422,7 @@ function FilterSelect({ label, value, onChange, options }) {
   );
 }
 
-function JobCard({ job, saved, onSave, onOpen }) {
+function JobCard({ job, saved, appliesLeft, onSave, onApply, onOpen }) {
   const c = srcColor(job.source);
   const isRemote = /(remote|worldwide|global)/i.test(job.location || '');
   return (
@@ -423,6 +443,11 @@ function JobCard({ job, saved, onSave, onOpen }) {
             <p className="text-xs text-ink-muted mt-0.5 truncate">
               {job.location} · {job.type}
             </p>
+            {job.tagline && (
+              <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-wider mt-1.5">
+                {job.tagline}
+              </p>
+            )}
           </div>
         </div>
         <button
@@ -468,13 +493,19 @@ function JobCard({ job, saved, onSave, onOpen }) {
       </div>
 
       <div className="mt-4 flex items-center justify-between">
-        <span className="text-sm font-bold text-ink">{job.salary || ''}</span>
+        <button
+          disabled={appliesLeft <= 0}
+          onClick={() => onApply(job)}
+          className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-emerald-500 text-white font-bold text-base shadow-[0_4px_14px_-4px_rgba(16,185,129,0.5)] hover:bg-emerald-600 hover:shadow-[0_6px_20px_-4px_rgba(16,185,129,0.6)] active:scale-[0.98] transition-all duration-150 disabled:opacity-50 disabled:pointer-events-none"
+        >
+          Apply Now
+        </button>
       </div>
     </motion.div>
   );
 }
 
-function JobDrawer({ job, saved, onSave, onClose }) {
+function JobDrawer({ job, saved, onSave, appliesLeft, onApply, onClose }) {
   const c = srcColor(job.source);
   return (
     <motion.div
@@ -510,11 +541,15 @@ function JobDrawer({ job, saved, onSave, onClose }) {
               <p className="text-sm font-semibold text-ink-subtle">{job.company}</p>
               <h2 className="text-xl font-black text-ink leading-tight">{job.title}</h2>
               <p className="text-sm text-ink-muted mt-1">{job.location} · {job.type}</p>
+              {job.tagline && (
+                <p className="text-xs font-bold text-emerald-600 uppercase tracking-wider mt-1.5">
+                  {job.tagline}
+                </p>
+              )}
             </div>
           </div>
 
           <div className="mt-6 grid grid-cols-2 gap-3">
-            {job.salary && <Info label="Salary"   value={job.salary} />}
             <Info label="Source"   value={job.source} />
             <Info label="Category" value={job.folder || job.category || '—'} />
           </div>
@@ -531,15 +566,13 @@ function JobDrawer({ job, saved, onSave, onClose }) {
           )}
 
           <div className="mt-8 flex gap-3">
-            <a
-              href={job.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackApply(job)}
-              className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-emerald-500 text-white font-bold text-base shadow-[0_4px_14px_-4px_rgba(16,185,129,0.5)] hover:bg-emerald-600 hover:shadow-[0_6px_20px_-4px_rgba(16,185,129,0.6)] active:scale-[0.98] transition-all duration-150"
+            <button
+              disabled={appliesLeft <= 0}
+              onClick={() => onApply(job)}
+              className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-emerald-500 text-white font-bold text-base shadow-[0_4px_14px_-4px_rgba(16,185,129,0.5)] hover:bg-emerald-600 hover:shadow-[0_6px_20px_-4px_rgba(16,185,129,0.6)] active:scale-[0.98] transition-all duration-150 disabled:opacity-50 disabled:pointer-events-none"
             >
               Apply Now
-            </a>
+            </button>
             <button
               onClick={onSave}
               className={[

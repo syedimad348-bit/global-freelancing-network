@@ -122,6 +122,34 @@ export function getInsights() {
 
 function startOfTodayMs() { const d = new Date(); d.setHours(0,0,0,0); return d.getTime(); }
 
+// ---- Apply credits ----
+// Every account starts with 17 applies. Each Apply click subtracts one
+// until zero. At zero no job links are shown, only text.
+const APPLIES_LEFT_KEY = 'dr_applies_left_v1';
+const APPLIES_START = 17;
+
+export function getAppliesLeft() {
+  try {
+    const raw = localStorage.getItem(APPLIES_LEFT_KEY);
+    if (raw === null) {
+      localStorage.setItem(APPLIES_LEFT_KEY, String(APPLIES_START));
+      return APPLIES_START;
+    }
+    const n = parseInt(raw, 10);
+    return Number.isFinite(n) ? Math.max(0, Math.min(APPLIES_START, n)) : APPLIES_START;
+  } catch {
+    return APPLIES_START;
+  }
+}
+
+export function consumeApply() {
+  const next = Math.max(0, getAppliesLeft() - 1);
+  try { localStorage.setItem(APPLIES_LEFT_KEY, String(next)); } catch {}
+  try { window.dispatchEvent(new CustomEvent('applies-changed')); } catch {}
+  return next;
+}
+
+
 // ---- Follow requests ----
 export function requestFollow(uid) {
   const u = loadUsage();

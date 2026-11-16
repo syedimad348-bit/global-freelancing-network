@@ -85,7 +85,7 @@ export default function Tricks() {
             Curated Collection · 20 Elite AI Tools
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-            AI Tricks & High-Impact Productivity Suite
+            Third Party Tools Access
           </h2>
           <p className="text-sm sm:text-base text-ink leading-relaxed">
             Gain an unfair advantage in international freelancing. Discover verified tools, access proprietary prompt workflows, and request access resources delivered via WhatsApp.
@@ -188,6 +188,9 @@ export default function Tricks() {
                         </h3>
                         <span className="text-[11px] font-semibold text-brand-600 bg-brand-50 px-2 py-0.5 rounded-md inline-block">
                           {tool.category}
+                        </span>
+                        <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md inline-block ml-1">
+                          Third Party
                         </span>
                       </div>
                     </div>
