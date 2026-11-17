@@ -5,11 +5,16 @@ import { isOwner, OWNER_EMAIL } from '../../lib/tiers';
 
 export default function Admin({ user }) {
   const [m, setM] = useState(null);
+  const [leads, setLeads] = useState([]);
   const [tab, setTab] = useState('users');
 
   useEffect(() => {
     if (!isOwner(user)) return;
     getAdminMetrics().then(setM);
+    fetch('/api/features/leads')
+      .then((r) => (r.ok ? r.json() : { leads: [] }))
+      .then((data) => setLeads(data?.leads || []))
+      .catch(() => setLeads([]));
   }, [user]);
 
   if (!isOwner(user)) {
@@ -71,9 +76,50 @@ export default function Admin({ user }) {
 
       {/* Tabs */}
       <div className="flex gap-2">
-        <Tab active={tab === 'users'} onClick={() => setTab('users')}>Users ({m.totalUsers})</Tab>
-        <Tab active={tab === 'payments'} onClick={() => setTab('payments')}>Payments ({m.payments.length})</Tab>
+        <Tab active={tab === 'users'} onClick={() => setTab('users')}>Users ({m?.totalUsers || 0})</Tab>
+        <Tab active={tab === 'payments'} onClick={() => setTab('payments')}>Payments ({m?.payments.length || 0})</Tab>
+        <Tab active={tab === 'requests'} onClick={() => setTab('requests')}>Requests ({leads.length})</Tab>
       </div>
+
+      {tab === 'requests' && (
+        <div className="card overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-[10px] uppercase tracking-wider text-ink-subtle font-semibold border-b border-line">
+                <th className="text-left py-2 px-2">Type</th>
+                <th className="text-left py-2 px-2">Niche / Section</th>
+                <th className="text-left py-2 px-2">Name</th>
+                <th className="text-left py-2 px-2">Email</th>
+                <th className="text-left py-2 px-2">Phone</th>
+                <th className="text-left py-2 px-2 text-[10px]">Notes</th>
+                <th className="text-left py-2 px-2 text-[10px] text-ink-muted">Submitted At</th>
+                <th className="text-left py-2 px-2">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {leads.map((l) => (
+                <tr key={l.id} className="border-b border-line/60 last:border-0">
+                  <td className="py-2 px-2">
+                    <Badge tone={l.type === 'facebook' ? 'indigo' : l.type === 'tricks' ? 'emerald' : 'brand'}>
+                      {l.type.charAt(0).toUpperCase() + l.type.slice(1)}
+                    </Badge>
+                  </td>
+                  <td className="py-2 px-2 text-ink font-medium">{l.niche || l.toolName || '—'}</td>
+                  <td className="py-2 px-2 text-ink">{l.name || 'Anonymous'}</td>
+                  <td className="py-2 px-2 text-ink-muted">{l.email || '—'}</td>
+                  <td className="py-2 px-2 text-ink">{l.phoneNumber || l.normalizedNumber || '—'}</td>
+                  <td className="py-2 px-2 text-[10px] text-ink-subtle line-clamp-1">{l.notes || '—'}</td>
+                  <td className="py-2 px-2 text-[10px] text-ink-muted">{new Date(l.createdAt || l.submittedAt).toLocaleDateString()}</td>
+                  <td className="py-2 px-2"><Badge tone={l.status === 'processed' ? 'emerald' : 'brand'}>{l.status}</Badge></td>
+                </tr>
+              ))}
+              {leads.length === 0 && (
+                <tr><td colSpan="8" className="py-6 text-center text-ink-muted text-sm">No submissions yet.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {tab === 'users' && (
         <div className="card overflow-x-auto">

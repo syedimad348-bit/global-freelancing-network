@@ -32,6 +32,7 @@ import {
   Target,
   Flame,
   Globe,
+  ThumbsUp,
 } from 'lucide-react';
 import { apiFetch, API_BASE_URL } from '../lib/api';
 import Logo from '../components/ui/Logo';
@@ -39,6 +40,7 @@ import Badge from '../components/ui/Badge';
 import JobHunter from './sections/JobHunter';
 import AITools from './sections/AITools';
 import Tricks from './sections/Tricks';
+import FacebookSection from './sections/Facebook';
 import MyInsights from './sections/MyInsights';
 import Profile from './sections/Profile';
 import Sources from './sections/Sources';
@@ -55,6 +57,7 @@ const BASE_NAV = [
   { id: 'jobs',      label: 'Find Jobs',      icon: Briefcase, badge: { tone: 'mint', text: 'Live' } },
   { id: 'tools',     label: 'AI Tools',        icon: Wrench },
   { id: 'tricks',    label: 'Tricks',          icon: Sparkles, badge: { tone: 'emerald', text: '20 Tools' } },
+  { id: 'facebook',  label: 'Facebook',        icon: ThumbsUp, badge: { tone: 'indigo', text: 'Niches' } },
   { id: 'insights',  label: 'My Insights',     icon: BarChart3 },
   { id: 'sources',   label: 'Job Sources',     icon: Globe, badge: { tone: 'emerald', text: 'Health' } },
   { id: 'profile',   label: 'My Profile',      icon: User },
@@ -412,6 +415,7 @@ className={[
               {active === 'jobs' && <JobHunter user={user} />}
               {active === 'tools' && <AITools user={user} />}
               {active === 'tricks' && <Tricks />}
+              {active === 'facebook' && <FacebookSection />}
               {active === 'insights' && <MyInsights user={user} />}
               {active === 'sources' && <Sources />}
               {active === 'profile' && <Profile user={user} />}
@@ -453,30 +457,28 @@ function DashboardOverview({ user, setActive, onOpenTrickModal }) {
   const loadDashboardData = useCallback(async () => {
     setLoading(true);
     try {
-      // 1. Job statistics
-      const statsRes = await apiFetch('/api/jobs/stats').catch(() => ({ total: 0, sources: [] }));
-      setStats({ total: statsRes?.total || 0, sources: statsRes?.sources || [] });
-
-      // 2. Saved jobs
-      const savedRes = await apiFetch('/api/jobs/saved').catch(() => ({ savedJobs: [] }));
-      setSavedJobs(savedRes?.savedJobs || []);
-
-      // 3. Applications
-      const appRes = await apiFetch('/api/features/applications').catch(() => ({ items: [] }));
-      setApplications(appRes?.items || []);
-
-      // 4. Projects, tasks, and activity summary
-      const summaryRes = await apiFetch('/api/features/dashboard-summary').catch(() => ({
-        projects: [],
-        tasks: [],
-        activity: [],
-        activeProjectsCount: 0,
-      }));
-      setDashboardData(summaryRes);
-
-      // 5. Recommended jobs from live feed
-      const jobsRes = await apiFetch('/api/jobs?limit=5').catch(() => ({ jobs: [] }));
-      setRecommendedJobs(jobsRes?.jobs || []);
+      const [statsRes, savedRes, appRes, summaryRes, jobsRes] = await Promise.allSettled([
+        apiFetch('/api/jobs/stats').catch(() => ({ total: 0, sources: [] })),
+        apiFetch('/api/jobs/saved').catch(() => ({ savedJobs: [] })),
+        apiFetch('/api/features/applications').catch(() => ({ items: [] })),
+        apiFetch('/api/features/dashboard-summary').catch(() => ({
+          projects: [],
+          tasks: [],
+          activity: [],
+          activeProjectsCount: 0,
+        })),
+        apiFetch('/api/jobs?limit=5').catch(() => ({ jobs: [] })),
+      ]);
+      const stats = statsRes.status === 'fulfilled' ? statsRes.value : { total: 0, sources: [] };
+      const saved = savedRes.status === 'fulfilled' ? savedRes.value : { savedJobs: [] };
+      const apps = appRes.status === 'fulfilled' ? appRes.value : { items: [] };
+      const summary = summaryRes.status === 'fulfilled' ? summaryRes.value : { projects: [], tasks: [], activity: [], activeProjectsCount: 0 };
+      const jobs = jobsRes.status === 'fulfilled' ? jobsRes.value : { jobs: [] };
+      setStats({ total: stats?.total || 0, sources: stats?.sources || [] });
+      setSavedJobs(saved?.savedJobs || []);
+      setApplications(apps?.items || []);
+      setDashboardData(summary);
+      setRecommendedJobs(jobs?.jobs || []);
     } catch (e) {
       console.warn('Dashboard data fetch warning:', e);
     } finally {
@@ -776,11 +778,11 @@ function DashboardOverview({ user, setActive, onOpenTrickModal }) {
 
         <PremiumChartCard
           title="Source Distribution"
-          subtitle="Jobs by platform · Live aggregation"
+          subtitle="Jobs by platform · Cumulative contribution"
           icon={PieChart}
           tone="emerald"
         >
-          <DonutChart data={sourceDistribution} />
+          <WaterfallChart data={sourceDistribution} />
         </PremiumChartCard>
 
         <PremiumChartCard
@@ -812,11 +814,11 @@ function DashboardOverview({ user, setActive, onOpenTrickModal }) {
 
         <PremiumChartCard
           title="Market Demand Index"
-          subtitle="Skill demand score · AI-powered estimate"
+          subtitle="Skill demand histogram · Distribution of demand scores"
           icon={Flame}
           tone="cyan"
         >
-          <RadarChart data={skillDemand} />
+          <HistogramChart data={skillDemand} />
         </PremiumChartCard>
       </div>
 
@@ -1388,36 +1390,36 @@ function TrendLineChart({ data }) {
   );
 }
 
-// ── Donut Chart Component ────────────────────────────────────────────────────────
-function DonutChart({ data }) {
+// ── Waterfall Chart Component (Cumulative Contribution) ──────────────────────────
+function WaterfallChart({ data }) {
   const total = data.reduce((sum, item) => sum + item.value, 0);
-  let currentAngle = 0;
+  const maxVal = Math.max(...data.map((d) => d.value));
+  const colors = ['#10b981', '#059669', '#06b6d4', '#0d9488', '#d4af37', '#a87f23', '#84cc16', '#34d399'];
+  let cumulative = 0;
 
   return (
-    <div className="relative w-48 h-48 mx-auto">
-      <svg width="192" height="192" className="transform -rotate-90">
-        <circle cx="96" cy="96" r="80" stroke="#E2E8F0" strokeWidth="16" fill="none" />
-        {data.map((item, idx) => {
-          const angle = (item.value / total) * 360;
-          const radius = 80;
-          const x1 = 96 + radius * Math.cos(currentAngle * Math.PI / 180);
-          const y1 = 96 + radius * Math.sin(currentAngle * Math.PI / 180);
-          currentAngle += angle;
-
-          const x2 = 96 + radius * Math.cos(currentAngle * Math.PI / 180);
-          const y2 = 96 + radius * Math.sin(currentAngle * Math.PI / 180);
-
-          const largeArc = angle > 180 ? 1 : 0;
-          const color = item.color || ['#10b981', '#059669', '#06b6d4', '#0d9488', '#d4af37', '#a87f23', '#84cc16', '#34d399'][idx % 8];
-
-          return <path d={`M 96 96 L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`} fill={color} />;
-        })}
-      </svg>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="text-center">
-          <span className="text-xl font-black text-ink block">{total}</span>
-          <span className="text-[10px] text-ink-muted uppercase tracking-wider">Total Jobs</span>
-        </div>
+    <div className="space-y-3">
+      {data.map((item, idx) => {
+        const start = cumulative;
+        cumulative += item.value;
+        const widthPct = maxVal > 0 ? (item.value / maxVal) * 100 : 0;
+        const color = item.color || colors[idx % colors.length];
+        return (
+          <div key={idx} className="flex items-center gap-3">
+            <span className="text-xs font-semibold text-ink w-24 truncate text-right">{item.name}</span>
+            <div className="flex-1 bg-gray-100 rounded h-6 overflow-hidden relative">
+              <div
+                className="absolute left-0 top-0 h-full rounded transition-all duration-700"
+                style={{ width: `${widthPct}%`, background: color }}
+              />
+            </div>
+            <span className="text-xs text-ink-muted font-medium w-12 text-left">{item.value}</span>
+          </div>
+        );
+      })}
+      <div className="pt-2 border-t border-gray-200/50 flex items-center justify-between text-xs">
+        <span className="font-bold text-ink">Total</span>
+        <span className="font-black text-emerald-600">{total}</span>
       </div>
     </div>
   );
@@ -1506,57 +1508,44 @@ function HorizontalBarChart({ data, total }) {
   );
 }
 
-// ── Radar Chart Component ───────────────────────────────────────────────────────
-function RadarChart({ data }) {
-  const size = 200;
-  const centerX = size / 2;
-  const centerY = size / 2;
-  const radius = 70;
-
-  const angles = data.map((_, idx) => (idx * 360) / data.length);
-  const maxValue = Math.max(...data.map((d) => d.demand));
-
-  const points = data.map((d, idx) => {
-    const angle = angles[idx];
-    const distance = (d.demand / maxValue) * radius;
-    const x = centerX + distance * Math.cos(angle * Math.PI / 180);
-    const y = centerY + distance * Math.sin(angle * Math.PI / 180);
-    return { x, y, angle, distance };
+// ── Histogram Chart Component ────────────────────────────────────────────────────
+function HistogramChart({ data }) {
+  const maxVal = Math.max(...data.map((d) => d.demand), 1);
+  const binCount = Math.min(6, Math.max(3, data.length));
+  const binSize = maxVal / binCount || 1;
+  const bins = Array.from({ length: binCount }, (_, i) => {
+    const min = i * binSize;
+    const max = (i + 1) * binSize;
+    const items = data.filter((d) => d.demand >= min && d.demand < max);
+    return { min, max, items, count: items.length };
   });
 
-  const polygons = [];
-  for (let i = 0; i < points.length; i++) {
-    const current = points[i];
-    const next = points[(i + 1) % points.length];
-    polygons.push(<line key={`line-${i}`} x1={current.x} y1={current.y} x2={next.x} y2={next.y} stroke="#E2E8F0" strokeWidth="2" />);
-  }
-
-  for (let i = 0; i < points.length; i++) {
-    const current = points[i];
-    const next = points[(i + 1) % points.length];
-    polygons.push(
-      <polygon
-        key={`poly-${i}`}
-        points={`${current.x},${current.y} ${next.x},${next.y} ${centerX},${centerY}`}
-        fill={data[i].fill}
-        fillOpacity="0.2"
-        stroke={data[i].fill}
-        strokeWidth="2"
-      />
-    );
-  }
-
   return (
-    <div className="relative w-48 h-48 mx-auto">
-      <svg width={size} height={size} className="transform -rotate-90">
-        {polygons}
-        {points.map((point, idx) => (
-          <circle key={`point-${idx}`} cx={point.x} cy={point.y} r="4" fill={data[idx].fill} />
+    <div className="space-y-4">
+      <div className="flex items-end justify-center gap-3 h-48 pt-4">
+        {bins.map((bin, idx) => {
+          const height = (bin.count / Math.max(...bins.map((b) => b.count), 1)) * 100;
+          return (
+            <div key={idx} className="flex-1 flex flex-col items-center group">
+              <span className="text-xs font-black text-ink">{bin.count}</span>
+              <div
+                className="w-full bg-gradient-to-t from-cyan-500 to-cyan-400 rounded-t-sm transition-all duration-700 group-hover:from-cyan-600 group-hover:to-cyan-500"
+                style={{ height: `${Math.max(height, bin.count > 0 ? 5 : 0)}%` }}
+              />
+              <span className="text-[10px] text-ink-muted mt-2 font-medium">
+                {Math.round(bin.min)}–{Math.round(bin.max)}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+      <div className="grid grid-cols-1 gap-1.5">
+        {data.map((item, idx) => (
+          <div key={idx} className="flex items-center justify-between text-xs bg-ink/5 rounded px-2.5 py-1.5">
+            <span className="font-medium text-ink-soft">{item.name}</span>
+            <span className="font-black text-cyan-600">{item.demand}</span>
+          </div>
         ))}
-        <circle cx={centerX} cy={centerY} r="1" fill="#94a3b8" />
-      </svg>
-      <div className="absolute bottom-0 left-0 right-0 text-center">
-        <span className="text-xs text-ink-muted font-medium">Skill Demand Index</span>
       </div>
     </div>
   );

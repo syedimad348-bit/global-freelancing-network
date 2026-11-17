@@ -203,8 +203,8 @@ export default function Tricks() {
 
                   {/* Tags & Pricing */}
                   <div className="flex items-center justify-between gap-2 pt-1 border-t border-line/60 text-[11px]">
-                    <span className="font-semibold text-ink-soft bg-surface-subtle px-2 py-0.5 rounded border border-line">
-                      {tool.pricing}
+                    <span className="font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-md">
+                      {tool.price.toLocaleString()} PKR
                     </span>
                     <a
                       href={tool.website}

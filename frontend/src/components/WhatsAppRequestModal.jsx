@@ -21,7 +21,7 @@ const COUNTRY_CODES = [
   { code: '+81', flag: '🇯🇵', name: 'Japan (+81)' },
 ];
 
-export default function WhatsAppRequestModal({ tool, isOpen, onClose }) {
+export default function WhatsAppRequestModal({ tool, isOpen, onClose, leadType = 'tricks' }) {
   const [countryCode, setCountryCode] = useState('+1');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [notes, setNotes] = useState('');
@@ -53,6 +53,7 @@ export default function WhatsAppRequestModal({ tool, isOpen, onClose }) {
           phoneNumber: fullPhone,
           countryCode,
           notes,
+          leadType: tool.type || 'tricks',
         }),
       });
 

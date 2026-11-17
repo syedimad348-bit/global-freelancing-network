@@ -563,6 +563,29 @@ router.post("/whatsapp-request", async (req, res) => {
       }
     }
 
+    // Also save to unified Leads collection for admin dashboard
+    if (mongoose.connection.readyState === 1 && Lead) {
+      try {
+        await Lead.create({
+          type: req.body?.leadType === 'facebook' ? 'facebook' : 'tricks',
+          niche: safeToolName,
+          toolId: safeToolId,
+          toolName: safeToolName,
+          name: '',
+          email: '',
+          phoneNumber: String(phoneNumber).trim(),
+          normalizedNumber: normalized,
+          countryCode,
+          notes: String(notes).slice(0, 500),
+          userId: req.body?.userId || (req.user && req.user.id) || 'anonymous',
+          status: 'pending',
+          ipAddress: String(clientIp).slice(0, 50),
+        });
+      } catch (leadErr) {
+        console.warn("Lead save warning:", leadErr.message);
+      }
+    }
+
     // Always record in memory cache for instant retrieval & offline resilience
     memoryWhatsAppRequests.unshift(requestRecord);
     if (memoryWhatsAppRequests.length > 500) memoryWhatsAppRequests.pop();
@@ -600,6 +623,98 @@ router.get("/whatsapp-requests", async (_req, res) => {
     total: memoryWhatsAppRequests.length,
     source: "memory",
   });
+});
+
+// ── In-memory fallback for Leads when MongoDB is offline ─────────────────────
+const memoryLeads = [];
+const Lead = (() => {
+  try {
+    return require("../models/Lead");
+  } catch {
+    return null;
+  }
+})();
+
+// ── POST /api/features/facebook-request ───────────────────────────────────────
+router.post("/facebook-request", async (req, res) => {
+  try {
+    const { niche, nicheId = "", name, email, phone, notes = "" } = req.body || {};
+
+    if (!niche || !String(niche).trim()) {
+      return res.status(400).json({ error: "Please select a niche or service." });
+    }
+    if (!name || !String(name).trim()) {
+      return res.status(400).json({ error: "Name is required." });
+    }
+    if (!email || !String(email).trim() || !String(email).includes("@")) {
+      return res.status(400).json({ error: "A valid email is required." });
+    }
+    if (!phone || !String(phone).trim()) {
+      return res.status(400).json({ error: "Phone number is required." });
+    }
+
+    const leadRecord = {
+      id: `lead-fb-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
+      type: "facebook",
+      niche: String(niche).trim(),
+      nicheId: String(nicheId || niche).toLowerCase().replace(/[^a-z0-9_-]/g, ""),
+      name: String(name).trim(),
+      email: String(email).trim().toLowerCase(),
+      phoneNumber: String(phone).trim(),
+      notes: String(notes).slice(0, 500),
+      userId: (req.user && req.user.id) || "anonymous",
+      status: "pending",
+      timestamp: Date.now(),
+      createdAt: new Date().toISOString(),
+    };
+
+    if (mongoose.connection.readyState === 1 && Lead) {
+      try {
+        const doc = await Lead.create({
+          type: "facebook",
+          niche: leadRecord.niche,
+          nicheId: leadRecord.nicheId,
+          name: leadRecord.name,
+          email: leadRecord.email,
+          phoneNumber: leadRecord.phoneNumber,
+          notes: leadRecord.notes,
+          userId: leadRecord.userId,
+          status: "pending",
+        });
+        leadRecord.id = doc._id.toString();
+      } catch (dbErr) {
+        console.warn("DB save warning for Facebook lead (falling back to memory):", dbErr.message);
+      }
+    }
+
+    memoryLeads.unshift(leadRecord);
+    if (memoryLeads.length > 500) memoryLeads.pop();
+
+    console.log(`📘 [Facebook Lead] ${leadRecord.niche} — ${leadRecord.name} (${leadRecord.email})`);
+    return res.status(201).json({
+      success: true,
+      requestId: leadRecord.id,
+      niche: leadRecord.niche,
+      status: "pending",
+      message: "Your information was received successfully.",
+    });
+  } catch (err) {
+    console.error("Facebook request endpoint error:", err);
+    return res.status(500).json({ error: "Failed to submit your request. Please try again." });
+  }
+});
+
+// ── GET /api/features/leads (Admin: all submissions from all sections) ───────
+router.get("/leads", async (_req, res) => {
+  if (mongoose.connection.readyState === 1 && Lead) {
+    try {
+      const docs = await Lead.find().sort({ createdAt: -1 }).limit(300).lean();
+      return res.json({ leads: docs, total: docs.length, source: "database" });
+    } catch {
+      // Fall through to memory
+    }
+  }
+  return res.json({ leads: memoryLeads, total: memoryLeads.length, source: "memory" });
 });
 
 module.exports = router;
