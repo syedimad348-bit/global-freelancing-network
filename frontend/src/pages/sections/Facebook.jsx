@@ -14,7 +14,6 @@ import {
   ExternalLink,
   CheckCircle2,
 } from 'lucide-react';
-import WhatsAppRequestModal from '../../components/WhatsAppRequestModal';
 
 const FACEBOOK_NICHES = [
   { id: 'video-editing', name: 'Video Editing', icon: 'Video', color: 'from-emerald-500 to-teal-600', desc: 'Short-form & long-form video editing gigs and client requests.' },

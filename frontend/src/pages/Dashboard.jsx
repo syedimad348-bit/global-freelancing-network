@@ -1395,13 +1395,10 @@ function WaterfallChart({ data }) {
   const total = data.reduce((sum, item) => sum + item.value, 0);
   const maxVal = Math.max(...data.map((d) => d.value));
   const colors = ['#10b981', '#059669', '#06b6d4', '#0d9488', '#d4af37', '#a87f23', '#84cc16', '#34d399'];
-  let cumulative = 0;
 
   return (
     <div className="space-y-3">
       {data.map((item, idx) => {
-        const start = cumulative;
-        cumulative += item.value;
         const widthPct = maxVal > 0 ? (item.value / maxVal) * 100 : 0;
         const color = item.color || colors[idx % colors.length];
         return (
