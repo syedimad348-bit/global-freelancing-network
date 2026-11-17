@@ -266,7 +266,7 @@ export default function Login() {
           <p className="mt-4 text-center text-[11px] text-white/50 font-medium [@media(max-height:760px)]:hidden">
             By signing in, you agree to our <Link to="/terms" className="underline hover:text-white">Terms</Link> & <Link to="/privacy" className="underline hover:text-white">Privacy Policy</Link>
           </p>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
