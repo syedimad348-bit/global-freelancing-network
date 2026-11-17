@@ -126,7 +126,7 @@ export default function Login() {
                       required
                       autoComplete="email"
                       placeholder="you@example.com"
-                      className="w-full h-13 rounded-xl pl-13 pr-4 bg-white border border-line text-sm text-ink placeholder:text-ink-subtle transition-all duration-200 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 focus:bg-white hover:border-emerald-200"
+                      className="h-12 pl-8 pr-4 bg-white border border-line rounded-xl w-full text-sm text-ink placeholder:text-ink-subtle transition-all duration-200 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 focus:bg-white hover:border-emerald-200"
                     />
                   </div>
                 </div>
@@ -154,7 +154,7 @@ export default function Login() {
                       required
                       autoComplete="current-password"
                       placeholder="••••••••"
-                      className="w-full h-13 rounded-xl pl-13 pr-13 bg-white border border-line text-sm text-ink placeholder:text-ink-subtle transition-all duration-200 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 focus:bg-white hover:border-emerald-200"
+                      className="h-12 pl-8 pr-8 bg-white border border-line rounded-xl w-full text-sm text-ink placeholder:text-ink-subtle transition-all duration-200 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 focus:bg-white hover:border-emerald-200"
                     />
                     <button
                       type="button"
@@ -171,7 +171,7 @@ export default function Login() {
                 <button
                   type="submit"
                   disabled={busy}
-                  className="w-full h-13 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-600 text-white text-sm font-extrabold uppercase tracking-[0.15em] shadow-[0_8px_24px_-4px_rgba(16,185,129,0.4)] hover:brightness-105 hover:shadow-[0_12px_32px_-6px_rgba(16,185,129,0.5)] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none disabled:shadow-none flex items-center justify-center gap-2 relative overflow-hidden"
+                  className="w-full h-12 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-600 text-white text-sm font-extrabold uppercase tracking-[0.15em] shadow-[0_8px_24px_-4px_rgba(16,185,129,0.4)] hover:brightness-105 hover:shadow-[0_12px_32px_-6px_rgba(16,185,129,0.5)] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none disabled:shadow-none flex items-center justify-center gap-2 relative overflow-hidden"
                 >
                   {busy ? (
                     <>
@@ -261,12 +261,12 @@ export default function Login() {
 
             </div>
           </div>
-        </motion.div>
 
-        {/* Footer note */}
-        <p className="mt-4 text-center text-[11px] text-white/50 font-medium [@media(max-height:760px)]:hidden">
-          By signing in, you agree to our <Link to="/terms" className="underline hover:text-white">Terms</Link> & <Link to="/privacy" className="underline hover:text-white">Privacy Policy</Link>
-        </p>
+          {/* Footer note */}
+          <p className="mt-4 text-center text-[11px] text-white/50 font-medium [@media(max-height:760px)]:hidden">
+            By signing in, you agree to our <Link to="/terms" className="underline hover:text-white">Terms</Link> & <Link to="/privacy" className="underline hover:text-white">Privacy Policy</Link>
+          </p>
+        </div>
       </div>
     </div>
   );
