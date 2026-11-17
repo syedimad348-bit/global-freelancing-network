@@ -40,4 +40,5 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: ./frontend
           scope: ${{ secrets.VERCEL_SCOPE }}
-        if: github.event_name == 'push' && github.repository == 'syedimad348/global-freelancing-network'
+          vercel-args: '--prod'
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
