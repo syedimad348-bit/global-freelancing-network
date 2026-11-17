@@ -104,7 +104,7 @@ export default function Tricks() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by tool name, capability, or keyword…"
-              className="input pl-10 h-11 text-sm bg-white"
+              className="input pl-11 h-11 text-sm bg-white"
             />
             {searchQuery && (
               <button

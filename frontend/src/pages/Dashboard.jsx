@@ -293,7 +293,7 @@ className={[
                 value={globalSearch}
                 onChange={(e) => setGlobalSearch(e.target.value)}
                 placeholder="Search freelance jobs, skills, AI tools…"
-                className="input pl-10 h-10 text-xs bg-surface-subtle border-line focus:bg-white"
+                className="input pl-11 h-10 text-xs bg-surface-subtle border-line focus:bg-white"
               />
             </div>
           </form>

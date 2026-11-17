@@ -181,14 +181,14 @@ export default function WhatsAppRequestModal({ tool, isOpen, onClose }) {
                     </select>
 
                     <div className="relative flex-1">
-                      <PhoneCall className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-subtle" />
+                      <PhoneCall className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-subtle" />
                       <input
                         type="tel"
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         placeholder="300 1234567"
                         required
-                        className="input pl-9 h-10 font-mono text-sm"
+                        className="input pl-10 h-10 font-mono text-sm"
                       />
                     </div>
                   </div>

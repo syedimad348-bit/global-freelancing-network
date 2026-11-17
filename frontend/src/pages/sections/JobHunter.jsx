@@ -314,7 +314,7 @@ export default function JobHunter() {
               placeholder="Search role, company, skill…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="input pl-10 h-11"
+              className="input pl-11 h-11"
             />
           </div>
           <div className="flex items-center gap-2">

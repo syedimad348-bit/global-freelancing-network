@@ -117,7 +117,7 @@ export default function Login() {
                     Email Address
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500/70" aria-hidden="true" />
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500/70" aria-hidden="true" />
                     <input
                       id="email"
                       type="email"
@@ -126,7 +126,7 @@ export default function Login() {
                       required
                       autoComplete="email"
                       placeholder="you@example.com"
-                      className="h-12 pl-8 pr-4 bg-white border border-line rounded-xl w-full text-sm text-ink placeholder:text-ink-subtle transition-all duration-200 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 focus:bg-white hover:border-emerald-200"
+                      className="h-12 pl-11 pr-4 bg-white border border-line rounded-xl w-full text-sm text-ink placeholder:text-ink-subtle transition-all duration-200 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 focus:bg-white hover:border-emerald-200"
                     />
                   </div>
                 </div>
@@ -145,7 +145,7 @@ export default function Login() {
                     </Link>
                   </div>
                   <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500/70" aria-hidden="true" />
+                    <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500/70" aria-hidden="true" />
                     <input
                       id="password"
                       type={showPassword ? 'text' : 'password'}
@@ -154,15 +154,15 @@ export default function Login() {
                       required
                       autoComplete="current-password"
                       placeholder="••••••••"
-                      className="h-12 pl-8 pr-8 bg-white border border-line rounded-xl w-full text-sm text-ink placeholder:text-ink-subtle transition-all duration-200 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 focus:bg-white hover:border-emerald-200"
+                      className="h-12 pl-11 pr-11 bg-white border border-line rounded-xl w-full text-sm text-ink placeholder:text-ink-subtle transition-all duration-200 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 focus:bg-white hover:border-emerald-200"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword((v) => !v)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-500/70 hover:text-emerald-600 p-1.5 transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-500 hover:text-emerald-600 p-1"
                       aria-label={showPassword ? 'Hide password' : 'Show password'}
                     >
-                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
                 </div>

@@ -14,7 +14,7 @@ const Input = forwardRef(function Input(
       )}
       <div className="relative">
         {leftIcon && (
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-subtle">
+          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-subtle">
             {leftIcon}
           </span>
         )}
@@ -24,13 +24,13 @@ const Input = forwardRef(function Input(
           ref={ref}
           className={[
             'input',
-            leftIcon ? 'pl-9' : '',
-            rightSlot ? 'pr-10' : '',
+            leftIcon ? 'pl-10' : '',
+            rightSlot ? 'pr-11' : '',
             error ? 'border-accent-rose focus-visible:ring-accent-rose/15' : '',
           ].join(' ')}
         />
         {rightSlot && (
-          <span className="absolute right-2 top-1/2 -translate-y-1/2">
+          <span className="absolute right-3 top-1/2 -translate-y-1/2">
             {rightSlot}
           </span>
         )}
