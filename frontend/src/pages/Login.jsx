@@ -57,7 +57,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#052E22] via-[#064E3B] to-[#052E22] text-ink font-sans antialiased relative flex items-center justify-center p-4 sm:p-6 lg:p-8">
+    <div className="h-dvh bg-gradient-to-b from-[#052E22] via-[#064E3B] to-[#052E22] text-ink font-sans antialiased relative flex items-center justify-center p-4 sm:p-6 lg:p-8 overflow-hidden">
       {/* Decorative gradient blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-emerald-400/15 blur-[150px]" />
@@ -68,19 +68,19 @@ export default function Login() {
       </div>
 
       {/* Single centered login card */}
-      <div className="relative z-10 w-full max-w-md">
+      <div className="relative z-10 w-full max-w-md max-h-full origin-center will-change-transform [@media(max-height:840px)]:scale-[0.95] [@media(max-height:720px)]:scale-[0.88] [@media(max-height:600px)]:scale-[0.8] [@media(max-height:520px)]:scale-[0.7]">
         <motion.div
-          initial={{ opacity: 0, y: 30, scale: 0.95 }}
+          initial={{ opacity: 0, y: 20, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
         >
           <div className="relative rounded-3xl overflow-hidden bg-white/95 backdrop-blur-xl border border-white/20 shadow-[0_25px_50px_-12px_rgba(5,46,34,0.4)]">
-            <div className="p-8 sm:p-10 lg:p-12">
+            <div className="p-6 sm:p-8 lg:p-10">
 
               {/* Logo & Brand */}
-              <div className="flex items-center justify-center gap-3 mb-8">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-600 via-emerald-500 to-amber-500 flex items-center justify-center shadow-[0_8px_24px_-4px_rgba(16,185,129,0.4)]">
-                  <Flame className="w-6 h-6 text-white" />
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-600 via-emerald-500 to-amber-500 flex items-center justify-center shadow-[0_8px_24px_-4px_rgba(16,185,129,0.4)]">
+                  <Flame className="w-5 h-5 text-white" />
                 </div>
                 <div className="text-left">
                   <p className="text-base font-black text-ink leading-tight tracking-tight">Global Freelancing</p>
@@ -89,8 +89,8 @@ export default function Login() {
               </div>
 
               {/* Headline */}
-              <div className="text-center mb-8">
-                <h2 className="text-2xl sm:text-3xl font-black text-ink tracking-tight mb-2">Welcome back</h2>
+              <div className="text-center mb-6">
+                <h2 className="text-2xl sm:text-3xl font-black text-ink tracking-tight mb-1.5">Welcome back</h2>
                 <p className="text-sm text-ink-muted leading-relaxed">Sign in to access your dashboard and continue your journey</p>
               </div>
 
@@ -99,7 +99,7 @@ export default function Login() {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-sm font-medium text-rose-800 flex items-start gap-3"
+                  className="mb-5 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-sm font-medium text-rose-800 flex items-start gap-3"
                   role="alert"
                 >
                   <svg className="w-5 h-5 mt-0.5 shrink-0 text-rose-500" fill="currentColor" viewBox="0 0 20 20">
@@ -110,7 +110,7 @@ export default function Login() {
               )}
 
               {/* Login form */}
-              <form onSubmit={handleLogin} className="space-y-5 mb-8">
+              <form onSubmit={handleLogin} className="space-y-4 mb-7">
                 {/* Email field */}
                 <div>
                   <label htmlFor="email" className="text-[11px] font-bold uppercase tracking-wider text-ink-subtle block mb-2">
@@ -191,7 +191,7 @@ export default function Login() {
               </form>
 
               {/* Divider */}
-              <div className="relative mb-8">
+              <div className="relative mb-6">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-line"></div>
                 </div>
@@ -201,7 +201,7 @@ export default function Login() {
               </div>
 
               {/* Social login buttons */}
-              <div className="grid grid-cols-3 gap-3 mb-8">
+              <div className="grid grid-cols-3 gap-3 mb-6">
                 <button
                   type="button"
                   className="w-full h-12 rounded-xl bg-white text-ink border border-line flex items-center justify-center gap-2.5 shadow-sm hover:bg-surface-subtle hover:border-emerald-200 hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none group"
@@ -264,7 +264,7 @@ export default function Login() {
         </motion.div>
 
         {/* Footer note */}
-        <p className="mt-8 text-center text-[11px] text-white/50 font-medium">
+        <p className="mt-4 text-center text-[11px] text-white/50 font-medium [@media(max-height:760px)]:hidden">
           By signing in, you agree to our <Link to="/terms" className="underline hover:text-white">Terms</Link> & <Link to="/privacy" className="underline hover:text-white">Privacy Policy</Link>
         </p>
       </div>
