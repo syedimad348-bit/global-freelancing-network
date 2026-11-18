@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Lock, Mail, Flame, ArrowRight } from 'lucide-react';
-import { apiFetch, DEMO_CREDENTIALS } from '../lib/api';
+import { apiFetch, DEMO_CREDENTIALS, setSession } from '../lib/api';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -23,8 +23,7 @@ export default function Login() {
         method: 'POST',
         body: JSON.stringify({ email: email.trim(), password }),
       });
-      if (data?.token) localStorage.setItem('token', data.token);
-      if (data?.user) localStorage.setItem('user', JSON.stringify(data.user));
+      setSession(data);
       navigate('/dashboard');
     } catch (err) {
       setError(err?.message || 'Invalid email or password. Please check credentials and try again.');
@@ -43,11 +42,10 @@ export default function Login() {
         method: 'POST',
         body: JSON.stringify({ email: DEMO_CREDENTIALS.email, password: DEMO_CREDENTIALS.password }),
       }).catch(() => ({
-        token: 'demo-jwt-token-gfn-2026',
+        accessToken: 'demo-jwt-token-gfn-2026',
         user: { _id: 'demo-user-id', name: 'Imad Freelancer', email: DEMO_CREDENTIALS.email, plan: 'pro' },
       }));
-      if (data?.token) localStorage.setItem('token', data.token);
-      if (data?.user) localStorage.setItem('user', JSON.stringify(data.user));
+      setSession(data);
       navigate('/dashboard');
     } catch (err) {
       setError('Demo sign-in failed. Please try manual login.');
