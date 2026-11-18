@@ -55,7 +55,7 @@ export default function Login() {
   };
 
   return (
-    <div className="h-dvh bg-gradient-to-b from-[#052E22] via-[#064E3B] to-[#052E22] text-ink font-sans antialiased relative flex items-center justify-center p-4 sm:p-6 lg:p-8 overflow-hidden">
+    <div className="min-h-dvh bg-gradient-to-b from-[#052E22] via-[#064E3B] to-[#052E22] text-ink font-sans antialiased relative flex items-center justify-center p-4 sm:p-6 lg:p-8 overflow-y-auto">
       {/* Decorative gradient blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-emerald-400/15 blur-[150px]" />
@@ -72,7 +72,7 @@ export default function Login() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="relative rounded-3xl overflow-hidden bg-white/95 backdrop-blur-xl border border-white/20 shadow-[0_25px_50px_-12px_rgba(5,46,34,0.4)]">
+            <div className="relative rounded-3xl overflow-y-auto bg-white/95 backdrop-blur-xl border border-white/20 shadow-[0_25px_50px_-12px_rgba(5,46,34,0.4)] max-h-[85vh]">
             <div className="p-6 sm:p-8 lg:p-10">
 
               {/* Logo & Brand */}
