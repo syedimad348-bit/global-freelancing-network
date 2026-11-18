@@ -67,7 +67,7 @@ async function sendMagicLinkEmail({ to, name, link }) {
 }
 
 async function issueSession(user, res) {
-  const accessToken = createAccessToken(user._id.toString());
+  const accessToken = createAccessToken(user._id.toString(), user.email);
   const refreshToken = createRefreshToken(user._id.toString());
   user.refreshTokenHash = hashToken(refreshToken);
   await user.save();
@@ -98,12 +98,10 @@ router.post("/register", asyncHandler(async (req, res) => {
       name,
       email: normalizedEmail,
       plan: "free",
-      interests: [],
     };
     volatileUsers.set(normalizedEmail, { ...fallbackUser, password });
-    const accessToken = createAccessToken(fallbackUser._id);
-    recordRegisteredUser({ name, email: normalizedEmail, plan: "free", degradedMode: true });
-    return res.status(201).json({ accessToken, user: fallbackUser, degradedMode: true });
+    const accessToken = createAccessToken(fallbackUser._id, fallbackUser.email);
+    return res.json({ accessToken, user: fallbackUser, degradedMode: true });
   }
 
   const exists = await User.findOne({ email: normalizedEmail });
@@ -182,7 +180,7 @@ router.post("/login", asyncHandler(async (req, res) => {
     if (!fallbackUser || fallbackUser.password !== password) {
       throw new AppError("Invalid email or password", 401, "INVALID_CREDENTIALS");
     }
-    const accessToken = createAccessToken(fallbackUser._id);
+    const accessToken = createAccessToken(fallbackUser._id, fallbackUser.email);
     return res.json({
       accessToken,
       user: sanitizeUser(fallbackUser),

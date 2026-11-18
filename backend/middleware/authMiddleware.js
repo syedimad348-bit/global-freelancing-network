@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const AppError = require("../utils/appError");
 const { jwtSecret } = require("../config/secrets");
+const OWNER_EMAIL = "syedimad348@gmail.com";
 
 const protect = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
@@ -27,4 +28,14 @@ const protect = (req, res, next) => {
   }
 };
 
-module.exports = { protect };
+function ownerOnly(req, res, next) {
+  if (!req.user || req.user.degradedMode) {
+    return next(new AppError("Owner access required", 403, "OWNER_ONLY"));
+  }
+  if (req.user.email?.toLowerCase() !== OWNER_EMAIL) {
+    return next(new AppError("Owner only", 403, "OWNER_ONLY"));
+  }
+  next();
+}
+
+module.exports = { protect, ownerOnly };

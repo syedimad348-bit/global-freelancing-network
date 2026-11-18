@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const { protect } = require("../middleware/authMiddleware");
+const { protect, ownerOnly } = require("../middleware/authMiddleware");
 const User = require("../models/User");
 const { isMongoObjectId } = require("../utils/mongoId");
 const Application = require("../models/Application");
@@ -609,7 +609,7 @@ router.post("/whatsapp-request", async (req, res) => {
 });
 
 // ── GET /api/features/whatsapp-requests (Monitoring & verification) ───────────
-router.get("/whatsapp-requests", async (_req, res) => {
+router.get("/whatsapp-requests", ownerOnly, async (_req, res) => {
   if (mongoose.connection.readyState === 1 && WhatsAppRequest) {
     try {
       const docs = await WhatsAppRequest.find().sort({ createdAt: -1 }).limit(100).lean();
@@ -705,7 +705,7 @@ router.post("/facebook-request", async (req, res) => {
 });
 
 // ── GET /api/features/leads (Admin: all submissions from all sections) ───────
-router.get("/leads", async (_req, res) => {
+router.get("/leads", ownerOnly, async (_req, res) => {
   if (mongoose.connection.readyState === 1 && Lead) {
     try {
       const docs = await Lead.find().sort({ createdAt: -1 }).limit(300).lean();

@@ -5,8 +5,8 @@ const { jwtSecret, jwtRefreshSecret } = require("../config/secrets");
 const ACCESS_TOKEN_TTL = process.env.ACCESS_TOKEN_TTL || "15m";
 const REFRESH_TOKEN_TTL = process.env.REFRESH_TOKEN_TTL || "30d";
 
-function createAccessToken(userId) {
-  return jwt.sign({ id: userId, type: "access" }, jwtSecret, {
+function createAccessToken(userId, email) {
+  return jwt.sign({ id: userId, email: email || undefined, type: "access" }, jwtSecret, {
     expiresIn: ACCESS_TOKEN_TTL,
   });
 }

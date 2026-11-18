@@ -3,6 +3,7 @@ const router = express.Router();
 const fs = require("fs");
 const path = require("path");
 const User = require("../models/User");
+const { ownerOnly } = require("../middleware/authMiddleware");
 
 const ROOT = path.join(__dirname, "..", "data", "total_users");
 
@@ -11,7 +12,7 @@ function ensureDir() {
 }
 
 // GET /api/admin/dashboard - Admin dashboard stats
-router.get("/dashboard", async (req, res) => {
+router.get("/dashboard", ownerOnly, async (req, res) => {
   try {
     // Read user registry
     const jsonlPath = path.join(ROOT, "registry.jsonl");
@@ -71,7 +72,7 @@ router.get("/dashboard", async (req, res) => {
 });
 
 // GET /api/admin/users - All user details
-router.get("/users", async (req, res) => {
+router.get("/users", ownerOnly, async (req, res) => {
   try {
     let users = [];
     if (mongoose.connection.readyState === 1) {
@@ -84,7 +85,7 @@ router.get("/users", async (req, res) => {
 });
 
 // GET /api/admin/registry - Raw user registration registry
-router.get("/registry", async (req, res) => {
+router.get("/registry", ownerOnly, async (req, res) => {
   try {
     const jsonlPath = path.join(ROOT, "registry.jsonl");
     let registry = [];
